@@ -1,0 +1,183 @@
+{
+  "id": "cv-1792180126179-km032",
+  "jobId": "li-4397288897",
+  "jobTitle": "Backend Engineer (Berlin) | Trade Republic",
+  "company": "Trade Republic",
+  "targetRole": "Backend Engineer (Berlin) | Trade Republic",
+  "tailoredAt": "2026-10-16T19:48:46.179Z",
+  "contact": {
+    "name": "Timothy Owolabi S.",
+    "titles": [
+      "Senior Backend Engineer",
+      "Senior Software Engineer",
+      "Senior Data Platform Engineer",
+      "AI & Platform Engineer"
+    ],
+    "email": "owolabi.sunday08@gmail.com",
+    "phone": "+49 1624079145",
+    "location": "Düsseldorf, Germany",
+    "github": "https://github.com/timmyowl",
+    "linkedin": "https://linkedin.com/in/timothyowolabi",
+    "portfolio": "https://github.com/sunkylab"
+  },
+  "professionalSummary": "Specialized Backend and Platform Engineer with 9 years architecting resilient, fault-tolerant microservices, gRPC interfaces, event-driven architectures (CQRS/Kafka), and cloud-native backends in regulated financial and e-commerce ecosystems (BanqueMisr, Spreadgroup, 3Line Card Management).",
+  "highlightedSkills": [
+    {
+      "category": "Languages & Core",
+      "skills": [
+        "Python",
+        "Java (7/8/11/17)",
+        "Kotlin",
+        "Golang",
+        "SQL",
+        "TypeScript"
+      ]
+    },
+    {
+      "category": "Data & Distributed Architecture",
+      "skills": [
+        "Apache Kafka",
+        "ETL / ELT Pipelines",
+        "Streaming Data Architecture",
+        "LLM Prompt Engineering",
+        "Local LLM Inference (Ollama)",
+        "Taxonomy & Classification Pipelines",
+        "Recommendation Systems (LightFM, ALS-implicit)"
+      ]
+    },
+    {
+      "category": "Cloud, DevOps & Engineering Practices",
+      "skills": [
+        "Distributed Systems",
+        "Docker",
+        "Kubernetes",
+        "AWS (EC2, S3, RDS, ECS, Lambda)",
+        "GCP",
+        "CI/CD (GitHub Actions, GitLab CI)",
+        "Terraform"
+      ]
+    }
+  ],
+  "tailoredExperiences": [
+    {
+      "company": "Spreadgroup",
+      "role": "Senior Software Engineer",
+      "location": "Germany",
+      "period": "Jun 2025 – Present",
+      "bullets": [
+        "Extended Commercetools' checkout API with advanced payment flows integrating PayPal, Google Pay, and Apple Pay express methods, reducing checkout drop-off by an estimated 25% across global storefronts.",
+        "Designed custom API extensions hooking into Commercetools webhooks to enforce business validation logic and trigger downstream event processing in real time.",
+        "Re-architected product-to-Coveo batch sync pipeline using streamed CSV processing and tracking tables across ~18 locales, cutting sync failures by an estimated 65% and boosting catalog data consistency.",
+        "Led replacement of legacy Apache Mahout recommendation engine, evaluating ALS-implicit and LightFM approaches with decoupled offline training and online serving to improve model load time by ~22%."
+      ]
+    },
+    {
+      "company": "BanqueMisr — Retail Banking (via Andela Network)",
+      "role": "Senior Software Engineer",
+      "location": "Düsseldorf, Germany / Remote",
+      "period": "Dec 2022 – May 2025",
+      "bullets": [
+        "Migrated core retail banking microservices to GraalVM native image using Spring buildpacks, substantially reducing service memory footprint and improving cold-start latency.",
+        "Refactored core enterprise logging libraries with custom SLF4J sanitization to automatically redact PII and sensitive financial data across banking services, satisfying strict banking regulatory compliance.",
+        "Re-architected the analytical and reporting service utilizing CQRS patterns and denormalized MongoDB collections, accelerating query performance for high-volume transactions.",
+        "Elevated test coverage across core banking microservices by implementing comprehensive unit and integration test suites using Mockito, WireMock, and Castle Mock."
+      ]
+    },
+    {
+      "company": "Nomba (formerly Kudi)",
+      "role": "Senior Backend Engineer",
+      "location": "Remote",
+      "period": "Sep 2022 – Nov 2023",
+      "bullets": [
+        "Engineered core gRPC services and shared platform libraries (IAM, Storehouse) powering agency banking operations handling millions in daily transactional volume.",
+        "Streamlined API latency and cross-service communication overhead by transitioning internal REST endpoints to high-performance gRPC with Protocol Buffers.",
+        "Collaborated with cross-functional product and infrastructure teams to maintain 99.9% uptime during peak holiday banking transaction surges."
+      ]
+    },
+    {
+      "company": "Independent AI & Systems Initiatives",
+      "role": "AI & Platform Engineer",
+      "location": "Düsseldorf, Germany",
+      "period": "Jan 2023 – Present",
+      "bullets": [
+        "Designed and built an AI-driven taxonomy classification system using structured JSON prompting with LLMs to automatically categorize keywords into a 3-tier (C1/C2/C3) hierarchy, completely eliminating manual workflows.",
+        "Architected an on-premise, self-hosted keyword categorization and search service utilizing FastAPI, local LLMs via Ollama, PostgreSQL, and Docker with complete lifecycle ownership.",
+        "Engineered multilingual inference pipelines for German-language category label simplification using few-shot prompt engineering for reproducible, human-validated outputs."
+      ]
+    },
+    {
+      "company": "3Line Card Management Limited",
+      "role": "Software Engineer",
+      "location": "Lagos, Nigeria",
+      "period": "Apr 2019 – Aug 2020",
+      "bullets": [
+        "Restructured core and shared transactional services for the Freedom Network agency banking platform, driving customer engagement and transaction volume up to 10x within 3 months.",
+        "Architected Card-Not-Present (CNP) and POS settlement integrations complying with card scheme requirements and strict fraud-detection parameters.",
+        "Optimized relational database queries and indices in PostgreSQL, eliminating transaction bottlenecks during peak financial settlement hours."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Autonomous Taxonomy Classification & LLM Inference Engine",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "Ollama",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "bullets": [
+        "Engineered 3-tier semantic hierarchy categorization with JSON schema validation.",
+        "Runs on-premise with zero external API latency or egress data concerns."
+      ]
+    },
+    {
+      "name": "High-Throughput Event Streaming & CQRS Reporting Platform",
+      "technologies": [
+        "Apache Kafka",
+        "Java",
+        "Spring Boot",
+        "MongoDB",
+        "Docker"
+      ],
+      "bullets": [
+        "Decoupled read and write data paths using CQRS pattern to achieve sub-50ms query responses on historical transactions."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-rbs",
+      "degree": "Master's in Data Science Management",
+      "institution": "Rome Business School",
+      "location": "Rome, Italy",
+      "graduationYear": "2024",
+      "details": "Specialization in Distributed Data Infrastructure, Scalable Data Engineering, Machine Learning Systems, and Big Data Governance."
+    },
+    {
+      "id": "edu-hnd",
+      "degree": "Higher National Diploma (HND) in Computer Engineering",
+      "institution": "Yaba College of Technology",
+      "location": "Lagos, Nigeria",
+      "graduationYear": "2016",
+      "details": "Specialized coursework in Microprocessors, Computer Systems Architecture, Embedded Systems, and Software Engineering."
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-aws",
+      "name": "AWS Certified Solutions Architect / Cloud Practitioner",
+      "issuer": "Amazon Web Services",
+      "year": "2023"
+    },
+    {
+      "id": "cert-data",
+      "name": "Specialized Distributed Systems & Data Platform Architecture",
+      "issuer": "Professional Certificate",
+      "year": "2024"
+    }
+  ],
+  "matchScore": 78,
+  "rationale": "Matched 1 core competencies (Distributed Systems). Aligned bullet points to emphasize high-throughput systems, metrics, and architecture required for Backend Engineer (Berlin) | Trade Republic at Trade Republic."
+}
