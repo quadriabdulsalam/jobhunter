@@ -227,6 +227,11 @@ export default function Dashboard() {
     }
   }
 
+  async function signOut() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.assign('/login');
+  }
+
   async function handleTailor(job: JobPosting) {
     setSelectedJob(job);
     setIsLoadingTailor(true);
@@ -545,6 +550,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: aiConfigured ? '#34d399' : '#fbbf24' }} />
             {aiConfigured ? `${aiProvider} ready` : 'Local mode'}
           </div>
+          <button className="btn-secondary" onClick={signOut} style={{ padding: '6px 10px', fontSize: '12px' }}>Sign out</button>
         </div>
       </header>
 

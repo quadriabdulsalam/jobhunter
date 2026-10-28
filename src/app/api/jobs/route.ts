@@ -4,11 +4,16 @@ import { JobPosting } from '@/lib/types';
 import { tailorCVForJob } from '@/lib/cv-tailorer';
 
 export async function GET() {
-  const jobs = getAllJobs();
-  return NextResponse.json({
-    success: true,
-    jobs
-  });
+  try {
+    const jobs = await getAllJobs();
+    return NextResponse.json({
+      success: true,
+      jobs
+    }, { headers: { 'Cache-Control': 'no-store' } });
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ success: false, error }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: Request) {
@@ -27,7 +32,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ success: false, error: 'Job id is required' }, { status: 400 });
     }
 
-    const deleted = deleteJob(id);
+    const deleted = await deleteJob(id);
     return NextResponse.json({ success: deleted });
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : String(err);
@@ -55,25 +60,25 @@ export async function POST(req: Request) {
       status: 'extracted'
     };
 
-    upsertJob(job);
+    const savedJob = await upsertJob(job);
 
     // If autoTailor requested and profile exists, generate tailored CV immediately
     let tailoredCv = null;
     if (data.autoTailor) {
-      const profile = getMasterProfile();
-      if (profile && job.description) {
-        tailoredCv = await tailorCVForJob(profile, job);
-        saveTailoredCV(tailoredCv);
-        job.tailoredCvId = tailoredCv.id;
-        job.status = 'tailored';
-        job.matchScore = tailoredCv.matchScore;
-        upsertJob(job);
+      const profile = await getMasterProfile();
+      if (profile && savedJob.description) {
+        tailoredCv = await tailorCVForJob(profile, savedJob);
+        await saveTailoredCV(tailoredCv);
+        savedJob.tailoredCvId = tailoredCv.id;
+        savedJob.status = 'tailored';
+        savedJob.matchScore = tailoredCv.matchScore;
+        await upsertJob(savedJob);
       }
     }
 
     return NextResponse.json({
       success: true,
-      job,
+      job: savedJob,
       tailoredCv
     });
   } catch (err: unknown) {

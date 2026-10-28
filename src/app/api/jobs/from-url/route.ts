@@ -119,24 +119,24 @@ export async function POST(req: Request) {
       status: 'extracted'
     };
 
-    upsertJob(job);
+    const savedJob = await upsertJob(job);
 
     let tailoredCv = null;
     if (autoTailor) {
-      const profile = getMasterProfile();
+      const profile = await getMasterProfile();
       if (profile) {
-        tailoredCv = await tailorCVForJob(profile, job);
-        saveTailoredCV(tailoredCv);
-        job.tailoredCvId = tailoredCv.id;
-        job.status = 'tailored';
-        job.matchScore = tailoredCv.matchScore;
-        upsertJob(job);
+        tailoredCv = await tailorCVForJob(profile, savedJob);
+        await saveTailoredCV(tailoredCv);
+        savedJob.tailoredCvId = tailoredCv.id;
+        savedJob.status = 'tailored';
+        savedJob.matchScore = tailoredCv.matchScore;
+        await upsertJob(savedJob);
       }
     }
 
     return NextResponse.json({
       success: true,
-      job,
+      job: savedJob,
       tailoredCv
     });
   } catch (err: unknown) {

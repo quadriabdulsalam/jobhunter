@@ -5,7 +5,7 @@ import { tailorCVForJob } from '@/lib/cv-tailorer';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const profile = getMasterProfile();
+    const profile = await getMasterProfile();
 
     if (!profile) {
       return NextResponse.json({
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     let jobData: { id?: string; title: string; company: string; location?: string; description: string };
 
     if (body.jobId) {
-      const storedJob = getJobById(body.jobId);
+      const storedJob = await getJobById(body.jobId);
       if (!storedJob) {
         return NextResponse.json({
           success: false,
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
     console.log(`Tailoring CV for ${jobData.title} at ${jobData.company}...`);
     const tailoredCv = await tailorCVForJob(profile, jobData);
-    saveTailoredCV(tailoredCv);
+    await saveTailoredCV(tailoredCv);
 
     return NextResponse.json({
       success: true,

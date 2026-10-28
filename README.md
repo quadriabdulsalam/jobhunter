@@ -8,7 +8,7 @@ A platform designed to discover jobs on LinkedIn, consolidate multiple career CV
 
 1. **Master Profile Consolidation**:
    - Ingests multiple past CVs (PDFs, DOCX, TXT) from the `cvs/` directory.
-   - Synthesizes and de-duplicates all contact info, technical skills, chronological experiences, quantified achievements, and domain summaries into `data/master_profile.json`.
+   - Synthesizes and de-duplicates contact info, skills, experiences, and achievements, then stores the profile in Supabase when configured.
 
 2. **LinkedIn Job Discovery (Option A — Chrome Extension)**:
    - A Manifest V3 Chrome Extension injects a floating **JobHunter Copilot** widget on `linkedin.com/jobs/*`.
@@ -36,6 +36,18 @@ For Groq, create a key in the Groq Console and set `AI_PROVIDER=groq` and `GROQ_
 
 Keep `.env.local` private and never commit your API key. Without a configured key, CV tailoring uses the built-in rule-based engine and CV imports use basic local extraction.
 
+### Configure persistent storage with Supabase
+
+The deployed app uses Supabase for the master profile, saved jobs, and tailored resumes. Local development continues to use the JSON files in `data/` unless Supabase credentials are configured.
+
+1. Create a Supabase project and copy its project URL and **Secret key** from the Supabase dashboard. Keep the secret key on the server; do not prefix it with `NEXT_PUBLIC_`.
+2. In the Supabase SQL Editor, run [`supabase/schema.sql`](supabase/schema.sql) to create the app tables with row-level security enabled.
+3. Add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` to `.env.local` for local use, and add the same variables to the Vercel project’s Production environment.
+4. Set `APP_ACCESS_PASSWORD` to a long, unique password and `APP_SESSION_SECRET` to a random value with at least 32 characters in Vercel. These protect the private profile and job API with a single-user sign-in.
+5. Redeploy the Vercel project after saving its environment variables.
+
+The production app is locked until its Supabase and private-access environment values are configured. It intentionally does not fall back to Vercel’s read-only filesystem. The app has one shared profile and job workspace behind a single-user password gate.
+
 ### 1. Launch the Web Studio
 The web application runs locally at:
 ```bash
@@ -60,10 +72,7 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 ```
 jobhunter/
 ├── cvs/                          # Your source CVs (PDF, DOCX)
-├── data/                         # Consolidated Master Profile & Job Database
-│   ├── master_profile.json       # Synthesized career database
-│   ├── jobs.json                 # Tracked job applications
-│   └── tailored/                 # Stored tailored CVs
+├── data/                         # Local development fallback storage
 ├── extension/                    # Manifest V3 Chrome Extension
 │   ├── manifest.json
 │   ├── content.js                # LinkedIn DOM extractor & auto-fill assistant
@@ -77,7 +86,7 @@ jobhunter/
 │   │   └── api/                  # REST endpoints (/api/profile, /api/jobs, /api/tailor)
 │   └── lib/                      # Core business logic
 │       ├── types.ts              # TypeScript schemas
-│       ├── storage.ts            # Local persistence
+│       ├── storage.ts            # Supabase persistence with local development fallback
 │       ├── cv-parser.ts          # PDF/DOCX text extractor
 │       ├── profile-merger.ts     # Multi-CV consolidation
 │       └── cv-tailorer.ts        # Dual-engine ATS tailoring (LLM + Rule-based)

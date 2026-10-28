@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const cv = getTailoredCV(id);
+  const cv = await getTailoredCV(id);
 
   if (!cv) {
     return NextResponse.json({
@@ -18,7 +18,7 @@ export async function GET(
   return NextResponse.json({
     success: true,
     tailoredCv: cv
-  });
+  }, { headers: { 'Cache-Control': 'no-store' } });
 }
 
 export async function DELETE(
@@ -26,7 +26,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const deleted = deleteTailoredCV(id);
+  const deleted = await deleteTailoredCV(id);
   return NextResponse.json({
     success: deleted
   });

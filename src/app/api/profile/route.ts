@@ -3,17 +3,22 @@ import { getMasterProfile, saveMasterProfile } from '@/lib/storage';
 import { MasterProfile } from '@/lib/types';
 
 export async function GET() {
-  const profile = getMasterProfile();
-  if (!profile) {
+  try {
+    const profile = await getMasterProfile();
+    if (!profile) {
+      return NextResponse.json({
+        success: false,
+        message: 'Master profile not generated yet.'
+      }, { status: 404 });
+    }
     return NextResponse.json({
-      success: false,
-      message: 'Master profile not generated yet.'
-    }, { status: 404 });
+      success: true,
+      profile
+    }, { headers: { 'Cache-Control': 'no-store' } });
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ success: false, error }, { status: 500 });
   }
-  return NextResponse.json({
-    success: true,
-    profile
-  });
 }
 
 export async function POST(req: Request) {
@@ -23,7 +28,7 @@ export async function POST(req: Request) {
       ...updated.metadata,
       lastUpdated: new Date().toISOString()
     };
-    saveMasterProfile(updated);
+    await saveMasterProfile(updated);
     return NextResponse.json({
       success: true,
       profile: updated

@@ -18,7 +18,7 @@ export async function GET() {
 
     console.log(`Consolidating ${extracted.length} CVs into Master Profile...`);
     const masterProfile = await mergeCVsIntoMasterProfile(extracted);
-    saveMasterProfile(masterProfile);
+    await saveMasterProfile(masterProfile);
 
     return NextResponse.json({
       success: true,
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     }
 
     const masterProfile = await mergeCVsIntoMasterProfile(extracted);
-    saveMasterProfile(masterProfile);
+    await saveMasterProfile(masterProfile);
 
     return NextResponse.json({
       success: true,
