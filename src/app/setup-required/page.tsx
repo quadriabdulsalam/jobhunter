@@ -4,7 +4,7 @@ export default function SetupRequiredPage() {
       <section style={{ maxWidth: '520px' }}>
         <p style={{ color: '#777', fontSize: '13px', marginBottom: '8px' }}>Jobhunter setup</p>
         <h1 style={{ fontSize: '25px', fontWeight: 600, letterSpacing: '-0.03em', marginBottom: '12px' }}>Finish private access setup</h1>
-        <p style={{ color: '#6b6b6b', fontSize: '14px', lineHeight: 1.6 }}>Add APP_ACCESS_PASSWORD and APP_SESSION_SECRET to the Vercel project’s Production environment, then redeploy. Your profile and applications stay unavailable until these values are set.</p>
+        <p style={{ color: '#6b6b6b', fontSize: '14px', lineHeight: 1.6 }}>Add SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY to the Vercel project’s Production environment, then redeploy to enable secure account sign-in.</p>
       </section>
     </main>
   );

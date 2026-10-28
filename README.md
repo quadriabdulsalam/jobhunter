@@ -7,8 +7,8 @@ A platform designed to discover jobs on LinkedIn, consolidate multiple career CV
 ## 🏗️ Architecture & Workflow
 
 1. **Master Profile Consolidation**:
-   - Ingests multiple past CVs (PDFs, DOCX, TXT) from the `cvs/` directory.
-   - Synthesizes and de-duplicates contact info, skills, experiences, and achievements, then stores the profile in Supabase when configured.
+   - Users import their own CVs (PDFs, DOCX, TXT) from the profile screen.
+   - Synthesizes and de-duplicates contact info, skills, experiences, and achievements, then stores the profile in that user's account.
 
 2. **LinkedIn Job Discovery (Option A — Chrome Extension)**:
    - A Manifest V3 Chrome Extension injects a floating **JobHunter Copilot** widget on `linkedin.com/jobs/*`.
@@ -36,17 +36,15 @@ For Groq, create a key in the Groq Console and set `AI_PROVIDER=groq` and `GROQ_
 
 Keep `.env.local` private and never commit your API key. Without a configured key, CV tailoring uses the built-in rule-based engine and CV imports use basic local extraction.
 
-### Configure persistent storage with Supabase
+### Configure accounts and per-user storage with Supabase
 
-The deployed app uses Supabase for the master profile, saved jobs, and tailored resumes. Local development continues to use the JSON files in `data/` unless Supabase credentials are configured.
+Each account has its own profile, saved jobs, and tailored resumes. Supabase Auth manages sessions; PostgreSQL row-level security restricts each account to its own rows. Local development can use JSON files when Supabase is not configured.
 
-1. Create a Supabase project and copy its project URL and **Secret key** from the Supabase dashboard. Keep the secret key on the server; do not prefix it with `NEXT_PUBLIC_`.
-2. In the Supabase SQL Editor, run [`supabase/schema.sql`](supabase/schema.sql) to create the app tables with row-level security enabled.
-3. Add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` to `.env.local` for local use, and add the same variables to the Vercel project’s Production environment.
-4. Set `APP_ACCESS_PASSWORD` to a long, unique password and `APP_SESSION_SECRET` to a random value with at least 32 characters in Vercel. These protect the private profile and job API with a single-user sign-in.
-5. Redeploy the Vercel project after saving its environment variables.
-
-The production app is locked until its Supabase and private-access environment values are configured. It intentionally does not fall back to Vercel’s read-only filesystem. The app has one shared profile and job workspace behind a single-user password gate.
+1. Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` from the Supabase project in `.env.local` and the Vercel Production environment. Do not use a secret/service-role key in the app.
+2. For an existing single-user database, run [`supabase/migrations/20261028_multi_user_auth.sql`](supabase/migrations/20261028_multi_user_auth.sql) once. It preserves old records in restricted archive tables and creates empty per-user tables. For a new database, run [`supabase/schema.sql`](supabase/schema.sql).
+3. In Supabase Authentication URL Configuration, set the Site URL to your deployed app and allow `https://your-domain/auth/callback` plus `http://localhost:3000/auth/callback`.
+4. Enable email/password sign-in in Supabase Auth. To enable Google or GitHub, add OAuth credentials for each provider in Supabase Auth Providers and register Supabase's callback URL with that provider.
+5. Redeploy the Vercel project after environment changes.
 
 ### 1. Launch the Web Studio
 The web application runs locally at:

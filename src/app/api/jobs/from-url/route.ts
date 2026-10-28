@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getMasterProfile, saveTailoredCV, upsertJob } from '@/lib/storage';
 import { JobPosting } from '@/lib/types';
+import { getStorageContext } from '@/lib/supabase-server';
 import { tailorCVForJob } from '@/lib/cv-tailorer';
 
 export async function POST(req: Request) {
   try {
+    const context = await getStorageContext();
     const { url, autoTailor } = await req.json();
 
     if (!url || typeof url !== 'string') {
@@ -119,18 +121,18 @@ export async function POST(req: Request) {
       status: 'extracted'
     };
 
-    const savedJob = await upsertJob(job);
+    const savedJob = await upsertJob(context, job);
 
     let tailoredCv = null;
     if (autoTailor) {
-      const profile = await getMasterProfile();
+      const profile = await getMasterProfile(context);
       if (profile) {
         tailoredCv = await tailorCVForJob(profile, savedJob);
-        await saveTailoredCV(tailoredCv);
+        await saveTailoredCV(context, tailoredCv);
         savedJob.tailoredCvId = tailoredCv.id;
         savedJob.status = 'tailored';
         savedJob.matchScore = tailoredCv.matchScore;
-        await upsertJob(savedJob);
+        await upsertJob(context, savedJob);
       }
     }
 

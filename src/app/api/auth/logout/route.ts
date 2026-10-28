@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
 
 export async function POST() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.set('jobhunter_session', '', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 0 });
-  return response;
+  const supabase = await createSupabaseServerClient();
+  await supabase?.auth.signOut();
+  return NextResponse.json({ success: true });
 }

@@ -1,53 +1,52 @@
+import { createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
 
-const encoder = new TextEncoder();
-const SESSION_COOKIE = 'jobhunter_session';
-
-function toBase64Url(bytes: Uint8Array): string {
-  let binary = '';
-  bytes.forEach(byte => { binary += String.fromCharCode(byte); });
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-async function isValidSession(token: string | undefined, secret: string): Promise<boolean> {
-  if (!token) return false;
-  const [expiresAt, signature] = token.split('.');
-  const expiry = Number(expiresAt);
-  if (!Number.isFinite(expiry) || expiry <= Math.floor(Date.now() / 1000) || !signature) return false;
-
-  const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-  const normalized = signature.replace(/-/g, '+').replace(/_/g, '/');
-  const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
-  const signatureBytes = Uint8Array.from(atob(padded), char => char.charCodeAt(0));
-  return crypto.subtle.verify('HMAC', key, signatureBytes, encoder.encode(expiresAt));
+function getSupabaseConfig() {
+  const url = process.env.SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY?.trim();
+  return url && key ? { url, key } : null;
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isApi = pathname.startsWith('/api/');
-  const isLoginRoute = pathname === '/login' || pathname === '/api/auth/login' || pathname === '/api/auth/logout';
-  const password = process.env.APP_ACCESS_PASSWORD;
-  const secret = process.env.APP_SESSION_SECRET;
+  const config = getSupabaseConfig();
 
-  if (process.env.NODE_ENV !== 'production' && (!password || !secret)) return NextResponse.next();
-
-  if (!password || !secret || secret.length < 32) {
+  if (!config) {
+    if (process.env.NODE_ENV !== 'production') return NextResponse.next();
     if (pathname === '/setup-required') return NextResponse.next();
-    if (isApi) return NextResponse.json({ success: false, error: 'Set APP_ACCESS_PASSWORD and APP_SESSION_SECRET before using the app.' }, { status: 503 });
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json({ success: false, error: 'Supabase Auth is not configured.' }, { status: 503 });
+    }
     return NextResponse.redirect(new URL('/setup-required', request.url));
   }
 
-  const authorized = await isValidSession(request.cookies.get(SESSION_COOKIE)?.value, secret);
-  if (isLoginRoute) {
-    if (authorized && pathname === '/login') return NextResponse.redirect(new URL('/', request.url));
-    return NextResponse.next();
-  }
-  if (authorized) return NextResponse.next();
-  if (isApi) return NextResponse.json({ success: false, error: 'Sign in to continue.' }, { status: 401 });
+  let response = NextResponse.next({ request });
+  const supabase = createServerClient(config.url, config.key, {
+    cookies: {
+      getAll: () => request.cookies.getAll(),
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        response = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+      }
+    }
+  });
 
-  const loginUrl = new URL('/login', request.url);
-  loginUrl.searchParams.set('next', pathname);
-  return NextResponse.redirect(loginUrl);
+  const { data: { user } } = await supabase.auth.getUser();
+  const isAuthApi = pathname.startsWith('/api/auth/');
+  const isPublic = pathname === '/login' || pathname === '/setup-required' || pathname === '/auth/callback' || isAuthApi;
+
+  if (user && pathname === '/login') return NextResponse.redirect(new URL('/', request.url));
+  if (!user && !isPublic) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json({ success: false, error: 'Sign in to continue.' }, { status: 401 });
+    }
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('next', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return response;
 }
 
 export const config = {

@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getAllJobs, upsertJob, deleteJob, getMasterProfile, saveTailoredCV } from '@/lib/storage';
+import { getStorageContext } from '@/lib/supabase-server';
 import { JobPosting } from '@/lib/types';
 import { tailorCVForJob } from '@/lib/cv-tailorer';
 
 export async function GET() {
   try {
-    const jobs = await getAllJobs();
+    const context = await getStorageContext();
+    const jobs = await getAllJobs(context);
     return NextResponse.json({
       success: true,
       jobs
@@ -32,7 +34,8 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ success: false, error: 'Job id is required' }, { status: 400 });
     }
 
-    const deleted = await deleteJob(id);
+    const context = await getStorageContext();
+    const deleted = await deleteJob(context, id);
     return NextResponse.json({ success: deleted });
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : String(err);
@@ -42,6 +45,7 @@ export async function DELETE(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const context = await getStorageContext();
     const data = await req.json();
 
     const jobId = data.id || `job-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
@@ -60,19 +64,19 @@ export async function POST(req: Request) {
       status: 'extracted'
     };
 
-    const savedJob = await upsertJob(job);
+    const savedJob = await upsertJob(context, job);
 
     // If autoTailor requested and profile exists, generate tailored CV immediately
     let tailoredCv = null;
     if (data.autoTailor) {
-      const profile = await getMasterProfile();
+      const profile = await getMasterProfile(context);
       if (profile && savedJob.description) {
         tailoredCv = await tailorCVForJob(profile, savedJob);
-        await saveTailoredCV(tailoredCv);
+        await saveTailoredCV(context, tailoredCv);
         savedJob.tailoredCvId = tailoredCv.id;
         savedJob.status = 'tailored';
         savedJob.matchScore = tailoredCv.matchScore;
-        await upsertJob(savedJob);
+        await upsertJob(context, savedJob);
       }
     }
 
