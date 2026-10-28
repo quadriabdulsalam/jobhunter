@@ -14,9 +14,12 @@ export default function LoginPage() {
   const [providerMessage, setProviderMessage] = useState('');
 
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).has('error')) {
-      setProviderMessage('That sign-in option is not ready yet. Use email for now, or enable the provider in Supabase.');
-    }
+    const params = new URLSearchParams(window.location.search);
+    const authError = params.get('error');
+    if (authError === 'config') setProviderMessage('Sign-in is not configured yet. Please try again later.');
+    else if (authError === 'provider' || authError?.toLowerCase().includes('unsupported provider')) {
+      setProviderMessage('Google and GitHub sign-in are not enabled yet. Add each provider’s OAuth credentials in Supabase Auth settings to use them.');
+    } else if (authError) setProviderMessage('That sign-in could not be completed. Please try again or use email.');
   }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -26,7 +29,13 @@ export default function LoginPage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Unable to continue.');
+      if (!response.ok) {
+        const detail = String(data.error || '');
+        if (detail.toLowerCase().includes('email rate limit exceeded')) {
+          throw new Error('Supabase has temporarily limited confirmation emails. Wait before retrying, or configure a custom SMTP provider in Supabase Auth settings.');
+        }
+        throw new Error(detail || 'Unable to continue.');
+      }
       if (data.needsConfirmation) setMessage('Check your email to confirm your account, then come back to sign in.');
       else router.replace('/');
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to continue.'); }
