@@ -96,11 +96,23 @@ export default function Dashboard() {
         const data = await res.json();
         setProfile(data.profile);
         setProfileDraft(data.profile);
+        const hasProfileDetails = Boolean(
+          data.profile.contact?.name ||
+          data.profile.contact?.email ||
+          data.profile.experiences?.length ||
+          data.profile.projects?.length ||
+          data.profile.education?.length ||
+          data.profile.metadata?.sourceFiles?.length
+        );
+        if (!hasProfileDetails) {
+          setIsEditingProfile(true);
+          setProfileEntryMode('import');
+        }
       } else {
         setProfile(createEmptyProfile());
         setProfileDraft(createEmptyProfile());
         setIsEditingProfile(true);
-        setProfileEntryMode('choose');
+        setProfileEntryMode('import');
       }
     } catch (e) {
       console.error('Error fetching profile:', e);
