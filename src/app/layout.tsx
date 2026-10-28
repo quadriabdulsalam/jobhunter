@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'JobHunter AI — LinkedIn Job Extraction & Tailored CV Studio',
-  description: 'AI-powered LinkedIn job discovery, resume auto-tailoring, and application assistant.',
+  title: 'Jobhunter — Career workspace',
+  description: 'A focused workspace for job applications, career details, and tailored resumes.',
 };
 
 export default function RootLayout({

@@ -28,6 +28,14 @@ A platform designed to discover jobs on LinkedIn, consolidate multiple career CV
 
 ## 🛠️ Getting Started
 
+### Configure an AI provider (optional)
+
+The app supports Groq and OpenAI for AI-assisted CV tailoring and CV consolidation. Copy `.env.example` to `.env.local`, set `AI_PROVIDER` to `groq` or `openai`, fill in the matching API key, and restart the development server. Groq defaults to `openai/gpt-oss-20b`; OpenAI defaults to `gpt-4o`.
+
+For Groq, create a key in the Groq Console and set `AI_PROVIDER=groq` and `GROQ_API_KEY` in `.env.local`. The Groq API key is sent from the server to Groq; it is never exposed to the browser.
+
+Keep `.env.local` private and never commit your API key. Without a configured key, CV tailoring uses the built-in rule-based engine and CV imports use basic local extraction.
+
 ### 1. Launch the Web Studio
 The web application runs locally at:
 ```bash

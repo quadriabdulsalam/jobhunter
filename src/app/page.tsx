@@ -22,12 +22,40 @@ import {
   Check,
   Trash2
 } from 'lucide-react';
-import { MasterProfile, JobPosting, TailoredCV } from '@/lib/types';
+import { MasterProfile, JobPosting, TailoredCV, ExperienceItem } from '@/lib/types';
 import { cleanProfessionalTitle } from '@/lib/cv-tailorer';
+
+function createEmptyProfile(): MasterProfile {
+  return {
+    contact: { name: '', titles: [], email: '', phone: '', location: '', github: '', linkedin: '', portfolio: '' },
+    summaries: { general: '' },
+    skills: { languages: [], frameworks: [], data_and_ai: [], cloud_and_devops: [], databases: [], practices: [] },
+    experiences: [], projects: [], education: [], certifications: [],
+    metadata: { lastUpdated: new Date().toISOString(), sourceFiles: [] }
+  };
+}
+
+const profileInputStyle: React.CSSProperties = {};
+
+const profileLabelStyle: React.CSSProperties = {
+  display: 'block', marginBottom: '6px', color: 'var(--text-muted)',
+  fontSize: '13px', fontWeight: 500
+};
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'jobs' | 'studio' | 'profile' | 'extension'>('jobs');
   const [profile, setProfile] = useState<MasterProfile | null>(null);
+  const [profileDraft, setProfileDraft] = useState<MasterProfile>(createEmptyProfile);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [profileSaveMessage, setProfileSaveMessage] = useState('');
+  const [profileEntryMode, setProfileEntryMode] = useState<'choose' | 'import' | 'manual'>('manual');
+  const [profileFiles, setProfileFiles] = useState<File[]>([]);
+  const [isImportingProfile, setIsImportingProfile] = useState(false);
+  const [profileImportMessage, setProfileImportMessage] = useState('');
+  const [aiConfigured, setAIConfigured] = useState(false);
+  const [aiProvider, setAIProvider] = useState('OpenAI');
+  const [aiModel, setAIModel] = useState('gpt-4o');
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
   const [tailoredCv, setTailoredCv] = useState<TailoredCV | null>(null);
@@ -50,6 +78,7 @@ export default function Dashboard() {
   useEffect(() => {
     fetchProfile();
     fetchJobs();
+    fetchAIStatus();
 
     // Check URL parameters (e.g. ?cvId=... from Chrome Extension)
     const params = new URLSearchParams(window.location.search);
@@ -66,9 +95,93 @@ export default function Dashboard() {
       if (res.ok) {
         const data = await res.json();
         setProfile(data.profile);
+        setProfileDraft(data.profile);
+      } else {
+        setProfile(createEmptyProfile());
+        setProfileDraft(createEmptyProfile());
+        setIsEditingProfile(true);
+        setProfileEntryMode('choose');
       }
     } catch (e) {
       console.error('Error fetching profile:', e);
+    }
+  }
+
+  function updateProfileContact(field: keyof MasterProfile['contact'], value: string) {
+    const updatedValue = field === 'titles' ? value.split(',').map(item => item.trim()).filter(Boolean) : value;
+    setProfileDraft(current => ({ ...current, contact: { ...current.contact, [field]: updatedValue } }));
+  }
+
+  function updateProfileSkill(field: keyof MasterProfile['skills'], value: string) {
+    setProfileDraft(current => ({
+      ...current,
+      skills: { ...current.skills, [field]: value.split(',').map(item => item.trim()).filter(Boolean) }
+    }));
+  }
+
+  function updateProfileExperience(index: number, field: keyof ExperienceItem, value: string) {
+    setProfileDraft(current => ({
+      ...current,
+      experiences: current.experiences.map((experience, itemIndex) => itemIndex === index
+        ? { ...experience, [field]: field === 'highlights' ? value.split('\n').map(item => item.trim()).filter(Boolean) : field === 'keywords' ? value.split(',').map(item => item.trim()).filter(Boolean) : value }
+        : experience)
+    }));
+  }
+
+  function addProfileExperience() {
+    setProfileDraft(current => ({
+      ...current,
+      experiences: [...current.experiences, {
+        id: `exp-${Date.now()}`, company: '', role: '', location: '', startDate: '', endDate: '', highlights: [], keywords: []
+      }]
+    }));
+  }
+
+  async function saveProfileDetails() {
+    setIsSavingProfile(true);
+    setProfileSaveMessage('');
+    try {
+      const res = await fetch('/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileDraft)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not save your profile.');
+      setProfile(data.profile);
+      setProfileDraft(data.profile);
+      setIsEditingProfile(false);
+      setProfileSaveMessage('Your career details are saved and ready to use when tailoring a CV.');
+    } catch (error) {
+      setProfileSaveMessage(error instanceof Error ? error.message : 'Could not save your profile.');
+    } finally {
+      setIsSavingProfile(false);
+    }
+  }
+
+  async function importProfileCVs() {
+    if (profileFiles.length === 0) {
+      setProfileImportMessage('Choose at least one CV file first.');
+      return;
+    }
+    setIsImportingProfile(true);
+    setProfileImportMessage('');
+    try {
+      const formData = new FormData();
+      profileFiles.forEach(file => formData.append('files', file));
+      const res = await fetch('/api/profile/import', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not import the CV.');
+      setProfileDraft(data.profile);
+      setProfileEntryMode('manual');
+      setProfileImportMessage(data.usedAI
+        ? `Imported ${data.filesProcessed.length} CV file(s). Review the extracted details and add anything that was missed.`
+        : `Imported ${data.filesProcessed.length} CV file(s). Basic details and recognized skills were extracted. Review them, then add your work history and achievements before saving.`);
+      setProfileFiles([]);
+    } catch (error) {
+      setProfileImportMessage(error instanceof Error ? error.message : 'Could not import the CV.');
+    } finally {
+      setIsImportingProfile(false);
     }
   }
 
@@ -118,6 +231,19 @@ Requirements:
       }
     } catch (e) {
       console.error('Error fetching jobs:', e);
+    }
+  }
+
+  async function fetchAIStatus() {
+    try {
+      const res = await fetch('/api/ai/status');
+      if (!res.ok) return;
+      const status = await res.json();
+      setAIConfigured(Boolean(status.configured));
+      setAIProvider(status.providerLabel || 'OpenAI');
+      setAIModel(status.model || 'gpt-4o');
+    } catch (e) {
+      console.error('Error checking AI configuration:', e);
     }
   }
 
@@ -306,9 +432,9 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
   );
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-shell" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
-      <header className="no-print" style={{
+      <header className="topbar no-print" style={{
         position: 'sticky',
         top: 0,
         zIndex: 50,
@@ -322,34 +448,30 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{
+            <div className="brand-mark" style={{
               width: '36px',
               height: '36px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+              background: '#111111',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 800,
               fontSize: '18px',
-              boxShadow: '0 4px 14px rgba(59, 130, 246, 0.4)'
+              boxShadow: 'none'
             }}>
               JH
             </div>
             <div>
-              <div style={{ fontSize: '17px', fontWeight: 700, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                JobHunter AI <span className="badge badge-purple" style={{ fontSize: '10px' }}>Copilot</span>
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                LinkedIn Discovery & Tailored ATS CV Engine
-              </div>
+              <div className="brand-name">Jobhunter</div>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <nav style={{ display: 'flex', gap: '6px', marginLeft: '20px' }}>
+          <nav className="top-nav" aria-label="Main navigation" style={{ display: 'flex', gap: '6px', marginLeft: '20px' }}>
             <button 
               onClick={() => setActiveTab('jobs')}
+              className={`nav-button ${activeTab === 'jobs' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -365,11 +487,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <Briefcase size={16} /> Job Pipeline ({jobs.length})
+              <Briefcase size={16} /> Applications ({jobs.length})
             </button>
 
             <button 
               onClick={() => setActiveTab('studio')}
+              className={`nav-button ${activeTab === 'studio' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -385,11 +508,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <FileText size={16} /> Tailored CV Studio
+              <FileText size={16} /> Resume
             </button>
 
             <button 
               onClick={() => setActiveTab('profile')}
+              className={`nav-button ${activeTab === 'profile' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -405,11 +529,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <UserCheck size={16} /> Master Profile ({profile?.metadata?.sourceFiles?.length || 5} CVs)
+              <UserCheck size={16} /> Profile
             </button>
 
             <button 
               onClick={() => setActiveTab('extension')}
+              className={`nav-button ${activeTab === 'extension' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -425,45 +550,39 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <Chrome size={16} /> Extension Setup
+              <Chrome size={16} /> Browser helper
             </button>
           </nav>
         </div>
 
         {/* Profile Status Badge & Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '20px',
-            fontSize: '12px'
+        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div className="ai-status" title={aiConfigured ? `${aiProvider} is configured for ${aiModel}; requests may still fall back if the key is invalid.` : `Configure ${aiProvider} in .env.local to enable AI. The app currently uses its built-in tailoring engine.`} style={{
+            display: 'flex', alignItems: 'center', gap: '7px', padding: '6px 11px',
+            backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-subtle)',
+            borderRadius: '20px', fontSize: '11px', color: 'var(--text-muted)'
           }}>
-            <span className="pulse-dot"></span>
-            <span style={{ color: 'var(--text-muted)' }}>Master:</span>
-            <strong style={{ color: '#ffffff' }}>{profile?.contact?.name || 'Timothy Owolabi S.'}</strong>
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: aiConfigured ? '#34d399' : '#fbbf24' }} />
+            {aiConfigured ? `${aiProvider} ready` : 'Local mode'}
           </div>
-
-          <button 
-            onClick={() => setShowAddJobModal(true)}
-            className="btn-primary"
-            style={{ padding: '8px 14px', fontSize: '13px' }}
-          >
-            <Plus size={16} /> Add Job Manually
-          </button>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, padding: '28px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+      <main className={`main-shell ${activeTab === 'studio' ? 'main-shell-wide' : ''}`} style={{ flex: 1, padding: '28px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         {/* TAB 1: JOB APPLICATIONS & PIPELINE */}
         {activeTab === 'jobs' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div className="jobs-workspace" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="page-heading heading-row">
+              <div>
+                <p className="eyebrow">YOUR WORKSPACE</p>
+                <h1>Applications</h1>
+                <p className="page-lede">Keep the roles you’re considering in one place.</p>
+              </div>
+              <button className="btn-secondary" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add job manually</button>
+            </div>
             {/* Metric Banner */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div className="metrics-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
                 <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Total Jobs Tracked</div>
                 <div style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff' }}>{jobs.length}</div>
@@ -488,13 +607,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
                 <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Master Career Bank</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: '#fbbf24' }}>5 CVs</div>
+                <div style={{ fontSize: '28px', fontWeight: 800, color: '#fbbf24' }}>{profile?.metadata?.sourceFiles?.length || 0} CVs</div>
                 <div style={{ fontSize: '11px', color: 'var(--accent-amber)', marginTop: '4px' }}>De-duplicated & Enriched</div>
               </div>
             </div>
 
             {/* Quick Import from LinkedIn URL Banner */}
-            <div className="glass-panel" style={{
+            <div className="glass-panel import-panel" style={{
               padding: '18px 22px',
               background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(139, 92, 246, 0.12))',
               border: '1px solid rgba(59, 130, 246, 0.3)',
@@ -504,13 +623,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '18px' }}>🔗</span>
                   <div>
                     <h3 style={{ fontSize: '14.5px', fontWeight: 700, color: '#ffffff' }}>
-                      Import Directly via LinkedIn Job URL
+                      Add a job from LinkedIn
                     </h3>
                     <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                      Paste any LinkedIn job posting link to auto-extract requirements, calculate match score, and tailor your CV.
+                      Paste a job link to save the role and prepare a tailored resume.
                     </p>
                   </div>
                 </div>
@@ -520,7 +638,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <input 
                   type="url"
                   required
-                  placeholder="https://www.linkedin.com/jobs/view/4123456789/... or any LinkedIn job link"
+                  placeholder="Paste a LinkedIn job link"
                   value={linkedinUrlInput}
                   onChange={e => setLinkedinUrlInput(e.target.value)}
                   style={{
@@ -540,18 +658,18 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   className="btn-primary"
                   style={{ padding: '11px 22px', whiteSpace: 'nowrap' }}
                 >
-                  <Sparkles size={16} /> {isImportingUrl ? 'Fetching & Tailoring...' : 'Fetch & Tailor CV'}
+                  <Sparkles size={16} /> {isImportingUrl ? 'Importing…' : 'Import job'}
                 </button>
               </form>
             </div>
 
             {/* Filter & Search Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+            <div className="job-tools" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
               <div style={{ position: 'relative', width: '360px' }}>
                 <Search size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} />
                 <input 
                   type="text" 
-                  placeholder="Filter by job title, company, or keywords..."
+                  placeholder="Search roles"
                   value={filterQuery}
                   onChange={e => setFilterQuery(e.target.value)}
                   style={{
@@ -573,9 +691,9 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             </div>
 
             {/* Job Cards Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))', gap: '18px' }}>
+            <div className="job-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))', gap: '18px' }}>
               {filteredJobs.map(job => (
-                <div key={job.id} className="glass-panel" style={{ padding: '22px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div key={job.id} className="glass-panel job-card" style={{ padding: '22px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '10px' }}>
                       <div>
@@ -589,7 +707,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
                         <span className={`badge ${job.applyType === 'easy_apply' ? 'badge-emerald' : 'badge-blue'}`}>
-                          {job.applyType === 'easy_apply' ? '⚡ Easy Apply' : '🔗 External Link'}
+                          {job.applyType === 'easy_apply' ? 'Easy Apply' : 'External link'}
                         </span>
                         {job.matchScore && (
                           <span style={{ fontSize: '11px', fontWeight: 700, color: '#34d399' }}>
@@ -664,9 +782,9 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
         {/* TAB 2: TAILORED CV STUDIO */}
         {activeTab === 'studio' && (
-          <div className="studio-grid" style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: '28px' }}>
+          <div className="studio-grid" style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '24px' }}>
             {/* Left Controls & Analysis Panel */}
-            <div className="no-print" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="no-print studio-controls" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="glass-panel" style={{ padding: '20px' }}>
                 <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <ShieldCheck size={18} color="#3b82f6" /> ATS Alignment & Optimization
@@ -773,7 +891,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             </div>
 
             {/* Right: The Clean ATS Resume Document Sheet */}
-            <div style={{
+            <div className="resume-paper print-resume-sheet" style={{
               backgroundColor: '#ffffff',
               color: '#111827',
               borderRadius: '12px',
@@ -782,7 +900,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               minHeight: '1000px',
               fontFamily: '"Times New Roman", Times, Georgia, serif',
               lineHeight: '1.4'
-            }} className="print-resume-sheet">
+            }}>
               {isLoadingTailor ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', gap: '14px', color: '#6b7280' }}>
                   <div className="jh-spinner" style={{ width: '28px', height: '28px', borderColor: 'rgba(0,0,0,0.2)', borderTopColor: '#2563eb' }}></div>
@@ -935,8 +1053,119 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
         {/* TAB 3: MASTER PROFILE HUB */}
         {activeTab === 'profile' && profile && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {isEditingProfile && (
+              <section className="glass-panel profile-editor-panel" style={{ padding: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '20px' }}>
+                  <div>
+                    <h2 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>Your career details</h2>
+                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '640px' }}>
+                      Add accurate details about your experience and skills. The tailoring tool will use this information to prepare a role-specific resume.
+                    </p>
+                  </div>
+                  {profile.contact.name && (
+                    <button className="btn-secondary" onClick={() => { setProfileDraft(profile); setIsEditingProfile(false); setProfileSaveMessage(''); }}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
+
+                <div role="tablist" aria-label="Choose how to add your profile" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '20px' }}>
+                  <button role="tab" aria-selected={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'import' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'import' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
+                    <strong style={{ display: 'block', marginBottom: '4px' }}>Import an existing CV</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Upload PDF, DOCX, or TXT</span>
+                  </button>
+                  <button role="tab" aria-selected={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'manual' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'manual' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
+                    <strong style={{ display: 'block', marginBottom: '4px' }}>Enter details manually</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Add your information one section at a time</span>
+                  </button>
+                </div>
+
+                {profileEntryMode === 'import' ? (
+                  <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '18px' }}>
+                    <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>Import your resume</h3>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>Choose one or more files. You’ll be able to review and correct the extracted information before saving it to your profile.</p>
+                    <label style={profileLabelStyle}>CV files (PDF, DOCX, TXT)
+                      <input style={{ ...profileInputStyle, marginTop: '6px' }} type="file" accept=".pdf,.docx,.txt,application/pdf,text/plain" multiple onChange={e => setProfileFiles(Array.from(e.target.files || []))} />
+                    </label>
+                    {profileFiles.length > 0 && <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>Selected: {profileFiles.map(file => file.name).join(', ')}</p>}
+                    <p style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '12px' }}>When an OpenAI API key is configured, the CV text is sent to OpenAI for extraction. Without a key, basic details are extracted locally and you can complete the profile manually.</p>
+                    <button className="btn-primary" style={{ marginTop: '14px' }} onClick={importProfileCVs} disabled={isImportingProfile || profileFiles.length === 0}>
+                      {isImportingProfile ? <><RefreshCw size={15} className="spin" /> Importing...</> : <><FileText size={15} /> Import and review</>}
+                    </button>
+                    {profileImportMessage && <p role="status" style={{ color: profileImportMessage.toLowerCase().includes('could not') || profileImportMessage.toLowerCase().includes('choose') ? '#fca5a5' : '#6ee7b7', fontSize: '12px', marginTop: '12px' }}>{profileImportMessage}</p>}
+                  </div>
+                ) : (
+                  <>
+                {profileImportMessage && <p role="status" style={{ color: '#6ee7b7', fontSize: '12px', marginBottom: '14px' }}>{profileImportMessage}</p>}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
+                  <label style={profileLabelStyle}>Full name<input style={profileInputStyle} value={profileDraft.contact.name} onChange={e => updateProfileContact('name', e.target.value)} placeholder="Your name" /></label>
+                  <label style={profileLabelStyle}>Professional titles<input style={profileInputStyle} value={profileDraft.contact.titles.join(', ')} onChange={e => updateProfileContact('titles', e.target.value)} placeholder="e.g. Product Designer, UX Researcher" /></label>
+                  <label style={profileLabelStyle}>Email<input style={profileInputStyle} type="email" value={profileDraft.contact.email} onChange={e => updateProfileContact('email', e.target.value)} placeholder="you@example.com" /></label>
+                  <label style={profileLabelStyle}>Phone<input style={profileInputStyle} value={profileDraft.contact.phone} onChange={e => updateProfileContact('phone', e.target.value)} placeholder="Phone number" /></label>
+                  <label style={profileLabelStyle}>Location<input style={profileInputStyle} value={profileDraft.contact.location} onChange={e => updateProfileContact('location', e.target.value)} placeholder="City, Country" /></label>
+                  <label style={profileLabelStyle}>LinkedIn<input style={profileInputStyle} value={profileDraft.contact.linkedin || ''} onChange={e => updateProfileContact('linkedin', e.target.value)} placeholder="LinkedIn URL" /></label>
+                  <label style={profileLabelStyle}>Portfolio or website<input style={profileInputStyle} value={profileDraft.contact.portfolio || ''} onChange={e => updateProfileContact('portfolio', e.target.value)} placeholder="Website URL" /></label>
+                  <label style={profileLabelStyle}>GitHub<input style={profileInputStyle} value={profileDraft.contact.github || ''} onChange={e => updateProfileContact('github', e.target.value)} placeholder="GitHub URL" /></label>
+                </div>
+
+                <label style={{ ...profileLabelStyle, marginTop: '18px' }}>Professional summary
+                  <textarea style={{ ...profileInputStyle, minHeight: '110px', resize: 'vertical', marginTop: '6px' }} value={profileDraft.summaries.general || ''} onChange={e => setProfileDraft(current => ({ ...current, summaries: { ...current.summaries, general: e.target.value } }))} placeholder="Summarize your experience, strengths, and the work you do." />
+                </label>
+
+                <h3 style={{ fontSize: '15px', fontWeight: 700, margin: '22px 0 12px' }}>Skills</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '12px' }}>Separate skills with commas. Include only skills you can support with real experience.</p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                  {([
+                    ['languages', 'Languages / core skills'], ['frameworks', 'Tools / frameworks'], ['data_and_ai', 'Data / AI'],
+                    ['cloud_and_devops', 'Cloud / operations'], ['databases', 'Databases'], ['practices', 'Methods / practices']
+                  ] as [keyof MasterProfile['skills'], string][]).map(([key, label]) => (
+                    <label key={key} style={profileLabelStyle}>{label}<input style={profileInputStyle} value={profileDraft.skills[key].join(', ')} onChange={e => updateProfileSkill(key, e.target.value)} placeholder="Add comma-separated skills" /></label>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap', margin: '24px 0 12px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '15px', fontWeight: 700 }}>Work experience</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px' }}>Add the roles and achievements you want considered for tailored resumes.</p>
+                  </div>
+                  <button className="btn-secondary" onClick={addProfileExperience}><Plus size={15} /> Add role</button>
+                </div>
+                {profileDraft.experiences.map((experience, index) => (
+                  <div key={experience.id} style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', marginBottom: '12px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+                      {([['role', 'Job title'], ['company', 'Company'], ['location', 'Location'], ['startDate', 'Start date'], ['endDate', 'End date']] as [keyof ExperienceItem, string][]).map(([key, label]) => (
+                        <label key={key} style={profileLabelStyle}>{label}<input style={profileInputStyle} value={experience[key] as string} onChange={e => updateProfileExperience(index, key, e.target.value)} placeholder={label} /></label>
+                      ))}
+                    </div>
+                    <label style={{ ...profileLabelStyle, marginTop: '10px' }}>Achievements (one per line)
+                      <textarea style={{ ...profileInputStyle, minHeight: '88px', resize: 'vertical', marginTop: '6px' }} value={experience.highlights.join('\n')} onChange={e => updateProfileExperience(index, 'highlights', e.target.value)} placeholder="Describe what you did and the results you achieved." />
+                    </label>
+                    <label style={{ ...profileLabelStyle, marginTop: '10px' }}>Relevant skills (comma-separated)
+                      <input style={profileInputStyle} value={experience.keywords.join(', ')} onChange={e => updateProfileExperience(index, 'keywords', e.target.value)} placeholder="Skills and tools used in this role" />
+                    </label>
+                    <button className="btn-secondary" style={{ marginTop: '10px', color: '#fca5a5' }} onClick={() => setProfileDraft(current => ({ ...current, experiences: current.experiences.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 size={14} /> Remove role</button>
+                  </div>
+                ))}
+                {profileDraft.experiences.length === 0 && <p style={{ color: 'var(--text-dim)', fontSize: '13px', padding: '12px 0' }}>No roles added yet. Add at least one role for better tailoring.</p>}
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '18px' }}>
+                  <button className="btn-primary" onClick={saveProfileDetails} disabled={isSavingProfile || !profileDraft.contact.name.trim()}>
+                    {isSavingProfile ? <><RefreshCw size={15} className="spin" /> Saving...</> : <><CheckCircle2 size={15} /> Save career details</>}
+                  </button>
+                  {!profileDraft.contact.name.trim() && <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>Enter your name to save.</span>}
+                  {profileSaveMessage && <span role="status" style={{ color: profileSaveMessage.includes('saved') ? '#6ee7b7' : '#fca5a5', fontSize: '12px' }}>{profileSaveMessage}</span>}
+                </div>
+                  </>
+                )}
+              </section>
+            )}
+
+            {!isEditingProfile && profile.contact.name && (
+              <>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <button className="btn-primary" onClick={() => { setProfileDraft(profile); setIsEditingProfile(true); setProfileSaveMessage(''); }}><UserCheck size={15} /> Edit career details</button>
+                </div>
+                {profileSaveMessage && <p role="status" style={{ color: '#555', fontSize: '13px' }}>{profileSaveMessage}</p>}
             {/* Header info */}
-            <div className="glass-panel" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div className="glass-panel profile-overview" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
               <div>
                 <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
                   {profile.contact.name}
@@ -945,21 +1174,19 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   {profile.contact.titles.join(' • ')}
                 </div>
                 <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--accent-blue)', flexWrap: 'wrap' }}>
-                  <span>📍 {profile.contact.location}</span>
-                  <span>📞 {profile.contact.phone}</span>
-                  <span>✉️ {profile.contact.email}</span>
-                  <a href={profile.contact.github} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-blue)', textDecoration: 'none' }}>
-                    GitHub ↗
-                  </a>
+                  {profile.contact.location && <span>{profile.contact.location}</span>}
+                  {profile.contact.phone && <a href={`tel:${profile.contact.phone}`}>{profile.contact.phone}</a>}
+                  {profile.contact.email && <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>}
+                  {profile.contact.github && <a href={profile.contact.github} target="_blank" rel="noreferrer">GitHub ↗</a>}
                 </div>
               </div>
 
               <div style={{ textAlign: 'right' }}>
                 <span className="badge badge-emerald" style={{ marginBottom: '6px' }}>
-                  ✓ 5 Source CVs Synthesized
+                  {profile.metadata.sourceFiles.length} CV{profile.metadata.sourceFiles.length === 1 ? '' : 's'} saved
                 </span>
                 <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
-                  De-duplicated & stored in data/master_profile.json
+                  Used when tailoring your resume
                 </div>
               </div>
             </div>
@@ -967,7 +1194,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Categorized Skills */}
             <div className="glass-panel" style={{ padding: '24px' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Layers size={18} color="#8b5cf6" /> Consolidated Skill Banks
+                <Layers size={18} /> Skills
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '18px' }}>
                 <div>
@@ -1003,7 +1230,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Work History Timeline */}
             <div className="glass-panel" style={{ padding: '24px' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Briefcase size={18} color="#06b6d4" /> Consolidated Career Experience ({profile.experiences.length} Roles)
+                <Briefcase size={18} /> Work experience ({profile.experiences.length})
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {profile.experiences.map(exp => (
@@ -1021,12 +1248,14 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 ))}
               </div>
             </div>
+              </>
+            )}
           </div>
         )}
 
         {/* TAB 4: CHROME EXTENSION SETUP GUIDE */}
         {activeTab === 'extension' && (
-          <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div className="glass-panel" style={{ padding: '28px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
                 <div style={{
@@ -1111,7 +1340,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   <div>
                     <h4 style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>Click "Load unpacked"</h4>
                     <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                      Select this exact folder from your Mac:
+                      Select the extension folder inside this project:
                     </p>
                     <code style={{
                       display: 'block',
@@ -1122,7 +1351,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                       fontSize: '12px',
                       fontFamily: 'monospace'
                     }}>
-                      /Users/timothyowolabi/Documents/jobhunter/extension
+                      jobhunter/extension
                     </code>
                   </div>
                 </div>
@@ -1156,7 +1385,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
       {/* Manual Job Modal */}
       {showAddJobModal && (
-        <div style={{
+        <div className="modal-backdrop" style={{
           position: 'fixed',
           inset: 0,
           backgroundColor: 'rgba(0,0,0,0.7)',
@@ -1167,7 +1396,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           zIndex: 100,
           padding: '20px'
         }}>
-          <div className="glass-panel" style={{ width: '100%', maxWidth: '580px', padding: '28px' }}>
+          <div className="glass-panel job-modal" style={{ width: '100%', maxWidth: '580px', padding: '28px' }}>
             <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: '#ffffff' }}>
               Add Job Posting Manually
             </h3>

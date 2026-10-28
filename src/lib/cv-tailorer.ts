@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { MasterProfile, JobPosting, TailoredCV } from './types';
+import { createAIClient, AI_MODEL } from './openai-config';
 
 // Clean raw job titles into pristine, executive resume titles
 // Strips employer names (e.g. "Trade Republic"), cities ("Berlin"), and job posting quirks ("(m/w/d)", "(Backend focused)")
@@ -59,11 +60,11 @@ export async function tailorCVForJob(
   profile: MasterProfile,
   job: Partial<JobPosting> & { description: string; title: string; company: string }
 ): Promise<TailoredCV> {
-  // Try LLM tailoring first if API key is provided
-  if (process.env.OPENAI_API_KEY) {
+  // Try LLM tailoring first if an API key is configured.
+  const ai = createAIClient();
+  if (ai) {
     try {
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      return await tailorWithLLM(openai, profile, job);
+      return await tailorWithLLM(ai, profile, job);
     } catch (llmErr: unknown) {
       const errorMsg = llmErr instanceof Error ? llmErr.message : String(llmErr);
       console.warn(`[CV Tailorer] LLM tailoring fallback (${errorMsg}) -> using deterministic transferable ATS engine.`);
@@ -75,7 +76,7 @@ export async function tailorCVForJob(
 }
 
 async function tailorWithLLM(
-  openai: OpenAI,
+  ai: OpenAI,
   profile: MasterProfile,
   job: Partial<JobPosting> & { description: string; title: string; company: string }
 ): Promise<TailoredCV> {
@@ -151,8 +152,8 @@ CANDIDATE MASTER PROFILE:
 ${JSON.stringify(profile, null, 2)}
 `;
 
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
+  const response = await ai.chat.completions.create({
+    model: AI_MODEL,
     response_format: { type: 'json_object' },
     temperature: 0.25,
     messages: [
@@ -163,7 +164,7 @@ ${JSON.stringify(profile, null, 2)}
 
   const content = response.choices[0]?.message?.content;
   if (!content) {
-    throw new Error('Empty response from OpenAI');
+    throw new Error('Empty response from AI provider');
   }
 
   const result = JSON.parse(content);
