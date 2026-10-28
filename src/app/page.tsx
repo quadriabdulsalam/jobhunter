@@ -190,39 +190,7 @@ export default function Dashboard() {
       const res = await fetch('/api/jobs');
       if (res.ok) {
         const data = await res.json();
-        let fetchedJobs = data.jobs || [];
-
-        // If no jobs yet, seed a sample job so user has an immediate hands-on test
-        if (fetchedJobs.length === 0) {
-          const sampleJob: JobPosting = {
-            id: 'job-tesla-sample',
-            title: 'Senior Data Platform & Distributed Systems Engineer',
-            company: 'Tesla',
-            location: 'Berlin / Düsseldorf, Germany',
-            workplaceType: 'Hybrid',
-            url: 'https://www.linkedin.com/jobs/view/sample-tesla',
-            source: 'linkedin',
-            applyType: 'easy_apply',
-            description: `We are looking for a Senior Data & Distributed Systems Engineer to scale our vehicle telemetry and real-time streaming infrastructure.
-Responsibilities:
-- Build high-throughput event streaming pipelines using Apache Kafka, Python, Go, and PostgreSQL.
-- Optimize distributed storage, ETL/ELT pipelines, and query performance for terabytes of vehicle sensor data.
-- Design resilient microservices with Docker, Kubernetes, and AWS cloud infrastructure.
-- Lead architecture reviews, CQRS designs, and low-latency API development.
-Requirements:
-- 6+ years in backend/data platform engineering.
-- Deep expertise in Python or Java/Kotlin, Kafka, SQL, Docker, and Kubernetes.
-- Experience with real-time analytics, data modeling, and performance tuning.`,
-            extractedAt: new Date().toISOString(),
-            status: 'extracted'
-          };
-          await fetch('/api/jobs', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(sampleJob)
-          });
-          fetchedJobs = [sampleJob];
-        }
+        const fetchedJobs = data.jobs || [];
 
         setJobs(fetchedJobs);
         if (fetchedJobs.length > 0 && !selectedJob) {
@@ -776,6 +744,18 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   </div>
                 </div>
               ))}
+              {filteredJobs.length === 0 && (
+                <div className="glass-panel" style={{ gridColumn: '1 / -1', padding: '36px 24px', textAlign: 'center' }}>
+                  <Briefcase size={22} style={{ color: 'var(--text-muted)', marginBottom: '12px' }} />
+                  <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '6px' }}>
+                    {filterQuery ? 'No matching applications' : 'Your application list is empty'}
+                  </h2>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '16px' }}>
+                    {filterQuery ? 'Try a different search.' : 'Add a job manually or import one from LinkedIn when you’re ready.'}
+                  </p>
+                  {!filterQuery && <button className="btn-secondary" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add your first job</button>}
+                </div>
+              )}
             </div>
           </div>
         )}
