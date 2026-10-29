@@ -36,8 +36,11 @@ export default function LoginPage() {
         }
         throw new Error(detail || 'Unable to continue.');
       }
-      if (data.needsConfirmation) setMessage('Check your email to confirm your account, then come back to sign in.');
-      else router.replace('/');
+      if (data.needsConfirmation) {
+        setError('Email confirmation is still enabled for this app. Disable “Confirm email” in Supabase Dashboard → Authentication → Sign In / Providers to create accounts and sign users in immediately.');
+      } else {
+        router.replace('/');
+      }
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to continue.'); }
     finally { setBusy(false); }
   }
