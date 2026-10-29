@@ -1265,7 +1265,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   onClick={(event) => {
                     event.preventDefault();
                     window.open(event.currentTarget.href, '_blank', 'noopener,noreferrer');
-                    window.open('https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js', '_blank', 'noopener,noreferrer');
+                    window.location.assign('https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js');
                   }}
                   className="btn-primary"
                   style={{ minHeight: '46px', flex: '1 1 240px', justifyContent: 'center', textDecoration: 'none' }}
@@ -1283,7 +1283,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </a>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '14px', lineHeight: 1.5 }}>
-                Chrome asks you to approve the extension and userscript. Use <strong>Approve in Chrome</strong> to open Tampermonkey settings and allow user scripts. If it is already installed, the install button opens the script’s install screen directly. Then sign in to Jobhunter and open a LinkedIn job listing.
+                The install button opens Tampermonkey in a separate tab and the script installer here. Approve the script in Tampermonkey. If you need to install Tampermonkey first, do that in its tab, then reload the script tab. Use <strong>Approve in Chrome</strong> to allow user scripts. Then sign in to Jobhunter and open a LinkedIn job listing.
               </p>
             </div>
 
