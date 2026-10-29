@@ -44,6 +44,7 @@ const profileLabelStyle: React.CSSProperties = {
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'jobs' | 'studio' | 'profile' | 'extension'>('jobs');
+  const [tampermonkeyInstalled, setTampermonkeyInstalled] = useState(false);
   const [profile, setProfile] = useState<MasterProfile | null>(null);
   const [profileDraft, setProfileDraft] = useState<MasterProfile>(createEmptyProfile);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -1257,21 +1258,27 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             <div className="glass-panel" style={{ padding: '24px' }}>
               <h2 style={{ fontSize: '20px', fontWeight: 750, marginBottom: '6px' }}>Add Jobhunter to your browser</h2>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px' }}>
-                Set up the LinkedIn helper in one step. This opens Tampermonkey and the Jobhunter script so you can install both.
+                Install Tampermonkey first, then load the Jobhunter script after the extension is ready.
               </p>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <a
                   href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    window.open(event.currentTarget.href, '_blank', 'noopener,noreferrer');
-                    window.location.assign('https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js');
-                  }}
+                  target="_blank"
+                  rel="noreferrer"
                   className="btn-primary"
                   style={{ minHeight: '46px', flex: '1 1 240px', justifyContent: 'center', textDecoration: 'none' }}
                 >
-                  <Download size={16} /> Install Jobhunter browser helper
+                  <Download size={16} /> 1. Install Tampermonkey
                 </a>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  disabled={!tampermonkeyInstalled}
+                  onClick={() => window.open('https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js', '_blank', 'noopener,noreferrer')}
+                  style={{ minHeight: '46px', flex: '1 1 240px', justifyContent: 'center', opacity: tampermonkeyInstalled ? 1 : 0.5, cursor: tampermonkeyInstalled ? 'pointer' : 'not-allowed' }}
+                >
+                  <CheckCircle2 size={16} /> 2. Install Jobhunter script
+                </button>
                 <a
                   href="chrome://extensions/?id=dhdgffkkebhmkfjojejmpbldmpobfkfo"
                   target="_blank"
@@ -1282,8 +1289,16 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   <CheckCircle2 size={16} /> Approve in Chrome
                 </a>
               </div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '9px', marginTop: '14px', fontSize: '12px', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={tampermonkeyInstalled}
+                  onChange={(event) => setTampermonkeyInstalled(event.target.checked)}
+                />
+                I’ve installed Tampermonkey (or already have it)
+              </label>
               <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '14px', lineHeight: 1.5 }}>
-                The install button opens Tampermonkey in a separate tab and the script installer here. Approve the script in Tampermonkey. If you need to install Tampermonkey first, do that in its tab, then reload the script tab. Use <strong>Approve in Chrome</strong> to allow user scripts. Then sign in to Jobhunter and open a LinkedIn job listing.
+                Browsers don’t let this page reliably detect installed extensions, so confirm Tampermonkey is installed before enabling the script button. Then approve the script in Tampermonkey, use <strong>Approve in Chrome</strong> to allow user scripts, sign in to Jobhunter, and open a LinkedIn job listing.
               </p>
             </div>
 
