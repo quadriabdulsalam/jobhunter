@@ -457,6 +457,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <nav className="top-nav" aria-label="Main navigation" style={{ display: 'flex', gap: '6px', marginLeft: '20px' }}>
             <button 
               onClick={() => setActiveTab('jobs')}
+              aria-pressed={activeTab === 'jobs'}
               className={`nav-button ${activeTab === 'jobs' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -478,6 +479,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
             <button 
               onClick={() => setActiveTab('studio')}
+              aria-pressed={activeTab === 'studio'}
               className={`nav-button ${activeTab === 'studio' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -499,6 +501,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
             <button 
               onClick={() => setActiveTab('profile')}
+              aria-pressed={activeTab === 'profile'}
               className={`nav-button ${activeTab === 'profile' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -520,6 +523,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
             <button 
               onClick={() => setActiveTab('extension')}
+              aria-pressed={activeTab === 'extension'}
               className={`nav-button ${activeTab === 'extension' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -622,23 +626,27 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               </div>
 
               <form onSubmit={handleImportFromUrl} style={{ display: 'flex', gap: '10px', width: '100%' }}>
-                <input 
-                  type="url"
-                  required
-                  placeholder="Paste a LinkedIn job link"
-                  value={linkedinUrlInput}
-                  onChange={e => setLinkedinUrlInput(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '11px 16px',
-                    backgroundColor: 'rgba(10, 14, 23, 0.7)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '10px',
-                    color: '#ffffff',
-                    fontSize: '13.5px',
-                    outline: 'none'
-                  }}
-                />
+                <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: '6px' }}>
+                  <label htmlFor="linkedin-job-url" style={{ color: 'var(--text-muted)', fontSize: '13px' }}>LinkedIn job link</label>
+                  <input
+                    id="linkedin-job-url"
+                    type="url"
+                    required
+                    placeholder="Paste a LinkedIn job link"
+                    value={linkedinUrlInput}
+                    onChange={e => setLinkedinUrlInput(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '11px 16px',
+                      backgroundColor: 'rgba(10, 14, 23, 0.7)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: '10px',
+                      color: '#ffffff',
+                      fontSize: '13.5px',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
                 <button 
                   type="submit" 
                   disabled={isImportingUrl}
@@ -653,8 +661,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Filter & Search Bar */}
             <div className="job-tools" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
               <div style={{ position: 'relative', width: '360px' }}>
-                <Search size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} />
-                <input 
+                <label htmlFor="application-search" style={{ display: 'block', marginBottom: '6px', color: 'var(--text-muted)', fontSize: '13px' }}>Search applications</label>
+                <Search size={16} style={{ position: 'absolute', left: '12px', top: '39px', color: 'var(--text-muted)' }} />
+                <input
+                  id="application-search"
                   type="text" 
                   placeholder="Search roles"
                   value={filterQuery}
@@ -738,6 +748,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                           className="btn-secondary" 
                           style={{ padding: '6px 10px', fontSize: '12px' }}
                           title="Open on LinkedIn"
+                          aria-label={`Open ${job.title} at ${job.company} on LinkedIn`}
                         >
                           <ExternalLink size={14} />
                         </a>
@@ -756,6 +767,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                         className="btn-secondary"
                         style={{ padding: '7px 10px', fontSize: '12px', color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.25)' }}
                         title="Remove job from pipeline"
+                        aria-label={`Remove ${job.title} at ${job.company}`}
                       >
                         <Trash2 size={14} />
                       </button>
@@ -1068,11 +1080,11 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   )}
                 </div>
 
-                <div role="tablist" aria-label="Choose how to add your profile" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '20px' }}>
-                  <button role="tab" aria-selected={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'import' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'import' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
+                <div role="group" aria-label="Choose how to add your profile" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '20px' }}>
+                  <button type="button" aria-pressed={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'import' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'import' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
                     <strong style={{ display: 'block', marginBottom: '4px' }}>Import an existing CV</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Upload PDF, DOCX, or TXT</span>
                   </button>
-                  <button role="tab" aria-selected={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'manual' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'manual' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
+                  <button type="button" aria-pressed={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'manual' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'manual' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
                     <strong style={{ display: 'block', marginBottom: '4px' }}>Enter details manually</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Add your information one section at a time</span>
                   </button>
                 </div>

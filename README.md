@@ -89,7 +89,7 @@ jobhunter/
 ├── src/
 │   ├── app/                      # Next.js App Router (Studio UI & API endpoints)
 │   │   ├── page.tsx              # Main interactive dashboard
-│   │   ├── globals.css           # Design tokens, glassmorphism, print CSS
+│   │   ├── globals.css           # Design tokens, responsive UI, print CSS
 │   │   └── api/                  # REST endpoints (/api/profile, /api/jobs, /api/tailor)
 │   └── lib/                      # Core business logic
 │       ├── types.ts              # TypeScript schemas
@@ -98,3 +98,7 @@ jobhunter/
 │       ├── profile-merger.ts     # Multi-CV consolidation
 │       └── cv-tailorer.ts        # Dual-engine ATS tailoring (LLM + Rule-based)
 ```
+
+## UI design system
+
+The shared visual and interaction rules are documented in [`design-system/jobhunter/MASTER.md`](design-system/jobhunter/MASTER.md) and implemented in `src/app/globals.css`. Follow those rules when adding or changing screens.
