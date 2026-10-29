@@ -44,7 +44,6 @@ const profileLabelStyle: React.CSSProperties = {
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'jobs' | 'studio' | 'profile' | 'extension'>('jobs');
-  const [tampermonkeyInstalled, setTampermonkeyInstalled] = useState(false);
   const [profile, setProfile] = useState<MasterProfile | null>(null);
   const [profileDraft, setProfileDraft] = useState<MasterProfile>(createEmptyProfile);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -1254,176 +1253,45 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
         {/* TAB 4: CHROME EXTENSION SETUP GUIDE */}
         {activeTab === 'extension' && (
-          <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <h2 style={{ fontSize: '20px', fontWeight: 750, marginBottom: '6px' }}>Add Jobhunter to your browser</h2>
-              <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px' }}>
-                Install Tampermonkey first, then load the Jobhunter script after the extension is ready.
-              </p>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <a
-                  href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-primary"
-                  style={{ minHeight: '46px', flex: '1 1 240px', justifyContent: 'center', textDecoration: 'none' }}
-                >
-                  <Download size={16} /> 1. Install Tampermonkey
-                </a>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  disabled={!tampermonkeyInstalled}
-                  onClick={() => window.open('https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js', '_blank', 'noopener,noreferrer')}
-                  style={{ minHeight: '46px', flex: '1 1 240px', justifyContent: 'center', opacity: tampermonkeyInstalled ? 1 : 0.5, cursor: tampermonkeyInstalled ? 'pointer' : 'not-allowed' }}
-                >
-                  <CheckCircle2 size={16} /> 2. Install Jobhunter script
-                </button>
-                <a
-                  href="chrome://extensions/?id=dhdgffkkebhmkfjojejmpbldmpobfkfo"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-secondary"
-                  style={{ minHeight: '46px', flex: '1 1 200px', justifyContent: 'center', textDecoration: 'none' }}
-                >
-                  <CheckCircle2 size={16} /> Approve in Chrome
-                </a>
-              </div>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '9px', marginTop: '14px', fontSize: '12px', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                <input
-                  type="checkbox"
-                  checked={tampermonkeyInstalled}
-                  onChange={(event) => setTampermonkeyInstalled(event.target.checked)}
-                />
-                I’ve installed Tampermonkey (or already have it)
-              </label>
-              <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '14px', lineHeight: 1.5 }}>
-                Browsers don’t let this page reliably detect installed extensions, so confirm Tampermonkey is installed before enabling the script button. Then approve the script in Tampermonkey, use <strong>Approve in Chrome</strong> to allow user scripts, sign in to Jobhunter, and open a LinkedIn job listing.
-              </p>
-            </div>
-
+          <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div className="glass-panel" style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                <div style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff'
-                }}>
-                  <Chrome size={24} />
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
+                <Chrome size={24} />
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: 800 }}>Install Chrome Extension (Option A)</h2>
-                  <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                    Extract jobs directly on LinkedIn and tailor your CV with 1 click.
-                  </div>
+                  <h2 style={{ fontSize: '20px', fontWeight: 750 }}>Add Jobhunter to Chrome</h2>
+                  <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Download it once, then load it into Chrome.</p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '24px' }}>
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <div style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(59, 130, 246, 0.2)',
-                    color: '#60a5fa',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    flexShrink: 0
-                  }}>1</div>
-                  <div>
-                    <h4 style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>Open Extensions in Chrome</h4>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                      In Google Chrome, navigate to <code style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>chrome://extensions</code>
-                    </p>
-                  </div>
-                </div>
+              <section style={{ padding: '20px 0', borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.12))' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 1 · Download the extension</h3>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px' }}>Save the ZIP, then extract it to a folder you can find easily, such as Downloads.</p>
+                <a
+                  href="/downloads/jobhunter-chrome-extension.zip"
+                  download="jobhunter-chrome-extension.zip"
+                  className="btn-primary"
+                  style={{ minHeight: '46px', justifyContent: 'center', textDecoration: 'none', padding: '0 18px' }}
+                >
+                  <Download size={16} /> Download Chrome extension (.zip)
+                </a>
+              </section>
 
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <div style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(59, 130, 246, 0.2)',
-                    color: '#60a5fa',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    flexShrink: 0
-                  }}>2</div>
-                  <div>
-                    <h4 style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>Enable "Developer mode"</h4>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                      Toggle the switch in the top-right corner of the Extensions page.
-                    </p>
-                  </div>
+              <section style={{ padding: '20px 0' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 2 · Add it to Chrome</h3>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.65 }}>
+                  Open Chrome Extensions, turn on <strong>Developer mode</strong>, choose <strong>Load unpacked</strong>, and select the extracted <strong>extension</strong> folder. Then open the extension and sign in to Jobhunter.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
+                  <a
+                    href="chrome://extensions/"
+                    className="btn-primary"
+                    style={{ minHeight: '46px', justifyContent: 'center', textDecoration: 'none', padding: '0 18px' }}
+                  >
+                    <Chrome size={16} /> Open Chrome Extensions
+                  </a>
+                  <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>Then visit LinkedIn Jobs to use the helper.</span>
                 </div>
-
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <div style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(59, 130, 246, 0.2)',
-                    color: '#60a5fa',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    flexShrink: 0
-                  }}>3</div>
-                  <div>
-                    <h4 style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>Click "Load unpacked"</h4>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                      Select the extension folder inside this project:
-                    </p>
-                    <code style={{
-                      display: 'block',
-                      background: 'rgba(0,0,0,0.5)',
-                      padding: '10px 14px',
-                      borderRadius: '8px',
-                      color: '#34d399',
-                      fontSize: '12px',
-                      fontFamily: 'monospace'
-                    }}>
-                      jobhunter/extension
-                    </code>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <div style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(16, 185, 129, 0.2)',
-                    color: '#34d399',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    flexShrink: 0
-                  }}>4</div>
-                  <div>
-                    <h4 style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>Ready! Open LinkedIn Jobs</h4>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                      Go to <a href="https://www.linkedin.com/jobs" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-blue)' }}>linkedin.com/jobs</a>. You will see the floating <strong>JobHunter AI Copilot</strong> widget in the bottom-right corner!
-                    </p>
-                  </div>
-                </div>
-              </div>
+              </section>
             </div>
           </div>
         )}

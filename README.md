@@ -54,15 +54,11 @@ npm run dev
 Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ### 2. Install the Chrome Extension
-1. Open Google Chrome and go to `chrome://extensions`.
-2. Toggle on **Developer mode** in the top-right corner.
-3. Click **Load unpacked**.
-4. Select the `extension/` directory:
-   ```
-   /Users/timothyowolabi/Documents/jobhunter/extension
-   ```
-5. Open the extension popup and sign in with your Jobhunter email and password, or choose **Continue with Google or GitHub** to connect your browser session. It connects to the deployed app by default; choose **Local development** only when running the app on your computer.
-6. Navigate to any LinkedIn job posting ([linkedin.com/jobs](https://www.linkedin.com/jobs)). The **Jobhunter** widget will appear in the bottom-right corner.
+1. Download the [Jobhunter Chrome extension ZIP](https://jobhunter-azure.vercel.app/downloads/jobhunter-chrome-extension.zip) and extract it.
+2. In Chrome, open `chrome://extensions`, enable **Developer mode**, and select **Load unpacked**.
+3. Select the extracted `extension/` folder.
+4. Open the extension popup and sign in with your Jobhunter email and password, or choose **Continue with Google or GitHub** to connect your browser session. It connects to the deployed app by default; choose **Local development** only when running the app on your computer.
+5. Open any LinkedIn job posting ([linkedin.com/jobs](https://www.linkedin.com/jobs)). The **Jobhunter** widget will appear in the bottom-right corner.
 
 ### 3. Install the Tampermonkey userscript (alternative)
 
