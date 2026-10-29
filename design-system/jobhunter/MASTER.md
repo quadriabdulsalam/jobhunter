@@ -19,10 +19,11 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary | `#111111` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary / links | `#0369A1` | `--color-link` |
-| Accent/CTA | `#111111` | `--color-primary` |
+| Primary / action | `#F97316` | `--color-primary` |
+| On Primary | `#111111` | `--color-on-primary` |
+| Primary hover | `#EA580C` | `--color-primary-hover` |
+| Accent text / links / focus | `#C2410C` | `--color-primary-strong`, `--color-link`, `--color-focus` |
+| Accent/CTA | `#F97316` | `--color-primary` |
 | Background | `#FCFCFC` | `--color-page` |
 | Foreground | `#111111` | `--color-text` |
 | Card | `#FFFFFF` | `--color-card` |
@@ -32,9 +33,9 @@
 | Border | `#E5E5E3` | `--color-border` |
 | Destructive | `#A12B2B` | `--color-danger` |
 | On Destructive | `#FFFFFF` | `--color-on-danger` |
-| Ring | `#0369A1` | `--color-focus` |
+| Ring | `#C2410C` | `--color-focus` |
 
-**Color Notes:** The interface follows the user’s established quiet, near-white direction. Use graphite for the primary action and reserve blue for links and keyboard focus. Do not add gradient or decorative accent fills.
+**Color Notes:** Use the established near-white surfaces and neutral text. Orange is reserved for primary actions, the brand mark, selected navigation, and focus. Use dark orange for text links and focus so normal text meets WCAG AA on white. Keep primary-button text near-black for readable contrast on orange. Avoid gradients and decorative accent fills.
 
 ### Typography
 
@@ -45,15 +46,15 @@
 
 | Token | Size | Use |
 |-------|------|-----|
-| `--font-size-xs` | `12px` | Badges and compact metadata |
-| `--font-size-sm` | `14px` | Buttons, labels, and secondary copy |
-| `--font-size-base` | `16px` | Default text and mobile body copy |
-| `--font-size-lg` | `18px` | Section headings and lead text |
-| `--font-size-xl` | `24px` | Subsection headings |
-| `--font-size-2xl` | `32px` | Page headings |
-| `--font-size-3xl` | `40px` | Large display headings |
+| `--font-size-xs` | `.75rem` | Badges and compact metadata |
+| `--font-size-sm` | `.875rem` | Buttons, labels, and secondary copy |
+| `--font-size-base` | `1rem` | Default text and mobile body copy |
+| `--font-size-lg` | `1.125rem` | Section headings and lead text |
+| `--font-size-xl` | `1.5rem` | Subsection headings |
+| `--font-size-2xl` | `2rem` | Page headings |
+| `--font-size-3xl` | `2.5rem` | Large display headings |
 
-Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use the muted text token (`#666` on white) so contrast remains readable.
+Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use the muted text token (`#666` on white) so contrast remains readable. Keep page headings fluid with `clamp()` and use system font fallbacks for a fast first paint.
 
 ### Spacing Variables
 
@@ -92,7 +93,7 @@ Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use 
   gap: 8px;
   min-height: 44px;
   background: var(--color-primary);
-  color: var(--color-on-primary);
+  color: var(--color-on-primary); /* near-black for contrast on orange */
   padding: 10px 16px;
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-control);
@@ -105,6 +106,12 @@ Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use 
 .btn-primary:hover {
   background: var(--color-primary-hover);
 }
+
+.btn-primary:active { opacity: .82; }
+.btn-primary:disabled { opacity: .52; cursor: not-allowed; }
+
+/* Ghost actions stay quiet until hover/focus; all button variants remain 44px tall. */
+.btn-ghost { min-height: 44px; background: transparent; color: var(--color-text-muted); }
 
 /* Secondary Button */
 .btn-secondary {
@@ -213,9 +220,9 @@ Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use 
 
 ### Responsive Dashboard
 
-- **Mobile first:** Default to a single column with 16px body text, 18px side gutters, wrapped navigation, and full-width primary actions.
-- **Tablet (`768px`):** Restore horizontal form and job-card actions when there is room; allow two-column profile and control groups.
-- **Desktop (`900px`):** Use the full top navigation and a two-column resume workspace.
+- **Mobile first (`320–480px`):** Default to a single column with 16px body text, 16px side gutters, wrapped navigation, full-width primary actions, and no horizontal overflow.
+- **Tablet (`768–1024px`):** Restore horizontal form and job-card actions when there is room; allow two-column profile and control groups while keeping nav labels legible.
+- **Desktop (`900px+`):** Use the full top navigation and a two-column resume workspace.
 - **Wide screens (`1200px+`):** Expand only the resume workspace; keep application text at a readable measure.
 - **Touch:** Interactive controls are at least `44 × 44px`; keep `8px` or more between adjacent targets.
 - **Overflow:** Wrap long content and action groups; never rely on horizontal page scrolling.
