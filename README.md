@@ -10,8 +10,8 @@ A platform designed to discover jobs on LinkedIn, consolidate multiple career CV
    - Users import their own CVs (PDFs, DOCX, TXT) from the profile screen.
    - Synthesizes and de-duplicates contact info, skills, experiences, and achievements, then stores the profile in that user's account.
 
-2. **LinkedIn Job Discovery (Option A — Chrome Extension)**:
-   - A Manifest V3 Chrome Extension injects a floating **JobHunter Copilot** widget on `linkedin.com/jobs/*`.
+2. **LinkedIn Job Discovery (Chrome Extension or Userscript)**:
+   - The Manifest V3 Chrome Extension or optional Tampermonkey userscript injects a floating **Jobhunter Copilot** widget on LinkedIn job listings.
    - 1-Click extracts Job Title, Company, Location, Description, and Apply Type (Easy Apply vs External).
    - Communicates with the selected Jobhunter app (deployed by default, or local development) to compute ATS match scores and tailor the CV for the signed-in user.
 
@@ -64,6 +64,17 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 5. Open the extension popup and sign in with your Jobhunter email and password, or choose **Continue with Google or GitHub** to connect your browser session. It connects to the deployed app by default; choose **Local development** only when running the app on your computer.
 6. Navigate to any LinkedIn job posting ([linkedin.com/jobs](https://www.linkedin.com/jobs)). The **Jobhunter** widget will appear in the bottom-right corner.
 
+### 3. Install the Tampermonkey userscript (alternative)
+
+The userscript is a lighter alternative to the Chrome extension. Install [Tampermonkey](https://www.tampermonkey.net/) in your browser, then [open the Jobhunter userscript](https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js) and confirm **Install** in Tampermonkey. It runs on LinkedIn job pages and the deployed Jobhunter app.
+
+1. Sign in to [Jobhunter](https://jobhunter-azure.vercel.app/) in the same browser profile. The userscript securely reads the signed-in Supabase session through Jobhunter's same-origin session endpoint and shares it with the LinkedIn tab through Tampermonkey storage.
+2. Open a LinkedIn job listing. The Jobhunter panel appears in the lower-right corner. If the panel says it is disconnected, click **Connect Jobhunter account**, sign in on the opened Jobhunter tab, then return to LinkedIn.
+3. Click **Tailor my CV for this job** only when you want to send that job and your profile to Jobhunter for tailoring. Review the result in Jobhunter.
+4. **Assist with application form** fills supported blank contact fields when you click it. Check the values and complete the application yourself; the userscript never submits it.
+
+By default, the userscript connects to the production Jobhunter app. To use another self-hosted domain, update the `@match` and `@connect` entries in the userscript header for that domain, then change **Settings → Jobhunter app URL** in the panel. For local development, add `http://localhost:3000/*` to `@match` and `localhost` to `@connect` (already included).
+
 ---
 
 ## 📁 Repository Structure
@@ -77,6 +88,8 @@ jobhunter/
 │   ├── content.css               # Floating glassmorphic copilot UI
 │   ├── popup.html & popup.js     # Toolbar popup
 │   └── icons/                    # Extension icons
+├── userscript/
+│   └── jobhunter.user.js         # Tampermonkey alternative for LinkedIn
 ├── src/
 │   ├── app/                      # Next.js App Router (Studio UI & API endpoints)
 │   │   ├── page.tsx              # Main interactive dashboard

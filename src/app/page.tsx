@@ -1254,6 +1254,45 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
         {/* TAB 4: CHROME EXTENSION SETUP GUIDE */}
         {activeTab === 'extension' && (
           <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="glass-panel" style={{ padding: '24px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 750, marginBottom: '6px' }}>Add Jobhunter to your browser</h2>
+              <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px' }}>
+                Choose the lightweight userscript or the full Chrome extension. Both add Jobhunter tools to LinkedIn job pages.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '12px' }}>
+                <a
+                  href="https://www.tampermonkey.net/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-secondary"
+                  style={{ minHeight: '44px', justifyContent: 'center', textDecoration: 'none' }}
+                >
+                  <ExternalLink size={15} /> Get Tampermonkey
+                </a>
+                <a
+                  href="https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary"
+                  style={{ minHeight: '44px', justifyContent: 'center', textDecoration: 'none' }}
+                >
+                  <Download size={15} /> Install Jobhunter userscript
+                </a>
+                <a
+                  href="https://github.com/quadriabdulsalam/jobhunter/archive/refs/heads/main.zip"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-secondary"
+                  style={{ minHeight: '44px', justifyContent: 'center', textDecoration: 'none' }}
+                >
+                  <Chrome size={16} /> Download Chrome extension
+                </a>
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '14px', lineHeight: 1.5 }}>
+                For the userscript, install Tampermonkey first, then install the Jobhunter userscript. For the Chrome extension, extract the ZIP, open <code>chrome://extensions</code>, turn on Developer mode, choose <strong>Load unpacked</strong>, and select the <code>extension</code> folder.
+              </p>
+            </div>
+
             <div className="glass-panel" style={{ padding: '28px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
                 <div style={{
