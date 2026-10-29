@@ -44,6 +44,7 @@ const profileLabelStyle: React.CSSProperties = {
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'jobs' | 'studio' | 'profile' | 'extension'>('jobs');
+  const [extensionsLinkCopied, setExtensionsLinkCopied] = useState(false);
   const [profile, setProfile] = useState<MasterProfile | null>(null);
   const [profileDraft, setProfileDraft] = useState<MasterProfile>(createEmptyProfile);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -1279,18 +1280,28 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               <section style={{ padding: '20px 0' }}>
                 <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 2 · Add it to Chrome</h3>
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.65 }}>
-                  Open Chrome Extensions, turn on <strong>Developer mode</strong>, choose <strong>Load unpacked</strong>, and select the extracted <strong>extension</strong> folder. Then open the extension and sign in to Jobhunter.
+                  Chrome blocks websites from opening its internal pages. Copy the address below, paste it into Chrome’s address bar, then turn on <strong>Developer mode</strong>, choose <strong>Load unpacked</strong>, and select the extracted <strong>extension</strong> folder. Open the extension and sign in to Jobhunter.
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-                  <a
-                    href="chrome://extensions/"
+                  <code style={{ padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', color: 'var(--text-primary, #fff)', fontSize: '13px' }}>chrome://extensions</code>
+                  <button
+                    type="button"
                     className="btn-primary"
-                    style={{ minHeight: '46px', justifyContent: 'center', textDecoration: 'none', padding: '0 18px' }}
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText('chrome://extensions');
+                        setExtensionsLinkCopied(true);
+                      } catch {
+                        setExtensionsLinkCopied(false);
+                      }
+                    }}
+                    style={{ minHeight: '46px', justifyContent: 'center', padding: '0 18px' }}
                   >
-                    <Chrome size={16} /> Open Chrome Extensions
-                  </a>
-                  <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>Then visit LinkedIn Jobs to use the helper.</span>
+                    {extensionsLinkCopied ? <Check size={16} /> : <Copy size={16} />}
+                    {extensionsLinkCopied ? 'Copied — paste in address bar' : 'Copy Chrome Extensions address'}
+                  </button>
                 </div>
+                <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '10px' }}>If copying is blocked, select and copy the address above. After setup, visit <a href="https://www.linkedin.com/jobs" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-blue)' }}>LinkedIn Jobs</a> to use the helper.</p>
               </section>
             </div>
           </div>
