@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Jobhunter — LinkedIn Copilot
 // @namespace    https://github.com/quadriabdulsalam/jobhunter
-// @version      1.0.0
+// @version      1.0.1
 // @description  Extract LinkedIn job details, tailor a CV with Jobhunter, and assist with application forms.
 // @author       Jobhunter
-// @match        https://www.linkedin.com/jobs/*
+// @match        https://*.linkedin.com/jobs/*
 // @match        https://jobhunter-azure.vercel.app/*
 // @match        http://localhost:3000/*
 // @run-at       document-idle
@@ -13,6 +13,8 @@
 // @grant        GM_openInTab
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addValueChangeListener
+// @updateURL    https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js
+// @downloadURL  https://raw.githubusercontent.com/quadriabdulsalam/jobhunter/main/userscript/jobhunter.user.js
 // @connect      jobhunter-azure.vercel.app
 // @connect      localhost
 // @connect      127.0.0.1
@@ -24,7 +26,7 @@
   const DEFAULT_APP_URL = 'https://jobhunter-azure.vercel.app';
   const APP_URL_KEY = 'jobhunter.appUrl';
   const SESSION_KEY = 'jobhunter.session';
-  const onLinkedIn = location.hostname === 'www.linkedin.com' && location.pathname.startsWith('/jobs/');
+  const onLinkedIn = /(^|\.)linkedin\.com$/i.test(location.hostname) && location.pathname.startsWith('/jobs/');
 
   const getValue = (key, fallback) => GM_getValue(key, fallback);
   const setValue = (key, value) => GM_setValue(key, value);
