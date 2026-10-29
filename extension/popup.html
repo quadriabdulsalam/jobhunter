@@ -1,115 +1,68 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>JobHunter AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jobhunter</title>
   <style>
-    body {
-      width: 280px;
-      margin: 0;
-      padding: 16px;
-      background: #0f172a;
-      color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .logo {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      color: #ffffff;
-      font-size: 13px;
-    }
-    .title {
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 12px;
-      font-size: 12px;
-    }
-    .status-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #10b981;
-    }
-    .badge.offline {
-      color: #ef4444;
-    }
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      text-align: center;
-      text-decoration: none;
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-      color: #ffffff;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-    }
-    .btn:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-    }
+    * { box-sizing: border-box; }
+    body { width: 320px; margin: 0; padding: 20px; color: #111; background: #fafaf9; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: white; background: #111; font-size: 12px; font-weight: 700; }
+    h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    .subtle { margin: 3px 0 0; color: #737373; font-size: 12px; }
+    .status { display: flex; align-items: center; gap: 8px; padding: 11px 12px; margin-bottom: 16px; border: 1px solid #e6e6e3; border-radius: 9px; color: #555; font-size: 12px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #a3a3a3; }
+    .status.online .dot { background: #39825a; }
+    .status.offline .dot { background: #b5473a; }
+    label { display: grid; gap: 6px; margin: 12px 0; color: #444; font-size: 12px; font-weight: 500; }
+    input, select { width: 100%; height: 38px; padding: 0 10px; border: 1px solid #dededb; border-radius: 7px; background: #fff; color: #111; font: inherit; }
+    button, .link { display: grid; place-items: center; width: 100%; min-height: 39px; padding: 8px 12px; border: 0; border-radius: 7px; background: #111; color: #fff; font: inherit; font-size: 13px; font-weight: 550; text-decoration: none; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .secondary { border: 1px solid #dededb; background: #fff; color: #222; }
+    .actions { display: grid; gap: 8px; margin-top: 12px; }
+    #message { min-height: 16px; margin: 10px 0 0; color: #a23328; font-size: 12px; }
+    #message:empty { display: none; }
+    #account { display: none; }
+    #account-name { overflow: hidden; color: #333; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .footer { margin: 15px 0 0; color: #888; font-size: 11px; text-align: center; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logo">JH</div>
-    <div class="title">JobHunter AI Copilot</div>
-  </div>
+  <header>
+    <div class="mark">J</div>
+    <div><h1>Jobhunter</h1><p class="subtle">LinkedIn job copilot</p></div>
+  </header>
 
-  <div class="card">
-    <div class="status-row">
-      <span style="color: #94a3b8;">Local Studio:</span>
-      <span id="studio-status" class="badge">
-        <span class="dot"></span> Checking...
-      </span>
+  <div id="status" class="status"><span class="dot"></span><span id="status-text">Checking connection…</span></div>
+
+  <label for="app-url">Connect to
+    <select id="app-url">
+      <option value="https://jobhunter-azure.vercel.app">Jobhunter online</option>
+      <option value="http://localhost:3000">Local development</option>
+    </select>
+  </label>
+
+  <form id="login-form">
+    <label for="email">Email<input id="email" name="email" type="email" autocomplete="username" required></label>
+    <label for="password">Password<input id="password" name="password" type="password" autocomplete="current-password" required></label>
+    <button id="sign-in" type="submit">Sign in</button>
+    <div class="actions">
+      <a id="browser-connect" class="link secondary" target="_blank" rel="noreferrer">Continue with Google or GitHub</a>
+      <a id="create-account" class="link secondary" target="_blank" rel="noreferrer">Create an account</a>
     </div>
-    <div class="status-row" style="margin-bottom: 0;">
-      <span style="color: #94a3b8;">Active Profile:</span>
-      <span id="profile-name" style="color: #e2e8f0; font-weight: 500;">Loading...</span>
+  </form>
+
+  <section id="account">
+    <div id="account-name"></div>
+    <div class="actions">
+      <a id="open-studio" class="link" target="_blank" rel="noreferrer">Open Jobhunter</a>
+      <button id="sign-out" class="secondary" type="button">Sign out</button>
     </div>
-  </div>
+  </section>
 
-  <a href="http://localhost:3000" target="_blank" class="btn">
-    Launch JobHunter Studio ↗
-  </a>
-
+  <p id="message" role="alert"></p>
+  <p class="footer">Your sign-in stays in this browser.</p>
   <script src="popup.js"></script>
 </body>
 </html>

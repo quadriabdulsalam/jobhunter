@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "JobHunter AI - LinkedIn Job & CV Copilot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Extract LinkedIn jobs, tailor your CV in 1-click using your AI Master Profile, and assist with applications.",
   "permissions": [
     "activeTab",
@@ -9,7 +9,8 @@
   ],
   "host_permissions": [
     "*://*.linkedin.com/*",
-    "http://localhost:3000/*"
+    "http://localhost:3000/*",
+    "https://jobhunter-azure.vercel.app/*"
   ],
   "icons": {
     "16": "icons/icon16.png",
@@ -32,6 +33,14 @@
       "js": ["content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://jobhunter-azure.vercel.app/*",
+        "http://localhost:3000/*"
+      ],
+      "js": ["auth-bridge.js"],
+      "run_at": "document_start"
     }
   ]
 }

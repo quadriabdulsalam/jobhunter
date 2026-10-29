@@ -32,11 +32,16 @@ export async function middleware(request: NextRequest) {
     }
   });
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const accessToken = request.headers.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
+  const { data: { user } } = await supabase.auth.getUser(accessToken);
   const isAuthApi = pathname.startsWith('/api/auth/');
   const isPublic = pathname === '/login' || pathname === '/setup-required' || pathname === '/auth/callback' || isAuthApi;
 
-  if (user && pathname === '/login') return NextResponse.redirect(new URL('/', request.url));
+  if (user && pathname === '/login') {
+    const next = request.nextUrl.searchParams.get('next');
+    const nextPath = next && next.startsWith('/') && !next.startsWith('//') && !next.includes('\\') ? next : '/';
+    return NextResponse.redirect(new URL(nextPath, request.url));
+  }
   if (!user && !isPublic) {
     if (pathname.startsWith('/api/')) {
       return NextResponse.json({ success: false, error: 'Sign in to continue.' }, { status: 401 });

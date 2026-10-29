@@ -1,10 +1,11 @@
 import 'server-only';
 
 import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-export async function createSupabaseServerClient(): Promise<SupabaseClient | null> {
+export async function createSupabaseServerClient(accessToken?: string): Promise<SupabaseClient | null> {
   const url = process.env.SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_PUBLISHABLE_KEY?.trim();
 
@@ -13,6 +14,13 @@ export async function createSupabaseServerClient(): Promise<SupabaseClient | nul
       throw new Error('Supabase Auth is not configured. Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY.');
     }
     return null;
+  }
+
+  if (accessToken) {
+    return createClient(url, key, {
+      global: { headers: { Authorization: `Bearer ${accessToken}` } },
+      auth: { autoRefreshToken: false, persistSession: false }
+    });
   }
 
   const cookieStore = await cookies();
@@ -36,10 +44,13 @@ export type StorageContext = {
 };
 
 export async function getStorageContext(): Promise<StorageContext> {
-  const supabase = await createSupabaseServerClient();
+  const requestHeaders = await headers();
+  const authorization = requestHeaders.get('authorization');
+  const accessToken = authorization?.match(/^Bearer\s+(.+)$/i)?.[1];
+  const supabase = await createSupabaseServerClient(accessToken);
   if (!supabase) return { supabase: null, userId: 'local' };
 
-  const { data: { user }, error } = await supabase.auth.getUser();
+  const { data: { user }, error } = await supabase.auth.getUser(accessToken);
   if (error || !user) throw new Error('Sign in to access your career workspace.');
   return { supabase, userId: user.id };
 }

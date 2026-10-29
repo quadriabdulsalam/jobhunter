@@ -13,7 +13,7 @@ A platform designed to discover jobs on LinkedIn, consolidate multiple career CV
 2. **LinkedIn Job Discovery (Option A — Chrome Extension)**:
    - A Manifest V3 Chrome Extension injects a floating **JobHunter Copilot** widget on `linkedin.com/jobs/*`.
    - 1-Click extracts Job Title, Company, Location, Description, and Apply Type (Easy Apply vs External).
-   - Immediately communicates with the local studio (`http://localhost:3000/api/jobs`) to compute real-time ATS keyword match scores and tailor the CV.
+   - Communicates with the selected Jobhunter app (deployed by default, or local development) to compute ATS match scores and tailor the CV for the signed-in user.
 
 3. **ATS-Optimized CV Studio**:
    - Compares the target Job Description against the Master Profile.
@@ -61,8 +61,8 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
    ```
    /Users/timothyowolabi/Documents/jobhunter/extension
    ```
-5. Navigate to any LinkedIn Job posting ([linkedin.com/jobs](https://www.linkedin.com/jobs)).
-6. The **JobHunter AI Copilot** widget will appear in the bottom-right corner!
+5. Open the extension popup and sign in with your Jobhunter email and password, or choose **Continue with Google or GitHub** to connect your browser session. It connects to the deployed app by default; choose **Local development** only when running the app on your computer.
+6. Navigate to any LinkedIn job posting ([linkedin.com/jobs](https://www.linkedin.com/jobs)). The **Jobhunter** widget will appear in the bottom-right corner.
 
 ---
 

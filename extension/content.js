@@ -434,15 +434,15 @@
       }
 
       if (response && response.success && response.tailoredCv) {
-        showTailorResult(response.tailoredCv);
+        showTailorResult(response.tailoredCv, response.appUrl);
       } else {
-        alert('Tailoring result: ' + (response?.error || 'Make sure JobHunter Studio is running at http://localhost:3000'));
+        alert('Tailoring result: ' + (response?.error || 'Make sure you are signed in to Jobhunter and have created a profile.'));
         renderWidget();
       }
     });
   }
 
-  function showTailorResult(tailoredCv) {
+  function showTailorResult(tailoredCv, appUrl = 'https://jobhunter-azure.vercel.app') {
     const resultContainer = document.getElementById('jh-result-container');
     const actionArea = document.getElementById('jh-action-area');
     if (!resultContainer) return;
@@ -456,7 +456,7 @@
           <span class="jh-score-number">${tailoredCv.matchScore}%</span>
         </div>
         <div class="jh-toast">${(tailoredCv.rationale || '').slice(0, 140)}...</div>
-        <a href="http://localhost:3000?cvId=${tailoredCv.id}" target="_blank" class="jh-btn-primary" style="text-decoration: none;">
+        <a href="${appUrl}?cvId=${encodeURIComponent(tailoredCv.id)}" target="_blank" rel="noreferrer" class="jh-btn-primary" style="text-decoration: none;">
           📄 Open Tailored CV Studio
         </a>
       </div>
@@ -466,7 +466,7 @@
   // Intelligent Form Autofill
   function handleAutoFill() {
     if (!masterProfile) {
-      alert('Master Profile not loaded. Please ensure JobHunter studio is running at http://localhost:3000.');
+      alert('Your profile is not loaded. Sign in through the extension popup and create your profile in Jobhunter first.');
       return;
     }
 

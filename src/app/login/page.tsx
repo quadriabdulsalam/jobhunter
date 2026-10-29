@@ -12,9 +12,13 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [providerMessage, setProviderMessage] = useState('');
+  const [nextPath, setNextPath] = useState('/');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const requestedNext = params.get('next');
+    if (requestedNext?.startsWith('/') && !requestedNext.startsWith('//') && !requestedNext.includes('\\')) setNextPath(requestedNext);
+    if (params.get('mode') === 'signup') setMode('signup');
     const authError = params.get('error');
     if (authError === 'config') setProviderMessage('Sign-in is not configured yet. Please try again later.');
     else if (authError === 'provider' || authError?.toLowerCase().includes('unsupported provider')) {
@@ -39,7 +43,7 @@ export default function LoginPage() {
       if (data.needsConfirmation) {
         setError('Email confirmation is still enabled for this app. Disable “Confirm email” in Supabase Dashboard → Authentication → Sign In / Providers to create accounts and sign users in immediately.');
       } else {
-        router.replace('/');
+        router.replace(nextPath);
       }
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to continue.'); }
     finally { setBusy(false); }
@@ -49,8 +53,8 @@ export default function LoginPage() {
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: '#f9f9f8', color: '#111' }}>
       <section style={{ width: '100%', maxWidth: 360, display: 'grid', gap: 18 }}>
         <div><p style={{ color: '#777', fontSize: 13, marginBottom: 8 }}>Jobhunter</p><h1 style={{ fontSize: 27, fontWeight: 600, letterSpacing: '-.03em' }}>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1><p style={{ color: '#6b6b6b', fontSize: 14, marginTop: 8 }}>Your career workspace, kept private to you.</p></div>
-        <a href="/api/auth/oauth?provider=google" style={socialStyle}>Continue with Google</a>
-        <a href="/api/auth/oauth?provider=github" style={socialStyle}>Continue with GitHub</a>
+        <a href={`/api/auth/oauth?provider=google&next=${encodeURIComponent(nextPath)}`} style={socialStyle}>Continue with Google</a>
+        <a href={`/api/auth/oauth?provider=github&next=${encodeURIComponent(nextPath)}`} style={socialStyle}>Continue with GitHub</a>
         {providerMessage && <p role="status" style={{ color: '#6b6b6b', fontSize: 13, textAlign: 'center' }}>{providerMessage}</p>}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#888', fontSize: 12 }}><span style={{ height: 1, background: '#e2e2df', flex: 1 }} />or continue with email<span style={{ height: 1, background: '#e2e2df', flex: 1 }} /></div>
         <form onSubmit={submit} style={{ display: 'grid', gap: 13 }}>
