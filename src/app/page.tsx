@@ -419,6 +419,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
   return (
     <div className="app-shell" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       {/* Top Navbar */}
       <header className="topbar no-print" style={{
         position: 'sticky',
@@ -458,6 +459,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             <button 
               onClick={() => setActiveTab('jobs')}
               aria-pressed={activeTab === 'jobs'}
+              aria-controls="main-content"
               className={`nav-button ${activeTab === 'jobs' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -474,12 +476,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <Briefcase size={16} /> Applications ({jobs.length})
+              <Briefcase size={18} aria-hidden="true" /><span className="nav-label-desktop">Applications <span className="nav-count">({jobs.length})</span></span><span className="nav-label-mobile">Jobs</span>
             </button>
 
             <button 
               onClick={() => setActiveTab('studio')}
               aria-pressed={activeTab === 'studio'}
+              aria-controls="main-content"
               className={`nav-button ${activeTab === 'studio' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -496,12 +499,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <FileText size={16} /> Resume
+              <FileText size={18} aria-hidden="true" /><span>Resume</span>
             </button>
 
             <button 
               onClick={() => setActiveTab('profile')}
               aria-pressed={activeTab === 'profile'}
+              aria-controls="main-content"
               className={`nav-button ${activeTab === 'profile' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -518,12 +522,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <UserCheck size={16} /> Profile
+              <UserCheck size={18} aria-hidden="true" /><span>Profile</span>
             </button>
 
             <button 
               onClick={() => setActiveTab('extension')}
               aria-pressed={activeTab === 'extension'}
+              aria-controls="main-content"
               className={`nav-button ${activeTab === 'extension' ? 'is-active' : ''}`}
               style={{
                 display: 'flex',
@@ -540,7 +545,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <Chrome size={16} /> Browser helper
+              <Chrome size={18} aria-hidden="true" /><span className="nav-label-desktop">Browser helper</span><span className="nav-label-mobile">Helper</span>
             </button>
           </nav>
         </div>
@@ -560,7 +565,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
       </header>
 
       {/* Main Content Area */}
-      <main className={`main-shell ${activeTab === 'studio' ? 'main-shell-wide' : ''}`} style={{ flex: 1, padding: '28px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+      <main id="main-content" className={`main-shell ${activeTab === 'studio' ? 'main-shell-wide' : ''}`} style={{ flex: 1, padding: '28px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         {/* TAB 1: JOB APPLICATIONS & PIPELINE */}
         {activeTab === 'jobs' && (
           <div className="jobs-workspace" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

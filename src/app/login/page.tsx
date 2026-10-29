@@ -50,11 +50,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: '#f9f9f8', color: '#111' }}>
-      <section style={{ width: '100%', maxWidth: 360, display: 'grid', gap: 18 }}>
-        <div><p style={{ color: '#c2410c', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Jobhunter</p><h1 style={{ fontSize: 27, fontWeight: 600, letterSpacing: '-.03em' }}>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1><p style={{ color: '#6b6b6b', fontSize: 14, marginTop: 8 }}>Your career workspace, kept private to you.</p></div>
-        <a href={`/api/auth/oauth?provider=google&next=${encodeURIComponent(nextPath)}`} style={socialStyle}>Continue with Google</a>
-        <a href={`/api/auth/oauth?provider=github&next=${encodeURIComponent(nextPath)}`} style={socialStyle}>Continue with GitHub</a>
+    <main className="auth-page">
+      <section className="auth-card">
+        <div className="auth-intro"><p className="auth-brand">Jobhunter</p><h1>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1><p className="auth-description">Your career workspace, kept private to you.</p></div>
+        <a className="auth-social-link" href={`/api/auth/oauth?provider=google&next=${encodeURIComponent(nextPath)}`}>Continue with Google</a>
+        <a className="auth-social-link" href={`/api/auth/oauth?provider=github&next=${encodeURIComponent(nextPath)}`}>Continue with GitHub</a>
         {providerMessage && <p role="status" style={{ color: '#6b6b6b', fontSize: 13, textAlign: 'center' }}>{providerMessage}</p>}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#888', fontSize: 12 }}><span style={{ height: 1, background: '#e2e2df', flex: 1 }} />or continue with email<span style={{ height: 1, background: '#e2e2df', flex: 1 }} /></div>
         <form onSubmit={submit} style={{ display: 'grid', gap: 13 }}>
@@ -69,6 +69,5 @@ export default function LoginPage() {
   );
 }
 
-const socialStyle = { display: 'grid', placeItems: 'center', height: 44, border: '1px solid #d8d8d5', borderRadius: 8, background: 'white', color: '#111', fontSize: 14, textDecoration: 'none' } as const;
 const labelStyle = { display: 'grid', gap: 7, fontSize: 13 } as const;
 const inputStyle = { height: 44, border: '1px solid #d8d8d5', borderRadius: 8, padding: '0 12px', background: 'white', color: '#111' } as const;

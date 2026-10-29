@@ -19,23 +19,23 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary / action | `#F97316` | `--color-primary` |
-| On Primary | `#111111` | `--color-on-primary` |
-| Primary hover | `#EA580C` | `--color-primary-hover` |
-| Accent text / links / focus | `#C2410C` | `--color-primary-strong`, `--color-link`, `--color-focus` |
-| Accent/CTA | `#F97316` | `--color-primary` |
-| Background | `#FCFCFC` | `--color-page` |
-| Foreground | `#111111` | `--color-text` |
+| Primary / action | `#C04E1B` | `--color-primary` |
+| On Primary | `#FFFFFF` | `--color-on-primary` |
+| Primary hover | `#B84A16` | `--color-primary-hover` |
+| Accent text / links / focus | `#963B16` | `--color-primary-strong`, `--color-link`, `--color-focus` |
+| Accent/CTA | `#C04E1B` | `--color-primary` |
+| Background | `#F7F6F3` | `--color-page` |
+| Foreground | `#1A1917` | `--color-text` |
 | Card | `#FFFFFF` | `--color-card` |
 | Card Foreground | `#111111` | `--color-text` |
-| Muted | `#F4F4F2` | `--color-surface-muted` |
-| Muted Foreground | `#666666` | `--color-text-muted` |
-| Border | `#E5E5E3` | `--color-border` |
+| Muted | `#F2F1EE` | `--color-surface-muted` |
+| Muted Foreground | `#66625E` | `--color-text-muted` |
+| Border | `#E6E3DE` | `--color-border` |
 | Destructive | `#A12B2B` | `--color-danger` |
 | On Destructive | `#FFFFFF` | `--color-on-danger` |
 | Ring | `#C2410C` | `--color-focus` |
 
-**Color Notes:** Use the established near-white surfaces and neutral text. Orange is reserved for primary actions, the brand mark, selected navigation, and focus. Use dark orange for text links and focus so normal text meets WCAG AA on white. Keep primary-button text near-black for readable contrast on orange. Avoid gradients and decorative accent fills.
+**Color Notes:** Use warm neutral surfaces and near-black text. Reserve terracotta orange for primary actions, the brand mark, selected navigation, and focus. Use the deeper orange for text links and focus; white text on the primary orange maintains WCAG AA contrast. Avoid gradients and decorative accent fills.
 
 ### Typography
 
@@ -93,7 +93,7 @@ Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use 
   gap: 8px;
   min-height: 44px;
   background: var(--color-primary);
-  color: var(--color-on-primary); /* near-black for contrast on orange */
+  color: var(--color-on-primary); /* white maintains AA contrast on terracotta */
   padding: 10px 16px;
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-control);
@@ -213,14 +213,14 @@ Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use 
 **Pattern Name:** Calm career workspace
 
 - **Primary Surface:** Application list with a single, clear way to add a job.
-- **Navigation:** Compact top navigation for Applications, Resume, Profile, and Browser helper.
+- **Navigation:** Compact horizontal navigation on tablet and desktop; a persistent four-item bottom bar on phones for Jobs, Resume, Profile, and Helper.
 - **Progression:** Keep job capture, tailoring, and profile editing distinct; explain the next action when a screen has no content.
 - **CTA Placement:** One primary action per view; supporting actions use quiet secondary buttons.
 - **Section Order:** Page title and context > job capture > search and application list.
 
 ### Responsive Dashboard
 
-- **Mobile first (`320–480px`):** Default to a single column with 16px body text, 16px side gutters, wrapped navigation, full-width primary actions, and no horizontal overflow.
+- **Mobile first (`320–480px`):** Default to a single column with 16px body text, 16px side gutters, an always-reachable bottom navigation dock with safe-area spacing, full-width primary actions, and no horizontal overflow.
 - **Tablet (`768–1024px`):** Restore horizontal form and job-card actions when there is room; allow two-column profile and control groups while keeping nav labels legible.
 - **Desktop (`900px+`):** Use the full top navigation and a two-column resume workspace.
 - **Wide screens (`1200px+`):** Expand only the resume workspace; keep application text at a readable measure.
