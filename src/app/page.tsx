@@ -39,7 +39,7 @@ const profileInputStyle: React.CSSProperties = {};
 
 const profileLabelStyle: React.CSSProperties = {
   display: 'block', marginBottom: '6px', color: 'var(--text-muted)',
-  fontSize: '13px', fontWeight: 500
+  fontSize: '14px', fontWeight: 500
 };
 
 export default function Dashboard() {
@@ -552,7 +552,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-subtle)',
             borderRadius: '20px', fontSize: '11px', color: 'var(--text-muted)'
           }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: aiConfigured ? '#34d399' : '#fbbf24' }} />
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: aiConfigured ? 'var(--color-success)' : 'var(--color-warning)' }} />
             {aiConfigured ? `${aiProvider} ready` : 'Local mode'}
           </div>
           <button className="btn-secondary" onClick={signOut} style={{ padding: '6px 10px', fontSize: '12px' }}>Sign out</button>
@@ -582,7 +582,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
                 <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Tailored CVs Generated</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: '#34d399' }}>
+                <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-success)' }}>
                   {jobs.filter(j => j.tailoredCvId || j.status === 'tailored').length}
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--accent-emerald)', marginTop: '4px' }}>High-Match ATS Resumes</div>
@@ -627,7 +627,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
               <form onSubmit={handleImportFromUrl} style={{ display: 'flex', gap: '10px', width: '100%' }}>
                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: '6px' }}>
-                  <label htmlFor="linkedin-job-url" style={{ color: 'var(--text-muted)', fontSize: '13px' }}>LinkedIn job link</label>
+                  <label htmlFor="linkedin-job-url" style={{ color: 'var(--text-muted)', fontSize: '14px' }}>LinkedIn job link</label>
                   <input
                     id="linkedin-job-url"
                     type="url"
@@ -661,7 +661,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Filter & Search Bar */}
             <div className="job-tools" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
               <div style={{ position: 'relative', width: '360px' }}>
-                <label htmlFor="application-search" style={{ display: 'block', marginBottom: '6px', color: 'var(--text-muted)', fontSize: '13px' }}>Search applications</label>
+                <label htmlFor="application-search" style={{ display: 'block', marginBottom: '6px', color: 'var(--text-muted)', fontSize: '14px' }}>Search applications</label>
                 <Search size={16} style={{ position: 'absolute', left: '12px', top: '39px', color: 'var(--text-muted)' }} />
                 <input
                   id="application-search"
@@ -707,7 +707,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                           {job.applyType === 'easy_apply' ? 'Easy Apply' : 'External link'}
                         </span>
                         {job.matchScore && (
-                          <span style={{ fontSize: '11px', fontWeight: 700, color: '#34d399' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-success)' }}>
                             {job.matchScore}% Match
                           </span>
                         )}
@@ -764,8 +764,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
                       <button 
                         onClick={(e) => handleDeleteJob(job.id, e)}
-                        className="btn-secondary"
-                        style={{ padding: '7px 10px', fontSize: '12px', color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.25)' }}
+                        className="btn-danger"
                         title="Remove job from pipeline"
                         aria-label={`Remove ${job.title} at ${job.company}`}
                       >
@@ -826,11 +825,11 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 }}>
                   <div>
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Calculated Match Score</div>
-                    <div style={{ fontSize: '24px', fontWeight: 800, color: '#34d399' }}>
+                    <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-success)' }}>
                       {tailoredCv ? `${tailoredCv.matchScore}%` : '88%'}
                     </div>
                   </div>
-                  <div style={{ fontSize: '11px', color: '#a7f3d0', maxWidth: '160px', textAlign: 'right' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--color-success)', maxWidth: '160px', textAlign: 'right' }}>
                     Verified ATS single-column parseable
                   </div>
                 </div>
@@ -856,7 +855,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     className="btn-secondary" 
                     style={{ width: '100%', padding: '10px' }}
                   >
-                    {isCopied ? <Check size={16} color="#34d399" /> : <Copy size={16} />}
+                    {isCopied ? <Check size={16} color="var(--color-success)" /> : <Copy size={16} />}
                     {isCopied ? 'Copied to Clipboard!' : 'Copy Plain Text for ATS'}
                   </button>
 
@@ -875,8 +874,8 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   {tailoredCv && (
                     <button 
                       onClick={() => handleDeleteTailoredCv(tailoredCv.id)} 
-                      className="btn-secondary" 
-                      style={{ width: '100%', padding: '10px', color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.25)', marginTop: '4px' }}
+                      className="btn-danger"
+                      style={{ width: '100%', marginTop: '4px' }}
                     >
                       <Trash2 size={15} /> Remove This Tailored CV
                     </button>
@@ -1045,7 +1044,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </div>
               ) : (
                 <div style={{ textAlign: 'center', padding: '80px 0', color: '#6b7280' }}>
-                  <FileText size={48} style={{ margin: '0 auto 16px auto', color: '#9ca3af' }} />
+                  <FileText size={48} style={{ margin: '0 auto 16px auto', color: 'var(--color-text-muted)' }} />
                   <h3 style={{ fontSize: '18px', color: '#111827', marginBottom: '8px' }}>No CV Loaded in Studio</h3>
                   <p style={{ fontSize: '13px', maxWidth: '360px', margin: '0 auto 20px auto' }}>
                     Select any job from your Pipeline to run the tailoring engine and view your tailored resume.
@@ -1101,11 +1100,11 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     <button className="btn-primary" style={{ marginTop: '14px' }} onClick={importProfileCVs} disabled={isImportingProfile || profileFiles.length === 0}>
                       {isImportingProfile ? <><RefreshCw size={15} className="spin" /> Importing...</> : <><FileText size={15} /> Import and review</>}
                     </button>
-                    {profileImportMessage && <p role="status" style={{ color: profileImportMessage.toLowerCase().includes('could not') || profileImportMessage.toLowerCase().includes('choose') ? '#fca5a5' : '#6ee7b7', fontSize: '12px', marginTop: '12px' }}>{profileImportMessage}</p>}
+                    {profileImportMessage && <p role="status" style={{ color: profileImportMessage.toLowerCase().includes('could not') || profileImportMessage.toLowerCase().includes('choose') ? 'var(--color-danger)' : 'var(--color-success)', fontSize: '12px', marginTop: '12px' }}>{profileImportMessage}</p>}
                   </div>
                 ) : (
                   <>
-                {profileImportMessage && <p role="status" style={{ color: '#6ee7b7', fontSize: '12px', marginBottom: '14px' }}>{profileImportMessage}</p>}
+                {profileImportMessage && <p role="status" style={{ color: 'var(--color-success)', fontSize: '12px', marginBottom: '14px' }}>{profileImportMessage}</p>}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
                   <label style={profileLabelStyle}>Full name<input style={profileInputStyle} value={profileDraft.contact.name} onChange={e => updateProfileContact('name', e.target.value)} placeholder="Your name" /></label>
                   <label style={profileLabelStyle}>Professional titles<input style={profileInputStyle} value={profileDraft.contact.titles.join(', ')} onChange={e => updateProfileContact('titles', e.target.value)} placeholder="e.g. Product Designer, UX Researcher" /></label>
@@ -1152,7 +1151,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     <label style={{ ...profileLabelStyle, marginTop: '10px' }}>Relevant skills (comma-separated)
                       <input style={profileInputStyle} value={experience.keywords.join(', ')} onChange={e => updateProfileExperience(index, 'keywords', e.target.value)} placeholder="Skills and tools used in this role" />
                     </label>
-                    <button className="btn-secondary" style={{ marginTop: '10px', color: '#fca5a5' }} onClick={() => setProfileDraft(current => ({ ...current, experiences: current.experiences.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 size={14} /> Remove role</button>
+                    <button className="btn-danger" style={{ marginTop: '10px' }} onClick={() => setProfileDraft(current => ({ ...current, experiences: current.experiences.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 size={14} /> Remove role</button>
                   </div>
                 ))}
                 {profileDraft.experiences.length === 0 && <p style={{ color: 'var(--text-dim)', fontSize: '13px', padding: '12px 0' }}>No roles added yet. Add at least one role for better tailoring.</p>}
@@ -1162,7 +1161,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     {isSavingProfile ? <><RefreshCw size={15} className="spin" /> Saving...</> : <><CheckCircle2 size={15} /> Save career details</>}
                   </button>
                   {!profileDraft.contact.name.trim() && <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>Enter your name to save.</span>}
-                  {profileSaveMessage && <span role="status" style={{ color: profileSaveMessage.includes('saved') ? '#6ee7b7' : '#fca5a5', fontSize: '12px' }}>{profileSaveMessage}</span>}
+                  {profileSaveMessage && <span role="status" style={{ color: profileSaveMessage.includes('saved') ? 'var(--color-success)' : 'var(--color-danger)', fontSize: '12px' }}>{profileSaveMessage}</span>}
                 </div>
                   </>
                 )}

@@ -43,6 +43,18 @@
 - **Mood:** calm, clear, professional, focused
 - **Loading:** Keep system fallbacks to avoid a remote font dependency and preserve a fast first paint.
 
+| Token | Size | Use |
+|-------|------|-----|
+| `--font-size-xs` | `12px` | Badges and compact metadata |
+| `--font-size-sm` | `14px` | Buttons, labels, and secondary copy |
+| `--font-size-base` | `16px` | Default text and mobile body copy |
+| `--font-size-lg` | `18px` | Section headings and lead text |
+| `--font-size-xl` | `24px` | Subsection headings |
+| `--font-size-2xl` | `32px` | Page headings |
+| `--font-size-3xl` | `40px` | Large display headings |
+
+Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use the muted text token (`#666` on white) so contrast remains readable.
+
 ### Spacing Variables
 
 *Density: 4/10 — Standard*
@@ -55,6 +67,8 @@
 | `--space-4` | `16px` | Standard padding |
 | `--space-6` | `24px` | Section padding |
 | `--space-8` | `32px` | Large gaps |
+| `--space-10` | `40px` | Desktop section separation |
+| `--space-12` | `48px` | Wide page breathing room |
 
 ### Shadow Depths
 
@@ -72,29 +86,52 @@
 ```css
 /* Primary Button */
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
   background: var(--color-primary);
-  color: #FFFFFF;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  color: var(--color-on-primary);
+  padding: 10px 16px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-sm);
+  font-weight: 550;
+  transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease;
   cursor: pointer;
 }
 
 .btn-primary:hover {
-  background: #303030;
+  background: var(--color-primary-hover);
 }
 
 /* Secondary Button */
 .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
   background: #FFFFFF;
   color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  border: 1px solid #dededd;
+  padding: 10px 16px;
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease;
   cursor: pointer;
+}
+
+/* Destructive actions are visually distinct and retain readable contrast. */
+.btn-danger {
+  min-height: 44px;
+  color: var(--color-danger);
+  background: #fff;
+  border: 1px solid #e4b7b7;
+  border-radius: var(--radius-control);
+  padding: 10px 16px;
 }
 ```
 
@@ -119,10 +156,11 @@
 
 ```css
 .input {
-  padding: 12px 16px;
+  min-height: 44px;
+  padding: 10px 12px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  font-size: 16px;
+  font-size: var(--font-size-sm);
   transition: border-color 200ms ease;
 }
 
@@ -172,6 +210,21 @@
 - **Progression:** Keep job capture, tailoring, and profile editing distinct; explain the next action when a screen has no content.
 - **CTA Placement:** One primary action per view; supporting actions use quiet secondary buttons.
 - **Section Order:** Page title and context > job capture > search and application list.
+
+### Responsive Dashboard
+
+- **Mobile first:** Default to a single column with 16px body text, 18px side gutters, wrapped navigation, and full-width primary actions.
+- **Tablet (`768px`):** Restore horizontal form and job-card actions when there is room; allow two-column profile and control groups.
+- **Desktop (`900px`):** Use the full top navigation and a two-column resume workspace.
+- **Wide screens (`1200px+`):** Expand only the resume workspace; keep application text at a readable measure.
+- **Touch:** Interactive controls are at least `44 × 44px`; keep `8px` or more between adjacent targets.
+- **Overflow:** Wrap long content and action groups; never rely on horizontal page scrolling.
+
+### Contrast and Accessibility
+
+- Body text: `#111111` on `#FCFCFC`; muted text: `#666666` on white; links/focus: `#0369A1`; destructive text: `#A12B2B` on white. These pairs meet the normal-text `4.5:1` contrast target.
+- Preserve a visible keyboard focus ring. Give each form field a visible label and each icon-only action an accessible name.
+- Use `aria-pressed` for mutually exclusive view controls, provide clear disabled and destructive states, and respect reduced-motion preferences.
 
 ---
 
