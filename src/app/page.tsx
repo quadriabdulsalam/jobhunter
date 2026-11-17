@@ -249,7 +249,7 @@ export default function Dashboard() {
         setTailoredCv(data.tailoredCv);
         fetchJobs(); // Refresh job list status
       } else {
-        alert(data.error || 'Failed to tailor CV');
+        alert(data.error || 'Failed to tailor resume');
       }
     } catch {
       alert('Error connecting to tailoring service.');
@@ -476,7 +476,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 transition: 'all 0.15s ease'
               }}
             >
-              <Briefcase size={18} aria-hidden="true" /><span className="nav-label-desktop">Applications <span className="nav-count">({jobs.length})</span></span><span className="nav-label-mobile">Jobs</span>
+              <Briefcase size={18} aria-hidden="true" /><span className="nav-label-desktop">Jobs <span className="nav-count">({jobs.length})</span></span><span className="nav-label-mobile">Jobs</span>
             </button>
 
             <button 
@@ -571,9 +571,9 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <div className="jobs-workspace" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div className="page-heading heading-row">
               <div>
-                <p className="eyebrow">YOUR WORKSPACE</p>
-                <h1>Applications</h1>
-                <p className="page-lede">Keep the roles you’re considering in one place.</p>
+                <p className="eyebrow">YOUR CAREER WORKSPACE</p>
+                <h1>Your job pipeline</h1>
+                <p className="page-lede">Save interesting roles, prepare a focused resume, and keep your next steps clear.</p>
               </div>
               <button className="btn-secondary" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add job manually</button>
             </div>
@@ -594,31 +594,31 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Metric Banner */}
             <div className="metrics-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Total Jobs Tracked</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Roles saved</div>
                 <div style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff' }}>{jobs.length}</div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-blue)', marginTop: '4px' }}>Auto-synced with Extension</div>
+                <div style={{ fontSize: '11px', color: 'var(--accent-blue)', marginTop: '4px' }}>Across your search</div>
               </div>
 
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Tailored CVs Generated</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Resumes tailored</div>
                 <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-success)' }}>
                   {jobs.filter(j => j.tailoredCvId || j.status === 'tailored').length}
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-emerald)', marginTop: '4px' }}>High-Match ATS Resumes</div>
+                <div style={{ fontSize: '11px', color: 'var(--accent-emerald)', marginTop: '4px' }}>Ready to review</div>
               </div>
 
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Easy Apply Opportunities</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>LinkedIn Easy Apply</div>
                 <div style={{ fontSize: '28px', fontWeight: 800, color: '#c084fc' }}>
                   {jobs.filter(j => j.applyType === 'easy_apply').length}
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-purple)', marginTop: '4px' }}>Ready for 1-Click Submission</div>
+                <div style={{ fontSize: '11px', color: 'var(--accent-purple)', marginTop: '4px' }}>Roles in your pipeline</div>
               </div>
 
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Master Career Bank</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: '#fbbf24' }}>{profile?.metadata?.sourceFiles?.length || 0} CVs</div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-amber)', marginTop: '4px' }}>De-duplicated & Enriched</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Source resumes</div>
+                <div style={{ fontSize: '28px', fontWeight: 800, color: '#fbbf24' }}>{profile?.metadata?.sourceFiles?.length || 0}</div>
+                <div style={{ fontSize: '11px', color: 'var(--accent-amber)', marginTop: '4px' }}>In your career profile</div>
               </div>
             </div>
 
@@ -635,10 +635,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div>
                     <h3 style={{ fontSize: '14.5px', fontWeight: 700, color: '#ffffff' }}>
-                      Add a job from LinkedIn
+                      Start with a job you’re interested in
                     </h3>
                     <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                      Paste a job link to save the role and prepare a tailored resume.
+                      Paste a LinkedIn job link. Jobhunter will save the role and prepare a resume for you to review.
                     </p>
                   </div>
                 </div>
@@ -646,7 +646,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
               <form onSubmit={handleImportFromUrl} style={{ display: 'flex', gap: '10px', width: '100%' }}>
                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: '6px' }}>
-                  <label htmlFor="linkedin-job-url" style={{ color: 'var(--text-muted)', fontSize: '14px' }}>LinkedIn job link</label>
+                  <label htmlFor="linkedin-job-url" style={{ color: 'var(--text-muted)', fontSize: '14px' }}>LinkedIn job URL</label>
                   <input
                     id="linkedin-job-url"
                     type="url"
@@ -672,7 +672,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   className="btn-primary"
                   style={{ padding: '11px 22px', whiteSpace: 'nowrap' }}
                 >
-                  <Sparkles size={16} /> {isImportingUrl ? 'Importing…' : 'Import job'}
+                  <Sparkles size={16} /> {isImportingUrl ? 'Saving & tailoring…' : 'Save and tailor'}
                 </button>
               </form>
             </div>
@@ -680,12 +680,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Filter & Search Bar */}
             <div className="job-tools" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
               <div style={{ position: 'relative', width: '360px' }}>
-                <label htmlFor="application-search" style={{ display: 'block', marginBottom: '6px', color: 'var(--text-muted)', fontSize: '14px' }}>Search applications</label>
+                <label htmlFor="application-search" style={{ display: 'block', marginBottom: '6px', color: 'var(--text-muted)', fontSize: '14px' }}>Find a role</label>
                 <Search size={16} style={{ position: 'absolute', left: '12px', top: '39px', color: 'var(--text-muted)' }} />
                 <input
                   id="application-search"
                   type="text" 
-                  placeholder="Search roles"
+                  placeholder="Search by title or company"
                   value={filterQuery}
                   onChange={e => setFilterQuery(e.target.value)}
                   style={{
@@ -778,7 +778,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                         className="btn-primary"
                         style={{ padding: '7px 14px', fontSize: '12.5px' }}
                       >
-                        <Sparkles size={14} /> {job.tailoredCvId ? 'View Tailored CV' : 'Tailor CV Now'}
+                        <Sparkles size={14} /> {job.tailoredCvId ? 'View resume' : 'Tailor resume'}
                       </button>
 
                       <button 
@@ -797,12 +797,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <div className="glass-panel" style={{ gridColumn: '1 / -1', padding: '36px 24px', textAlign: 'center' }}>
                   <Briefcase size={22} style={{ color: 'var(--text-muted)', marginBottom: '12px' }} />
                   <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '6px' }}>
-                    {filterQuery ? 'No matching applications' : 'Your application list is empty'}
+                    {filterQuery ? 'No roles match that search' : 'Your pipeline is ready for its first role'}
                   </h2>
                   <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '16px' }}>
-                    {filterQuery ? 'Try a different search.' : 'Add a job manually or import one from LinkedIn when you’re ready.'}
+                    {filterQuery ? 'Try a different title or company name.' : 'Paste a LinkedIn job URL above or add a role manually to get started.'}
                   </p>
-                  {!filterQuery && <button className="btn-secondary" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add your first job</button>}
+                  {!filterQuery && <div className="empty-state-actions"><a className="btn-secondary" href="https://www.linkedin.com/jobs/" target="_blank" rel="noreferrer"><ExternalLink size={15} /> Browse LinkedIn jobs</a><button className="btn-ghost" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add manually</button></div>}
                 </div>
               )}
             </div>
@@ -830,7 +830,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
                 {selectedJob ? (
                   <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Target Job:</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Tailoring for</div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff' }}>{selectedJob.title}</div>
                     <div style={{ fontSize: '12px', color: 'var(--accent-blue)' }}>{selectedJob.company}</div>
                   </div>
@@ -852,7 +852,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   justifyContent: 'space-between'
                 }}>
                   <div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Calculated Match Score</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Resume match</div>
                     <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-success)' }}>
                       {tailoredCv ? `${tailoredCv.matchScore}%` : '—'}
                     </div>
@@ -864,7 +864,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
                 {tailoredCv?.rationale && (
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '18px' }}>
-                    <strong style={{ color: '#ffffff' }}>Strategy Rationale:</strong> {tailoredCv.rationale}
+                    <strong style={{ color: '#ffffff' }}>Tailoring notes:</strong> {tailoredCv.rationale}
                   </div>
                 )}
 
@@ -884,7 +884,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     style={{ width: '100%', padding: '10px' }}
                   >
                     {isCopied ? <Check size={16} color="var(--color-success)" /> : <Copy size={16} />}
-                    {isCopied ? 'Copied to Clipboard!' : 'Copy Plain Text for ATS'}
+                    {isCopied ? 'Resume copied' : 'Copy resume text'}
                   </button>
 
                   {selectedJob && (
@@ -895,7 +895,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                       style={{ width: '100%', padding: '10px' }}
                     >
                       <RefreshCw size={16} className={isLoadingTailor ? 'animate-spin' : ''} /> 
-                      {isLoadingTailor ? 'Regenerating...' : 'Re-run Tailoring Algorithm'}
+                      {isLoadingTailor ? 'Updating resume…' : 'Tailor again'}
                     </button>
                   )}
 
@@ -905,7 +905,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                       className="btn-danger"
                       style={{ width: '100%', marginTop: '4px' }}
                     >
-                      <Trash2 size={15} /> Remove This Tailored CV
+                      <Trash2 size={15} /> Remove tailored resume
                     </button>
                   )}
                 </div>
@@ -942,7 +942,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               {isLoadingTailor ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', gap: '14px', color: '#6b7280' }}>
                   <div className="jh-spinner" style={{ width: '28px', height: '28px', borderColor: 'rgba(0,0,0,0.2)', borderTopColor: '#2563eb' }}></div>
-                  <div style={{ fontSize: '14px', fontWeight: 600 }}>Synthesizing Master Profile & Tailoring CV...</div>
+                  <div style={{ fontSize: '14px', fontWeight: 600 }}>Preparing your profile and tailoring the resume…</div>
                 </div>
               ) : tailoredCv ? (
                 <div>
@@ -1073,14 +1073,16 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               ) : (
                 <div style={{ textAlign: 'center', padding: '80px 0', color: '#6b7280' }}>
                   <FileText size={48} style={{ margin: '0 auto 16px auto', color: 'var(--color-text-muted)' }} />
-                  <h3 style={{ fontSize: '18px', color: '#111827', marginBottom: '8px' }}>No CV Loaded in Studio</h3>
+                  <h3 style={{ fontSize: '18px', color: '#111827', marginBottom: '8px' }}>No tailored resume yet</h3>
                   <p style={{ fontSize: '13px', maxWidth: '360px', margin: '0 auto 20px auto' }}>
-                    Select any job from your Pipeline to run the tailoring engine and view your tailored resume.
+                    Save a role first, then Jobhunter can shape your experience into a resume focused on that opportunity.
                   </p>
-                  {selectedJob && (
+                  {selectedJob ? (
                     <button onClick={() => handleTailor(selectedJob)} className="btn-primary">
                       <Sparkles size={16} /> Tailor for {selectedJob.title}
                     </button>
+                  ) : (
+                    <button onClick={() => setActiveTab('jobs')} className="btn-secondary"><Briefcase size={15} /> Browse saved roles</button>
                   )}
                 </div>
               )}
@@ -1477,3 +1479,4 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
     </div>
   );
 }
+
