@@ -22,17 +22,19 @@
 | `--color-danger` | `#A22E36` | Destructive actions on light surfaces |
 | `--color-focus` | `#0969B5` | Visible keyboard focus |
 
+Spacing uses a 4px base with an 8px rhythm: 4, 8, 12, 16, 24, 32, 40, and 48px. Use these values for component padding and layout gaps before introducing a one-off value.
+
 Never pair dark text with dark surfaces or light text with light surfaces. The only dark surface is the sign-in story panel; its text and icons use high contrast light colors. Keep the resume preview white with dark text for print fidelity. Do not use opacity to create text colors.
 
 ## Type
 
 Use the native system sans stack with Inter when available. Keep the hierarchy clear and consistent:
 
-- Page title: `clamp(2rem, 3vw, 2.65rem)`, 690 weight, tight tracking, 1.08 line height.
+- Page title: `clamp(1.75rem, 3vw, 2.25rem)`, 690 weight, tight tracking, 1.1 line height.
 - Section title: 16–20px, 680–720 weight.
 - Body: 14–16px, 1.55–1.65 line height.
-- Labels and metadata: 12–13px, medium weight, readable contrast.
-- Do not reduce helper text below 11px; reserve that size for secondary metadata.
+- Labels and metadata: 12–14px, medium weight, readable contrast.
+- Keep interface helper text at 12px or larger. Compact resume print metadata may use smaller type to preserve document fit.
 
 ## Layout and components
 
@@ -40,14 +42,14 @@ Use the native system sans stack with Inter when available. Keep the hierarchy c
 - Keep panels at 10–12px radius. Avoid glass effects, gradients, ambient glow, and ornamental shadows.
 - Primary buttons use saturated blue with white text. Secondary buttons use white with dark blue-gray text and a visible border. Destructive actions use dark red text on white.
 - Buttons and controls are at least 44px high. Keep 8px between adjacent touch targets.
-- Inputs have visible labels, 46px minimum height, 7px radius, a strong blue focus ring, and dark text on white.
+- Inputs have visible labels, 48px minimum height, 7–8px radius, a strong blue focus ring, and dark text on white.
 - Native checkboxes and radios use the primary blue accent and remain at least 18px.
 - Job cards use concise metadata, aligned actions, and thin separators. Empty states offer one clear next step.
 - Resume preview remains a white, printable document with dark ink and no dark-mode treatments.
 
 ## Responsive behavior
 
-- **Phones (320–767px):** Keep the brand and account actions in the top header. Pin the four destination controls in a centered bottom dock above the safe area. Use 16px page gutters, one-column cards and forms, full-width primary actions, and bottom content padding that clears the dock.
+- **Phones (320–767px):** Keep the brand and account actions in the top header. Pin the four destination controls to a full-width bottom bar flush with the viewport edge. Put the safe-area inset inside the bar so it clears the home indicator without lifting the navigation. Use 16px page gutters, one-column cards and forms, full-width primary actions, and bottom content padding that clears the bar.
 - **Tablet (768–1023px):** Restore horizontal navigation and keep the resume editor in a compact two-column layout only when each column remains usable.
 - **Desktop (1024px+):** Use the full horizontal header, readable page measure, and a dedicated resume controls column.
 - Respect safe-area insets, reduced motion, keyboard focus, zoom, and long user-provided text. Prevent horizontal page scrolling.

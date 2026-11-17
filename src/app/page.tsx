@@ -418,35 +418,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
   );
 
   return (
-    <div className="app-shell" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-shell">
       <a className="skip-link" href="#main-content">Skip to main content</a>
       {/* Top Navbar */}
-      <header className="topbar no-print" style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        backgroundColor: 'rgba(10, 14, 23, 0.85)',
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border-subtle)',
-        padding: '14px 28px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div className="brand-mark" style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              background: '#111111',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '18px',
-              boxShadow: 'none'
-            }}>
+      <header className="topbar no-print">
+        <div className="topbar-brand-nav">
+          <div className="brand-lockup">
+            <div className="brand-mark">
               JH
             </div>
             <div>
@@ -455,26 +433,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           </div>
 
           {/* Navigation Tabs */}
-          <nav className="top-nav" aria-label="Main navigation" style={{ display: 'flex', gap: '6px', marginLeft: '20px' }}>
+          <nav className="top-nav" aria-label="Main navigation">
             <button 
               onClick={() => setActiveTab('jobs')}
               aria-pressed={activeTab === 'jobs'}
               aria-controls="main-content"
               className={`nav-button ${activeTab === 'jobs' ? 'is-active' : ''}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 14px',
-                borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'jobs' ? 'var(--color-border)' : 'transparent',
-                color: activeTab === 'jobs' ? '#ffffff' : 'var(--text-muted)',
-                fontWeight: activeTab === 'jobs' ? 600 : 500,
-                fontSize: '13.5px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
             >
               <Briefcase size={18} aria-hidden="true" /><span className="nav-label-desktop">Jobs <span className="nav-count">({jobs.length})</span></span><span className="nav-label-mobile">Jobs</span>
             </button>
@@ -484,20 +448,6 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               aria-pressed={activeTab === 'studio'}
               aria-controls="main-content"
               className={`nav-button ${activeTab === 'studio' ? 'is-active' : ''}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 14px',
-                borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'studio' ? 'var(--color-border)' : 'transparent',
-                color: activeTab === 'studio' ? '#ffffff' : 'var(--text-muted)',
-                fontWeight: activeTab === 'studio' ? 600 : 500,
-                fontSize: '13.5px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
             >
               <FileText size={18} aria-hidden="true" /><span>Resume</span>
             </button>
@@ -507,20 +457,6 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               aria-pressed={activeTab === 'profile'}
               aria-controls="main-content"
               className={`nav-button ${activeTab === 'profile' ? 'is-active' : ''}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 14px',
-                borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'profile' ? 'var(--color-border)' : 'transparent',
-                color: activeTab === 'profile' ? '#ffffff' : 'var(--text-muted)',
-                fontWeight: activeTab === 'profile' ? 600 : 500,
-                fontSize: '13.5px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
             >
               <UserCheck size={18} aria-hidden="true" /><span>Profile</span>
             </button>
@@ -530,20 +466,6 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               aria-pressed={activeTab === 'extension'}
               aria-controls="main-content"
               className={`nav-button ${activeTab === 'extension' ? 'is-active' : ''}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 14px',
-                borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'extension' ? 'var(--color-border)' : 'transparent',
-                color: activeTab === 'extension' ? '#ffffff' : 'var(--text-muted)',
-                fontWeight: activeTab === 'extension' ? 600 : 500,
-                fontSize: '13.5px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
             >
               <Chrome size={18} aria-hidden="true" /><span className="nav-label-desktop">Browser helper</span><span className="nav-label-mobile">Helper</span>
             </button>
@@ -551,24 +473,20 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
         </div>
 
         {/* Profile Status Badge & Actions */}
-        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div className="ai-status" title={aiConfigured ? `${aiProvider} is configured for ${aiModel}; requests may still fall back if the key is invalid.` : `Configure ${aiProvider} in .env.local to enable AI. The app currently uses its built-in tailoring engine.`} style={{
-            display: 'flex', alignItems: 'center', gap: '7px', padding: '6px 11px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-subtle)',
-            borderRadius: '20px', fontSize: '11px', color: 'var(--text-muted)'
-          }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: aiConfigured ? 'var(--color-success)' : 'var(--color-warning)' }} />
+        <div className="header-actions">
+          <div className="ai-status" title={aiConfigured ? `${aiProvider} is configured for ${aiModel}; requests may still fall back if the key is invalid.` : `Configure ${aiProvider} in .env.local to enable AI. The app currently uses its built-in tailoring engine.`}>
+            <span className={`ai-status-dot ${aiConfigured ? 'is-ready' : 'is-local'}`} aria-hidden="true" />
             {aiConfigured ? `${aiProvider} ready` : 'Local mode'}
           </div>
-          <button className="btn-secondary" onClick={signOut} style={{ padding: '6px 10px', fontSize: '12px' }}>Sign out</button>
+          <button className="btn-secondary" onClick={signOut}>Sign out</button>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main id="main-content" className={`main-shell ${activeTab === 'studio' ? 'main-shell-wide' : ''}`} style={{ flex: 1, padding: '28px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+      <main id="main-content" className={`main-shell ${activeTab === 'studio' ? 'main-shell-wide' : ''}`}>
         {/* TAB 1: JOB APPLICATIONS & PIPELINE */}
         {activeTab === 'jobs' && (
-          <div className="jobs-workspace" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div className="jobs-workspace">
             <div className="page-heading heading-row">
               <div>
                 <p className="eyebrow">YOUR CAREER WORKSPACE</p>
@@ -592,61 +510,52 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               </button>
             </div>
             {/* Metric Banner */}
-            <div className="metrics-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
-              <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Roles saved</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-text)' }}>{jobs.length}</div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-blue)', marginTop: '4px' }}>Across your search</div>
+            <div className="metrics-strip" aria-label="Job search overview">
+              <div className="glass-panel metric-card">
+                <div className="metric-label">Roles saved</div>
+                <div className="metric-value">{jobs.length}</div>
+                <div className="metric-note">Across your search</div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Resumes tailored</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-success)' }}>
+              <div className="glass-panel metric-card">
+                <div className="metric-label">Resumes tailored</div>
+                <div className="metric-value">
                   {jobs.filter(j => j.tailoredCvId || j.status === 'tailored').length}
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-emerald)', marginTop: '4px' }}>Ready to review</div>
+                <div className="metric-note">Ready to review</div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>LinkedIn Easy Apply</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: '#c084fc' }}>
+              <div className="glass-panel metric-card">
+                <div className="metric-label">LinkedIn Easy Apply</div>
+                <div className="metric-value">
                   {jobs.filter(j => j.applyType === 'easy_apply').length}
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-purple)', marginTop: '4px' }}>Roles in your pipeline</div>
+                <div className="metric-note">Roles in your pipeline</div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '18px 20px' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Source resumes</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: '#fbbf24' }}>{profile?.metadata?.sourceFiles?.length || 0}</div>
-                <div style={{ fontSize: '11px', color: 'var(--accent-amber)', marginTop: '4px' }}>In your career profile</div>
+              <div className="glass-panel metric-card">
+                <div className="metric-label">Source resumes</div>
+                <div className="metric-value">{profile?.metadata?.sourceFiles?.length || 0}</div>
+                <div className="metric-note">In your career profile</div>
               </div>
             </div>
 
             {/* Quick Import from LinkedIn URL Banner */}
-            <div className="glass-panel import-panel" style={{
-              padding: '18px 22px',
-              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(139, 92, 246, 0.12))',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--color-text)' }}>
+            <section className="glass-panel import-panel" aria-labelledby="job-import-heading">
+              <div className="import-panel-heading">
+                <div>
+                    <h3 id="job-import-heading">
                       Start with a job you’re interested in
                     </h3>
-                    <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                    <p>
                       Paste a LinkedIn job link. Jobhunter will save the role and prepare a resume for you to review.
                     </p>
-                  </div>
                 </div>
               </div>
 
-              <form onSubmit={handleImportFromUrl} style={{ display: 'flex', gap: '10px', width: '100%' }}>
-                <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: '6px' }}>
-                  <label htmlFor="linkedin-job-url" style={{ color: 'var(--text-muted)', fontSize: '14px' }}>LinkedIn job URL</label>
+              <form className="linkedin-import-form" onSubmit={handleImportFromUrl}>
+                <div className="field-stack">
+                  <label htmlFor="linkedin-job-url">LinkedIn job URL</label>
                   <input
                     id="linkedin-job-url"
                     type="url"
@@ -654,118 +563,81 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     placeholder="Paste a LinkedIn job link"
                     value={linkedinUrlInput}
                     onChange={e => setLinkedinUrlInput(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '11px 16px',
-                      backgroundColor: 'rgba(10, 14, 23, 0.7)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: '10px',
-                      color: 'var(--color-text)',
-                      fontSize: '13.5px',
-                      outline: 'none'
-                    }}
                   />
                 </div>
                 <button 
                   type="submit" 
                   disabled={isImportingUrl}
                   className="btn-primary"
-                  style={{ padding: '11px 22px', whiteSpace: 'nowrap' }}
                 >
                   <Sparkles size={16} /> {isImportingUrl ? 'Saving & tailoring…' : 'Save and tailor'}
                 </button>
               </form>
-            </div>
+            </section>
 
             {/* Filter & Search Bar */}
-            <div className="job-tools" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-              <div style={{ position: 'relative', width: '360px' }}>
-                <label htmlFor="application-search" style={{ display: 'block', marginBottom: '6px', color: 'var(--text-muted)', fontSize: '14px' }}>Find a role</label>
-                <Search size={16} style={{ position: 'absolute', left: '12px', top: '39px', color: 'var(--text-muted)' }} />
+            <div className="job-tools">
+              <div className="search-field">
+                <label htmlFor="application-search">Find a role</label>
+                <Search className="search-icon" size={18} aria-hidden="true" />
                 <input
                   id="application-search"
                   type="text" 
                   placeholder="Search by title or company"
                   value={filterQuery}
                   onChange={e => setFilterQuery(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 14px 10px 38px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '10px',
-                    color: 'var(--color-text)',
-                    fontSize: '13px',
-                    outline: 'none'
-                  }}
                 />
               </div>
 
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                Browse jobs on LinkedIn and click <strong style={{ color: 'var(--color-text)' }}>"Extract & Tailor My CV"</strong> on the floating assistant.
+              <div className="job-tools-hint">
+                Browse jobs on LinkedIn, then save a role from the browser helper.
               </div>
             </div>
 
             {/* Job Cards Grid */}
-            <div className="job-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))', gap: '18px' }}>
+            <div className="job-grid">
               {filteredJobs.map(job => (
-                <div key={job.id} className="glass-panel job-card" style={{ padding: '22px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <article key={job.id} className="glass-panel job-card">
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '10px' }}>
+                    <div className="job-card-header">
                       <div>
-                        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text)', marginBottom: '4px' }}>
+                        <h3>
                           {job.title}
                         </h3>
-                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                        <div className="job-card-company">
                           {job.company} • {job.location}
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                      <div className="job-card-meta">
                         <span className={`badge ${job.applyType === 'easy_apply' ? 'badge-emerald' : 'badge-blue'}`}>
                           {job.applyType === 'easy_apply' ? 'Easy Apply' : 'External link'}
                         </span>
                         {job.matchScore && (
-                          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-success)' }}>
+                          <span className="job-match-score">
                             {job.matchScore}% Match
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <p style={{
-                      fontSize: '12.5px',
-                      color: 'var(--text-dim)',
-                      lineHeight: '1.5',
-                      marginBottom: '16px',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}>
+                    <p className="job-description">
                       {job.description}
                     </p>
                   </div>
 
-                  <div style={{
-                    borderTop: '1px solid var(--border-subtle)',
-                    paddingTop: '14px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
-                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <div className="job-card-footer">
+                    <span className="job-card-date">
                       Added {new Date(job.extractedAt).toLocaleDateString()}
                     </span>
 
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div className="job-card-actions">
                       {job.url && job.url !== '#' && (
                         <a 
                           href={job.url} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="btn-secondary" 
-                          style={{ padding: '6px 10px', fontSize: '12px' }}
+                          className="btn-icon"
                           title="Open on LinkedIn"
                           aria-label={`Open ${job.title} at ${job.company} on LinkedIn`}
                         >
@@ -775,8 +647,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                       
                       <button 
                         onClick={() => handleTailor(job)}
-                        className="btn-primary"
-                        style={{ padding: '7px 14px', fontSize: '12.5px' }}
+                        className="btn-secondary"
                       >
                         <Sparkles size={14} /> {job.tailoredCvId ? 'View resume' : 'Tailor resume'}
                       </button>
@@ -791,7 +662,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                       </button>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
               {filteredJobs.length === 0 && (
                 <div className="glass-panel" style={{ gridColumn: '1 / -1', padding: '36px 24px', textAlign: 'center' }}>
