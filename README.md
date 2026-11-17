@@ -103,3 +103,4 @@ jobhunter/
 ## UI design system
 
 The shared visual and interaction rules are documented in [`design-system/jobhunter/MASTER.md`](design-system/jobhunter/MASTER.md) and implemented in `src/app/globals.css`. Follow those rules when adding or changing screens.
+
