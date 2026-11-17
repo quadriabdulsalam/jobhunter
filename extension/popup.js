@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function updateLinks() {
     openStudio.href = appUrlEl.value;
-    createAccount.href = `${appUrlEl.value}/login?mode=signup`;
+    createAccount.href = `${appUrlEl.value}/login?mode=signup&next=${encodeURIComponent('/extension/connect')}`;
     browserConnect.href = `${appUrlEl.value}/extension/connect`;
   }
 
@@ -119,3 +119,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await refreshStatus();
 });
+
