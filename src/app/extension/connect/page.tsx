@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { CheckCircle2, Chrome, Link2 } from 'lucide-react';
 
 export default function ExtensionConnectPage() {
   const [message, setMessage] = useState('Connect the extension to your signed-in Jobhunter account.');
@@ -22,11 +23,14 @@ export default function ExtensionConnectPage() {
   }, []);
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: '#f9f9f8', color: '#111' }}>
-      <section style={{ width: '100%', maxWidth: 420, textAlign: 'center' }}>
-        <p style={{ color: '#777', fontSize: 13 }}>Jobhunter</p>
-        <h1 style={{ fontSize: 25, fontWeight: 600, letterSpacing: '-.03em' }}>Connect your extension</h1>
-        <p role="status" style={{ color: failed ? '#b42318' : '#6b6b6b', fontSize: 14 }}>{message}</p>
+    <main className="extension-connect-page">
+      <section className="extension-connect-card">
+        <div className="extension-connect-mark"><Chrome size={20} aria-hidden="true" /></div>
+        <p className="extension-connect-brand">JOBHUNTER · LINKEDIN HELPER</p>
+        <h1>Connect your browser helper</h1>
+        <p className={`extension-connect-status${failed ? ' is-error' : ''}`} role="status" aria-live="polite">
+          {message}
+        </p>
         <button
           type="button"
           disabled={connecting}
@@ -45,11 +49,13 @@ export default function ExtensionConnectPage() {
               });
             }, 8000);
           }}
-          style={{ minHeight: 44, padding: '0 20px', border: 0, borderRadius: 8, background: '#111', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
+          className="extension-connect-button"
         >
-          {connecting ? 'Connecting…' : 'Connect extension'}
+          {connecting ? <><Link2 size={16} className="connect-spinner" /> Connecting…</> : failed ? 'Try connecting again' : message.startsWith('Connected') ? <><CheckCircle2 size={17} /> Connected to Jobhunter</> : <><Link2 size={16} /> Connect browser helper</>}
         </button>
+        <p className="extension-connect-footnote">Keep this tab open until the helper confirms the connection.</p>
       </section>
     </main>
   );
 }
+
