@@ -468,7 +468,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 padding: '8px 14px',
                 borderRadius: '8px',
                 border: 'none',
-                background: activeTab === 'jobs' ? 'rgba(255,255,255,0.1)' : 'transparent',
+                background: activeTab === 'jobs' ? 'var(--color-border)' : 'transparent',
                 color: activeTab === 'jobs' ? '#ffffff' : 'var(--text-muted)',
                 fontWeight: activeTab === 'jobs' ? 600 : 500,
                 fontSize: '13.5px',
@@ -491,7 +491,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 padding: '8px 14px',
                 borderRadius: '8px',
                 border: 'none',
-                background: activeTab === 'studio' ? 'rgba(255,255,255,0.1)' : 'transparent',
+                background: activeTab === 'studio' ? 'var(--color-border)' : 'transparent',
                 color: activeTab === 'studio' ? '#ffffff' : 'var(--text-muted)',
                 fontWeight: activeTab === 'studio' ? 600 : 500,
                 fontSize: '13.5px',
@@ -514,7 +514,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 padding: '8px 14px',
                 borderRadius: '8px',
                 border: 'none',
-                background: activeTab === 'profile' ? 'rgba(255,255,255,0.1)' : 'transparent',
+                background: activeTab === 'profile' ? 'var(--color-border)' : 'transparent',
                 color: activeTab === 'profile' ? '#ffffff' : 'var(--text-muted)',
                 fontWeight: activeTab === 'profile' ? 600 : 500,
                 fontSize: '13.5px',
@@ -537,7 +537,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 padding: '8px 14px',
                 borderRadius: '8px',
                 border: 'none',
-                background: activeTab === 'extension' ? 'rgba(255,255,255,0.1)' : 'transparent',
+                background: activeTab === 'extension' ? 'var(--color-border)' : 'transparent',
                 color: activeTab === 'extension' ? '#ffffff' : 'var(--text-muted)',
                 fontWeight: activeTab === 'extension' ? 600 : 500,
                 fontSize: '13.5px',
@@ -595,7 +595,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             <div className="metrics-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
                 <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Roles saved</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff' }}>{jobs.length}</div>
+                <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-text)' }}>{jobs.length}</div>
                 <div style={{ fontSize: '11px', color: 'var(--accent-blue)', marginTop: '4px' }}>Across your search</div>
               </div>
 
@@ -634,7 +634,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div>
-                    <h3 style={{ fontSize: '14.5px', fontWeight: 700, color: '#ffffff' }}>
+                    <h3 style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--color-text)' }}>
                       Start with a job you’re interested in
                     </h3>
                     <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
@@ -660,7 +660,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                       backgroundColor: 'rgba(10, 14, 23, 0.7)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '10px',
-                      color: '#ffffff',
+                      color: 'var(--color-text)',
                       fontSize: '13.5px',
                       outline: 'none'
                     }}
@@ -694,7 +694,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     backgroundColor: 'rgba(255, 255, 255, 0.04)',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '10px',
-                    color: '#ffffff',
+                    color: 'var(--color-text)',
                     fontSize: '13px',
                     outline: 'none'
                   }}
@@ -702,7 +702,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               </div>
 
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                Browse jobs on LinkedIn and click <strong style={{ color: '#ffffff' }}>"Extract & Tailor My CV"</strong> on the floating assistant.
+                Browse jobs on LinkedIn and click <strong style={{ color: 'var(--color-text)' }}>"Extract & Tailor My CV"</strong> on the floating assistant.
               </div>
             </div>
 
@@ -713,7 +713,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   <div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '10px' }}>
                       <div>
-                        <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text)', marginBottom: '4px' }}>
                           {job.title}
                         </h3>
                         <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
@@ -831,7 +831,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 {selectedJob ? (
                   <div style={{ marginBottom: '16px' }}>
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Tailoring for</div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff' }}>{selectedJob.title}</div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text)' }}>{selectedJob.title}</div>
                     <div style={{ fontSize: '12px', color: 'var(--accent-blue)' }}>{selectedJob.company}</div>
                   </div>
                 ) : (
@@ -864,7 +864,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
                 {tailoredCv?.rationale && (
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '18px' }}>
-                    <strong style={{ color: '#ffffff' }}>Tailoring notes:</strong> {tailoredCv.rationale}
+                    <strong style={{ color: 'var(--color-text)' }}>Tailoring notes:</strong> {tailoredCv.rationale}
                   </div>
                 )}
 
@@ -1118,16 +1118,16 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </div>
 
                 <div role="group" aria-label="Choose how to add your profile" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '20px' }}>
-                  <button type="button" aria-pressed={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'import' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'import' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
+                  <button type="button" aria-pressed={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'import' ? 'var(--accent-blue)' : 'var(--color-border)', background: profileEntryMode === 'import' ? 'var(--color-surface-muted)' : '#ffffff' }}>
                     <strong style={{ display: 'block', marginBottom: '4px' }}>Import an existing CV</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Upload PDF, DOCX, or TXT</span>
                   </button>
-                  <button type="button" aria-pressed={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'manual' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.12)', background: profileEntryMode === 'manual' ? 'rgba(59,130,246,0.13)' : 'rgba(7,12,24,0.5)' }}>
+                  <button type="button" aria-pressed={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'manual' ? 'var(--accent-blue)' : 'var(--color-border)', background: profileEntryMode === 'manual' ? 'var(--color-surface-muted)' : '#ffffff' }}>
                     <strong style={{ display: 'block', marginBottom: '4px' }}>Enter details manually</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Add your information one section at a time</span>
                   </button>
                 </div>
 
                 {profileEntryMode === 'import' ? (
-                  <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '18px' }}>
+                  <div style={{ border: '1px solid var(--color-border)', borderRadius: '10px', padding: '18px' }}>
                     <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>Import your resume</h3>
                     <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>Choose one or more files. You’ll be able to review and correct the extracted information before saving it to your profile.</p>
                     <label style={profileLabelStyle}>CV files (PDF, DOCX, TXT)
@@ -1177,7 +1177,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   <button className="btn-secondary" onClick={addProfileExperience}><Plus size={15} /> Add role</button>
                 </div>
                 {profileDraft.experiences.map((experience, index) => (
-                  <div key={experience.id} style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', marginBottom: '12px' }}>
+                  <div key={experience.id} style={{ border: '1px solid var(--color-border)', borderRadius: '10px', padding: '14px', marginBottom: '12px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
                       {([['role', 'Job title'], ['company', 'Company'], ['location', 'Location'], ['startDate', 'Start date'], ['endDate', 'End date']] as [keyof ExperienceItem, string][]).map(([key, label]) => (
                         <label key={key} style={profileLabelStyle}>{label}<input style={profileInputStyle} value={experience[key] as string} onChange={e => updateProfileExperience(index, key, e.target.value)} placeholder={label} /></label>
@@ -1215,7 +1215,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             {/* Header info */}
             <div className="glass-panel profile-overview" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
+                <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
                   {profile.contact.name}
                 </h2>
                 <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px' }}>
@@ -1284,7 +1284,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 {profile.experiences.map(exp => (
                   <div key={exp.id} style={{ borderLeft: '2px solid var(--accent-blue)', paddingLeft: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                      <strong style={{ fontSize: '14.5px', color: '#ffffff' }}>{exp.role} — {exp.company}</strong>
+                      <strong style={{ fontSize: '14.5px', color: 'var(--color-text)' }}>{exp.role} — {exp.company}</strong>
                       <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{exp.startDate} – {exp.endDate} | {exp.location}</span>
                     </div>
                     <ul style={{ margin: '8px 0', paddingLeft: '18px', fontSize: '12.5px', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -1321,7 +1321,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </div>
               </div>
 
-              <section style={{ padding: '20px 0', borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.12))' }}>
+              <section style={{ padding: '20px 0', borderBottom: '1px solid var(--border-subtle, var(--color-border))' }}>
                 <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 1 · Download the extension</h3>
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px' }}>Save the ZIP, then extract it to a folder you can find easily, such as Downloads.</p>
                 <a
@@ -1340,7 +1340,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   Chrome blocks websites from opening its internal pages. Copy the address below, paste it into Chrome’s address bar, then turn on <strong>Developer mode</strong>, choose <strong>Load unpacked</strong>, and select the extracted <strong>extension</strong> folder. Open the extension and sign in to Jobhunter.
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-                  <code style={{ padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', color: 'var(--text-primary, #fff)', fontSize: '13px' }}>chrome://extensions</code>
+                  <code style={{ padding: '12px', borderRadius: '8px', background: 'var(--color-surface-muted)', color: 'var(--color-text)', fontSize: '13px' }}>chrome://extensions</code>
                   <button
                     type="button"
                     className="btn-primary"
@@ -1380,7 +1380,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           padding: '20px'
         }}>
           <div className="glass-panel job-modal" style={{ width: '100%', maxWidth: '580px', padding: '28px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: '#ffffff' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: 'var(--color-text)' }}>
               Add Job Posting Manually
             </h3>
             <form onSubmit={handleCreateJob} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -1395,10 +1395,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    backgroundColor: '#ffffff',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '8px',
-                    color: '#ffffff',
+                    color: 'var(--color-text)',
                     fontSize: '13px'
                   }}
                 />
@@ -1415,10 +1415,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     style={{
                       width: '100%',
                       padding: '10px 12px',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      backgroundColor: '#ffffff',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '8px',
-                      color: '#ffffff',
+                      color: 'var(--color-text)',
                       fontSize: '13px'
                     }}
                   />
@@ -1433,10 +1433,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     style={{
                       width: '100%',
                       padding: '10px 12px',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      backgroundColor: '#ffffff',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '8px',
-                      color: '#ffffff',
+                      color: 'var(--color-text)',
                       fontSize: '13px'
                     }}
                   />
@@ -1454,10 +1454,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    backgroundColor: '#ffffff',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '8px',
-                    color: '#ffffff',
+                    color: 'var(--color-text)',
                     fontSize: '13px',
                     resize: 'vertical'
                   }}
@@ -1479,4 +1479,5 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
     </div>
   );
 }
+
 
