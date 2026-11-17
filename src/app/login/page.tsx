@@ -22,7 +22,7 @@ export default function LoginPage() {
     const authError = params.get('error');
     if (authError === 'config') setProviderMessage('Sign-in is not configured yet. Please try again later.');
     else if (authError === 'provider' || authError?.toLowerCase().includes('unsupported provider')) {
-      setProviderMessage('Google and GitHub sign-in are not enabled yet. Add each provider’s OAuth credentials in Supabase Auth settings to use them.');
+      setProviderMessage('LinkedIn sign-in is not enabled yet. Add your LinkedIn (OIDC) credentials in Supabase Auth settings.');
     } else if (authError) setProviderMessage('That sign-in could not be completed. Please try again or use email.');
   }, []);
 
@@ -41,7 +41,7 @@ export default function LoginPage() {
         throw new Error(detail || 'Unable to continue.');
       }
       if (data.needsConfirmation) {
-        setError('Email confirmation is still enabled for this app. Disable “Confirm email” in Supabase Dashboard → Authentication → Sign In / Providers to create accounts and sign users in immediately.');
+        setMessage('Account created. Check your email for the confirmation link, then return here to sign in.');
       } else {
         router.replace(nextPath);
       }
@@ -53,10 +53,9 @@ export default function LoginPage() {
     <main className="auth-page">
       <section className="auth-card">
         <div className="auth-intro"><p className="auth-brand">Jobhunter</p><h1>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1><p className="auth-description">Your career workspace, kept private to you.</p></div>
-        <a className="auth-social-link" href={`/api/auth/oauth?provider=google&next=${encodeURIComponent(nextPath)}`}>Continue with Google</a>
-        <a className="auth-social-link" href={`/api/auth/oauth?provider=github&next=${encodeURIComponent(nextPath)}`}>Continue with GitHub</a>
+        <a className="auth-social-link" href={`/api/auth/oauth?provider=linkedin_oidc&next=${encodeURIComponent(nextPath)}`}>Continue with LinkedIn</a>
         {providerMessage && <p role="status" style={{ color: '#6b6b6b', fontSize: 13, textAlign: 'center' }}>{providerMessage}</p>}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#888', fontSize: 12 }}><span style={{ height: 1, background: '#e2e2df', flex: 1 }} />or continue with email<span style={{ height: 1, background: '#e2e2df', flex: 1 }} /></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#888', fontSize: 12 }}><span style={{ height: 1, background: '#e2e2df', flex: 1 }} />or continue with email and password<span style={{ height: 1, background: '#e2e2df', flex: 1 }} /></div>
         <form onSubmit={submit} style={{ display: 'grid', gap: 13 }}>
           <label style={labelStyle}>Email<input autoComplete="email" required type="email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} /></label>
           <label style={labelStyle}>Password<input autoComplete={mode === 'login' ? 'current-password' : 'new-password'} required minLength={8} type="password" value={password} onChange={e => setPassword(e.target.value)} style={inputStyle} /></label>

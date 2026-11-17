@@ -9,7 +9,7 @@ function getSafeNextPath(value: string | null) {
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const provider = url.searchParams.get('provider');
-  if (provider !== 'google' && provider !== 'github') return NextResponse.redirect(new URL('/login?error=provider', url));
+  if (provider !== 'linkedin_oidc') return NextResponse.redirect(new URL('/login?error=provider', url));
   const supabase = await createSupabaseServerClient();
   if (!supabase) return NextResponse.redirect(new URL('/login?error=config', url));
   const nextPath = getSafeNextPath(url.searchParams.get('next'));

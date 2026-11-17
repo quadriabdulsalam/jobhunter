@@ -43,8 +43,9 @@ Each account has its own profile, saved jobs, and tailored resumes. Supabase Aut
 1. Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` from the Supabase project in `.env.local` and the Vercel Production environment. Do not use a secret/service-role key in the app.
 2. For an existing single-user database, run [`supabase/migrations/20261028_multi_user_auth.sql`](supabase/migrations/20261028_multi_user_auth.sql) once. It preserves old records in restricted archive tables and creates empty per-user tables. For a new database, run [`supabase/schema.sql`](supabase/schema.sql).
 3. In Supabase Authentication URL Configuration, set the Site URL to your deployed app and allow `https://your-domain/auth/callback` plus `http://localhost:3000/auth/callback`.
-4. Enable email/password sign-in in Supabase Auth. To enable Google or GitHub, add OAuth credentials for each provider in Supabase Auth Providers and register Supabase's callback URL with that provider.
-5. Redeploy the Vercel project after environment changes.
+4. Enable email/password sign-in in Supabase Auth. For LinkedIn, create a LinkedIn app and enable **Sign In with LinkedIn using OpenID Connect**. In Supabase Authentication → Sign In / Providers → LinkedIn (OIDC), enable the provider and add the LinkedIn client ID and secret. In the LinkedIn app, add Supabase's provider callback URL (`https://<project-ref>.supabase.co/auth/v1/callback`) as an authorized redirect URL. The app starts LinkedIn sign-in with Supabase's `linkedin_oidc` provider and returns through `/auth/callback`.
+5. In Supabase Authentication → URL Configuration, set the Site URL to your deployed app and add the deployed app's `/auth/callback` URL plus `http://localhost:3000/auth/callback` to the redirect URL allow list. No LinkedIn-specific app environment variables are needed; keep `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` configured as above. Turn off Google and GitHub providers in Supabase if they should no longer be available.
+6. Redeploy the Vercel project after environment changes.
 
 ### 1. Launch the Web Studio
 The web application runs locally at:
@@ -57,7 +58,7 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 1. Download the [Jobhunter Chrome extension ZIP](https://jobhunter-azure.vercel.app/downloads/jobhunter-chrome-extension.zip) and extract it.
 2. In Chrome, open `chrome://extensions`, enable **Developer mode**, and select **Load unpacked**.
 3. Select the extracted `extension/` folder.
-4. Open the extension popup and sign in with your Jobhunter email and password, or choose **Continue with Google or GitHub** to connect your browser session. It connects to the deployed app by default; choose **Local development** only when running the app on your computer.
+4. Open the extension popup and sign in with your Jobhunter email and password, or choose **Sign in with LinkedIn or email** to open Jobhunter in your browser. After signing in there, return to the extension to connect your browser session. It connects to the deployed app by default; choose **Local development** only when running the app on your computer.
 5. Open any LinkedIn job posting ([linkedin.com/jobs](https://www.linkedin.com/jobs)). The **Jobhunter** widget will appear in the bottom-right corner.
 
 ### 3. Install the Tampermonkey userscript (alternative)
