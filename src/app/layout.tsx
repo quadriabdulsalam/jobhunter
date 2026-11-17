@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Jobhunter — Career workspace',
-  description: 'A focused workspace for job applications, career details, and tailored resumes.',
+  title: 'Jobhunter — Your career workspace',
+  description: 'Organize job opportunities, build your career profile, and prepare focused resumes for your next role.',
 };
 
 export default function RootLayout({
@@ -17,3 +17,4 @@ export default function RootLayout({
     </html>
   );
 }
+
