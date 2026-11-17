@@ -169,264 +169,362 @@
       '.jobs-description',
       '.jobs-box__html-content',
       '[class*="jobs-description"]',
-      '…41531 tokens truncated…style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                  {profile.contact.titles.join(' • ')}
-                </div>
-                <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--accent-blue)', flexWrap: 'wrap' }}>
-                  {profile.contact.location && <span>{profile.contact.location}</span>}
-                  {profile.contact.phone && <a href={`tel:${profile.contact.phone}`}>{profile.contact.phone}</a>}
-                  {profile.contact.email && <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>}
-                  {profile.contact.github && <a href={profile.contact.github} target="_blank" rel="noreferrer">GitHub ↗</a>}
-                </div>
-              </div>
+      'article',
+      '.description__text'
+    ];
 
-              <div style={{ textAlign: 'right' }}>
-                <span className="badge badge-emerald" style={{ marginBottom: '6px' }}>
-                  {profile.metadata.sourceFiles.length} CV{profile.metadata.sourceFiles.length === 1 ? '' : 's'} saved
-                </span>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
-                  Used when tailoring your resume
-                </div>
-              </div>
+    let description = '';
+    for (const sel of descSelectors) {
+      const el = document.querySelector(sel);
+      if (el && el.innerText && el.innerText.trim().length > 30) {
+        description = el.innerText.trim();
+        break;
+      }
+    }
+
+    // Fallback for description from meta tags
+    if (!description || description.length < 30) {
+      const ogDesc = document.querySelector('meta[property="og:description"]')?.content ||
+                     document.querySelector('meta[name="description"]')?.content;
+      if (ogDesc && ogDesc.length > 20) {
+        description = ogDesc;
+      }
+    }
+
+    // 5. Detect Apply Type
+    const applyButton = document.querySelector('.jobs-apply-button--top-card, .jobs-apply-button, [data-control-name="jobdetails_topcard_inapply"]');
+    const isEasyApply = applyButton ? applyButton.innerText.toLowerCase().includes('easy apply') : false;
+
+    // 6. Job ID & URL
+    const url = window.location.href;
+    const urlMatch = url.match(/currentJobId=(\d+)/) || url.match(/\/jobs\/view\/(\d+)/);
+    const jobId = urlMatch ? `li-${urlMatch[1]}` : `li-${Date.now()}`;
+
+    // If we have either a title or description, create the job object
+    if (!title && !description) {
+      return null;
+    }
+
+    return {
+      id: jobId,
+      title: title || 'Target Role',
+      company: company || 'Hiring Company',
+      location: location || 'Remote / Hybrid',
+      description: description || `${title} at ${company}. Experience with backend platforms, distributed systems, and modern software engineering.`,
+      url,
+      applyType: isEasyApply ? 'easy_apply' : 'external',
+      source: 'linkedin'
+    };
+  }
+
+  // Render or update the floating widget
+  function renderWidget() {
+    let widget = document.getElementById('jobhunter-widget');
+    if (!widget) {
+      widget = document.createElement('div');
+      widget.id = 'jobhunter-widget';
+      document.body.appendChild(widget);
+    }
+
+    // Always attempt fresh extraction if no job yet or upon render
+    if (!currentJobData) {
+      currentJobData = extractJobDetails();
+    }
+
+    widget.innerHTML = `
+      <div class="jh-header">
+        <div class="jh-brand">
+          <div class="jh-logo-badge">JH</div>
+          <div class="jh-header-text">
+            <div class="jh-title">JobHunter AI</div>
+            <div id="jh-status-indicator" class="jh-status ${isConnected ? '' : 'offline'}">
+              <span class="jh-status-dot"></span> ${isConnected ? 'Studio Connected' : 'Studio Offline'}
             </div>
-
-            {/* Categorized Skills */}
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Layers size={18} /> Skills
-              </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '18px' }}>
-                <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Languages</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {profile.skills.languages.map((s, i) => <span key={i} className="badge badge-blue">{s}</span>)}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Frameworks & Libraries</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {profile.skills.frameworks.map((s, i) => <span key={i} className="badge badge-purple">{s}</span>)}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Data & AI Infrastructure</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {profile.skills.data_and_ai.map((s, i) => <span key={i} className="badge badge-emerald">{s}</span>)}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Cloud & DevOps</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {profile.skills.cloud_and_devops.map((s, i) => <span key={i} className="badge badge-amber">{s}</span>)}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Work History Timeline */}
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Briefcase size={18} /> Work experience ({profile.experiences.length})
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {profile.experiences.map(exp => (
-                  <div key={exp.id} style={{ borderLeft: '2px solid var(--accent-blue)', paddingLeft: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                      <strong style={{ fontSize: '14.5px', color: '#ffffff' }}>{exp.role} — {exp.company}</strong>
-                      <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{exp.startDate} – {exp.endDate} | {exp.location}</span>
-                    </div>
-                    <ul style={{ margin: '8px 0', paddingLeft: '18px', fontSize: '12.5px', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {exp.highlights.map((h, i) => (
-                        <li key={i}>{h}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* TAB 4: CHROME EXTENSION SETUP GUIDE */}
-        {activeTab === 'extension' && (
-          <>
-          <div className="page-heading extension-page-heading">
-            <div>
-              <p className="eyebrow">LINKEDIN COPILOT</p>
-              <h1>Bring Jobhunter to LinkedIn</h1>
-              <p className="page-lede">Capture a role while you browse and tailor your resume without copying job links.</p>
-            </div>
-          </div>
-          <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div className="glass-panel" style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
-                <Chrome size={24} />
-                <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: 750 }}>Add Jobhunter to Chrome</h2>
-                  <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Download it once, then load it into Chrome.</p>
-                </div>
-              </div>
-
-              <section style={{ padding: '20px 0', borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.12))' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 1 · Download the extension</h3>
-                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px' }}>Save the ZIP, then extract it to a folder you can find easily, such as Downloads.</p>
-                <a
-                  href="/downloads/jobhunter-chrome-extension.zip"
-                  download="jobhunter-chrome-extension.zip"
-                  className="btn-primary"
-                  style={{ minHeight: '46px', justifyContent: 'center', textDecoration: 'none', padding: '0 18px' }}
-                >
-                  <Download size={16} /> Download Chrome extension (.zip)
-                </a>
-              </section>
-
-              <section style={{ padding: '20px 0' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 2 · Add it to Chrome</h3>
-                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.65 }}>
-                  Chrome blocks websites from opening its internal pages. Copy the address below, paste it into Chrome’s address bar, then turn on <strong>Developer mode</strong>, choose <strong>Load unpacked</strong>, and select the extracted <strong>extension</strong> folder. Open the extension and sign in to Jobhunter.
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-                  <code style={{ padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', color: 'var(--text-primary, #fff)', fontSize: '13px' }}>chrome://extensions</code>
-                  <button
-                    type="button"
-                    className="btn-primary"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText('chrome://extensions');
-                        setExtensionsLinkCopied(true);
-                      } catch {
-                        setExtensionsLinkCopied(false);
-                      }
-                    }}
-                    style={{ minHeight: '46px', justifyContent: 'center', padding: '0 18px' }}
-                  >
-                    {extensionsLinkCopied ? <Check size={16} /> : <Copy size={16} />}
-                    {extensionsLinkCopied ? 'Copied — paste in address bar' : 'Copy Chrome Extensions address'}
-                  </button>
-                </div>
-                <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '10px' }}>If copying is blocked, select and copy the address above. After setup, visit <a href="https://www.linkedin.com/jobs" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-blue)' }}>LinkedIn Jobs</a> to use the helper.</p>
-              </section>
-            </div>
-          </div>
-          </>
-        )}
-      </main>
-
-      {/* Manual Job Modal */}
-      {showAddJobModal && (
-        <div className="modal-backdrop" style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          padding: '20px'
-        }}>
-          <div className="glass-panel job-modal" style={{ width: '100%', maxWidth: '580px', padding: '28px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: '#ffffff' }}>
-              Add Job Posting Manually
-            </h3>
-            <form onSubmit={handleCreateJob} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div>
-                <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Job Title</label>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="e.g. Senior Backend Engineer"
-                  value={newJobTitle}
-                  onChange={e => setNewJobTitle(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    fontSize: '13px'
-                  }}
-                />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div>
-                  <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Company</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Stripe, Tesla"
-                    value={newJobCompany}
-                    onChange={e => setNewJobCompany(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: '8px',
-                      color: '#ffffff',
-                      fontSize: '13px'
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Location</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Remote or Düsseldorf"
-                    value={newJobLocation}
-                    onChange={e => setNewJobLocation(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: '8px',
-                      color: '#ffffff',
-                      fontSize: '13px'
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Job Description</label>
-                <textarea 
-                  required
-                  rows={6}
-                  placeholder="Paste the full job requirements and description here..."
-                  value={newJobDesc}
-                  onChange={e => setNewJobDesc(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    fontSize: '13px',
-                    resize: 'vertical'
-                  }}
-                />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
-                <button type="button" onClick={() => setShowAddJobModal(false)} className="btn-secondary">
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  Save & Add to Pipeline
-                </button>
-              </div>
-            </form>
           </div>
         </div>
-      )}
-    </div>
-  );
-}
+        <div class="jh-actions-header">
+          <button id="jh-btn-rescan" class="jh-icon-btn" title="Scan / Refresh Connection">↻</button>
+          <button id="jh-btn-minimize" class="jh-icon-btn" title="Minimize">─</button>
+        </div>
+      </div>
+
+      <div class="jh-body">
+        ${currentJobData ? `
+          <div class="jh-job-card">
+            <div class="jh-job-role" title="${currentJobData.title}">${currentJobData.title}</div>
+            <div class="jh-job-company">${currentJobData.company} • ${currentJobData.location}</div>
+            <div class="jh-job-meta-tags">
+              <span class="jh-tag ${currentJobData.applyType === 'easy_apply' ? 'easy-apply' : ''}">
+                ${currentJobData.applyType === 'easy_apply' ? 'Easy Apply' : 'External link'}
+              </span>
+              <span class="jh-tag">JD: ${currentJobData.description ? `${currentJobData.description.split(' ').length} words` : 'Ready'}</span>
+            </div>
+          </div>
+
+          <div id="jh-action-area">
+            <button id="jh-btn-tailor" class="jh-btn-primary" ${isProcessing ? 'disabled' : ''}>
+              ${isProcessing ? '<div class="jh-spinner"></div> Preparing your resume…' : 'Save role and tailor resume'}
+            </button>
+          </div>
+
+          <div id="jh-result-container" style="display: none;"></div>
+
+          <button id="jh-btn-autofill" class="jh-btn-secondary" title="Fill application fields">
+            Assist with application details
+          </button>
+        ` : `
+          <div class="jh-job-card">
+            <div style="font-size: 12.5px; font-weight: 600; color: #18374e; margin-bottom: 4px;">
+              LinkedIn Job Detection
+            </div>
+            <div style="font-size: 11.5px; color: #526878; margin-bottom: 12px; line-height: 1.4;">
+              Click below to force scan this page or enter role manually:
+            </div>
+            <button id="jh-btn-force-scan" class="jh-btn-primary" style="margin-bottom: 10px;">
+              🔍 Scan This Page Now
+            </button>
+            <button id="jh-btn-toggle-manual" class="jh-btn-secondary" style="font-size: 11px;">
+              ✏️ Enter / Paste Role Details
+            </button>
+          </div>
+
+          ${showManualInput ? `
+            <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">
+              <input id="jh-manual-title" placeholder="Job Title (e.g. Senior Backend Engineer)" style="padding: 6px 8px; font-size: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: #fff;" />
+              <input id="jh-manual-company" placeholder="Company (e.g. GetYourGuide)" style="padding: 6px 8px; font-size: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: #fff;" />
+              <button id="jh-btn-submit-manual" class="btn-primary" style="padding: 6px; font-size: 12px;">Tailor resume for this role</button>
+            </div>
+          ` : ''}
+        `}
+      </div>
+    `;
+
+    // Rescan button handler
+    const rescanBtn = document.getElementById('jh-btn-rescan');
+    if (rescanBtn) {
+      rescanBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        checkServerConnection();
+        const extracted = extractJobDetails();
+        if (extracted) {
+          currentJobData = extracted;
+        }
+        renderWidget();
+      });
+    }
+
+    // Force scan button handler
+    const forceScanBtn = document.getElementById('jh-btn-force-scan');
+    if (forceScanBtn) {
+      forceScanBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        forceScanBtn.innerHTML = '<div class="jh-spinner"></div> Scanning...';
+        setTimeout(() => {
+          checkServerConnection();
+          const extracted = extractJobDetails();
+          if (extracted) {
+            currentJobData = extracted;
+            renderWidget();
+          } else {
+            forceScanBtn.innerText = 'Retrying scan...';
+            // Fallback to title
+            const t = parseDocumentTitle();
+            if (t && t.title) {
+              currentJobData = {
+                id: `li-${Date.now()}`,
+                title: t.title,
+                company: t.company || 'LinkedIn Company',
+                location: t.location || 'Berlin, Germany',
+                description: `${t.title} at ${t.company}. Role extracted from LinkedIn job post.`,
+                url: window.location.href,
+                applyType: 'easy_apply',
+                source: 'linkedin'
+              };
+              renderWidget();
+            } else {
+              showManualInput = true;
+              renderWidget();
+            }
+          }
+        }, 300);
+      });
+    }
+
+    // Toggle manual input
+    const toggleManualBtn = document.getElementById('jh-btn-toggle-manual');
+    if (toggleManualBtn) {
+      toggleManualBtn.addEventListener('click', () => {
+        showManualInput = !showManualInput;
+        renderWidget();
+      });
+    }
+
+    // Submit manual
+    const submitManualBtn = document.getElementById('jh-btn-submit-manual');
+    if (submitManualBtn) {
+      submitManualBtn.addEventListener('click', () => {
+        const titleVal = document.getElementById('jh-manual-title')?.value;
+        const compVal = document.getElementById('jh-manual-company')?.value;
+        if (titleVal) {
+          currentJobData = {
+            id: `li-${Date.now()}`,
+            title: titleVal,
+            company: compVal || 'Company',
+            location: 'Remote / Hybrid',
+            description: `${titleVal} at ${compVal || 'Company'}.`,
+            url: window.location.href,
+            applyType: 'easy_apply',
+            source: 'linkedin'
+          };
+          renderWidget();
+        }
+      });
+    }
+
+    // Minimize toggle
+    const minBtn = document.getElementById('jh-btn-minimize');
+    if (minBtn) {
+      minBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isWidgetMinimized = !isWidgetMinimized;
+        widget.classList.toggle('minimized', isWidgetMinimized);
+      });
+    }
+
+    widget.addEventListener('click', () => {
+      if (isWidgetMinimized) {
+        isWidgetMinimized = false;
+        widget.classList.remove('minimized');
+      }
+    });
+
+    // Tailor button handler
+    const tailorBtn = document.getElementById('jh-btn-tailor');
+    if (tailorBtn) {
+      tailorBtn.addEventListener('click', handleTailorClick);
+    }
+
+    // Auto-fill button handler
+    const autofillBtn = document.getElementById('jh-btn-autofill');
+    if (autofillBtn) {
+      autofillBtn.addEventListener('click', handleAutoFill);
+    }
+  }
+
+  // Handle Tailor action via background service worker proxy
+  function handleTailorClick() {
+    if (!currentJobData || isProcessing) return;
+
+    isProcessing = true;
+    renderWidget();
+
+    chrome.runtime.sendMessage({
+      type: 'SAVE_JOB',
+      payload: {
+        ...currentJobData,
+        autoTailor: true
+      }
+    }, (response) => {
+      isProcessing = false;
+      if (chrome.runtime.lastError) {
+        alert('Communication error with extension background: ' + chrome.runtime.lastError.message);
+        renderWidget();
+        return;
+      }
+
+      if (response && response.success && response.tailoredCv) {
+        showTailorResult(response.tailoredCv, response.appUrl);
+      } else {
+        alert('Tailoring result: ' + (response?.error || 'Make sure you are signed in to Jobhunter and have created a profile.'));
+        renderWidget();
+      }
+    });
+  }
+
+  function showTailorResult(tailoredCv, appUrl = 'https://jobhunter-azure.vercel.app') {
+    const resultContainer = document.getElementById('jh-result-container');
+    const actionArea = document.getElementById('jh-action-area');
+    if (!resultContainer) return;
+
+    if (actionArea) actionArea.style.display = 'none';
+    resultContainer.style.display = 'flex';
+    resultContainer.innerHTML = `
+      <div class="jh-result-card">
+        <div class="jh-score-badge">
+          <span style="font-size: 12px; font-weight: 600; color: #f1f5f9;">ATS Match Score</span>
+          <span class="jh-score-number">${tailoredCv.matchScore}%</span>
+        </div>
+        <div class="jh-toast">${(tailoredCv.rationale || '').slice(0, 140)}...</div>
+        <a href="${appUrl}?cvId=${encodeURIComponent(tailoredCv.id)}" target="_blank" rel="noreferrer" class="jh-btn-primary" style="text-decoration: none;">
+          Open tailored resume
+        </a>
+      </div>
+    `;
+  }
+
+  // Intelligent Form Autofill
+  function handleAutoFill() {
+    if (!masterProfile) {
+      alert('Your profile is not loaded. Sign in through the extension popup and create your profile in Jobhunter first.');
+      return;
+    }
+
+    const contact = masterProfile.contact;
+    const nameParts = (contact.name || '').split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    let filledCount = 0;
+
+    const fillInput = (selectorList, value) => {
+      if (!value) return;
+      for (const sel of selectorList) {
+        const inputs = document.querySelectorAll(sel);
+        inputs.forEach(input => {
+          if (input && !input.value) {
+            input.value = value;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            filledCount++;
+          }
+        });
+      }
+    };
+
+    fillInput(['input[name*="first" i]', 'input[id*="first" i]', 'input[autocomplete="given-name"]'], firstName);
+    fillInput(['input[name*="last" i]', 'input[id*="last" i]', 'input[autocomplete="family-name"]'], lastName);
+    fillInput(['input[name*="name" i]:not([name*="first" i]):not([name*="last" i])', 'input[id*="full_name" i]'], contact.name);
+    fillInput(['input[type="email"]', 'input[name*="email" i]', 'input[id*="email" i]'], contact.email);
+    fillInput(['input[type="tel"]', 'input[name*="phone" i]', 'input[id*="phone" i]'], contact.phone);
+    fillInput(['input[name*="city" i]', 'input[id*="city" i]', 'input[name*="location" i]'], contact.location);
+    fillInput(['input[name*="linkedin" i]', 'input[id*="linkedin" i]'], contact.linkedin || 'https://linkedin.com');
+    fillInput(['input[name*="github" i]', 'input[id*="github" i]', 'input[name*="website" i]'], contact.github || '');
+
+    alert(`JobHunter Auto-Fill: Checked form fields and filled ${filledCount} fields! Please review custom questions before submitting.`);
+  }
+
+  // Check connection and initialize
+  checkServerConnection();
+
+  let lastUrl = location.href;
+  new MutationObserver(() => {
+    const url = location.href;
+    if (url !== lastUrl) {
+      lastUrl = url;
+      currentJobData = null;
+      setTimeout(() => {
+        checkServerConnection();
+        renderWidget();
+      }, 1000);
+    }
+  }).observe(document, { subtree: true, childList: true });
+
+  window.addEventListener('load', () => {
+    setTimeout(renderWidget, 1000);
+  });
+
+  setTimeout(renderWidget, 1000);
+  setTimeout(renderWidget, 2500);
+})();
+
