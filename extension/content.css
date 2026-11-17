@@ -265,3 +265,79 @@
 @keyframes jh-spin {
   to { transform: rotate(360deg); }
 }
+
+
+/* Jobhunter visual refresh: warm neutral LinkedIn companion panel. */
+#jobhunter-widget {
+  width: min(360px, calc(100vw - 28px));
+  color: #211d19;
+  background: #fffdfa;
+  border: 1px solid #e7dfd7;
+  border-radius: 16px;
+  box-shadow: 0 16px 42px rgba(36, 27, 20, .16);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+#jobhunter-widget.minimized {
+  width: 54px; height: 54px; border: 0; border-radius: 50%;
+  background: #c04e1b; box-shadow: 0 8px 22px rgba(91, 46, 24, .24);
+}
+#jobhunter-widget.minimized .jh-header {
+  width: 54px; height: 54px; padding: 0; border: 0; border-radius: 50%; background: #c04e1b;
+}
+#jobhunter-widget.minimized .jh-logo-badge {
+  width: 54px; height: 54px; border-radius: 50%; background: transparent; box-shadow: none;
+}
+#jobhunter-widget.minimized #jh-btn-minimize { display: none !important; }
+#jobhunter-widget .jh-header {
+  padding: 13px 15px; background: #fff; border-bottom: 1px solid #eee8e1;
+}
+#jobhunter-widget .jh-brand { gap: 10px; }
+#jobhunter-widget .jh-logo-badge {
+  width: 34px; height: 34px; border-radius: 10px; background: #c04e1b;
+  color: #fff; font-size: 11px; box-shadow: none;
+}
+#jobhunter-widget .jh-title { color: #211d19; font-size: 13px; font-weight: 700; }
+#jobhunter-widget .jh-status { color: #4b7650; font-size: 10px; }
+#jobhunter-widget .jh-status.offline { color: #a14334; }
+#jobhunter-widget .jh-status-dot { background: #4b8a55; box-shadow: none; }
+#jobhunter-widget .jh-status.offline .jh-status-dot { background: #b5473a; box-shadow: none; }
+#jobhunter-widget .jh-icon-btn {
+  width: 30px; height: 30px; padding: 0; border: 1px solid #ece5dd; border-radius: 8px;
+  color: #746a61; background: #fff; font-size: 13px;
+}
+#jobhunter-widget .jh-icon-btn:hover { color: #211d19; background: #f7f3ee; }
+#jobhunter-widget .jh-body { padding: 15px; gap: 12px; }
+#jobhunter-widget .jh-job-card {
+  padding: 13px; border: 1px solid #eee5dc; border-radius: 12px; background: #faf7f3;
+}
+#jobhunter-widget .jh-job-role { color: #211d19; font-size: 14px; font-weight: 700; white-space: normal; line-height: 1.4; }
+#jobhunter-widget .jh-job-company { color: #766d65; font-size: 11px; }
+#jobhunter-widget .jh-tag { padding: 4px 8px; border-radius: 7px; background: #f0e9e1; color: #65584d; font-size: 10px; }
+#jobhunter-widget .jh-tag.easy-apply { border: 1px solid #d9e8d8; background: #f1f8f0; color: #426c47; }
+#jobhunter-widget .jh-btn-primary {
+  min-height: 43px; padding: 11px 14px; border: 1px solid #c04e1b; border-radius: 10px;
+  background: #c04e1b; color: #fff; font-size: 12px; font-weight: 700; box-shadow: none;
+}
+#jobhunter-widget .jh-btn-primary:hover:not(:disabled) { transform: none; background: #a94317; box-shadow: none; }
+#jobhunter-widget .jh-btn-primary:disabled { opacity: .58; }
+#jobhunter-widget .jh-btn-secondary {
+  min-height: 40px; padding: 9px 12px; border: 1px solid #e5ddd4; border-radius: 9px;
+  background: #fff; color: #514941; font-size: 11px;
+}
+#jobhunter-widget .jh-btn-secondary:hover:not(:disabled) { background: #f8f4ef; color: #211d19; }
+#jobhunter-widget .jh-result-card { border: 1px solid #dce8d9; border-radius: 12px; background: #f5faf3; }
+#jobhunter-widget .jh-score-number { color: #426c47; }
+#jobhunter-widget .jh-toast { color: #766d65; }
+#jobhunter-widget input {
+  width: 100%; min-height: 40px; padding: 9px 10px; border: 1px solid #e3dbd2;
+  border-radius: 8px; background: #fff; color: #211d19; font: inherit;
+}
+#jobhunter-widget button:focus-visible, #jobhunter-widget input:focus-visible {
+  outline: 2px solid #963b16; outline-offset: 2px;
+}
+#jobhunter-widget .jh-spinner { border-color: #eadbd1; border-top-color: #c04e1b; }
+@media (max-width: 480px) {
+  #jobhunter-widget { right: 12px; bottom: 92px; }
+}

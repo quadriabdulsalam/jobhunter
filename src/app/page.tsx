@@ -577,6 +577,20 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               </div>
               <button className="btn-secondary" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add job manually</button>
             </div>
+            <div className="profile-readiness">
+              <div className="readiness-copy">
+                <div className="readiness-icon"><UserCheck size={18} aria-hidden="true" /></div>
+                <div>
+                  <strong>{profile?.contact?.name ? 'Your career profile is ready' : 'Start with your career profile'}</strong>
+                  <p>{profile?.contact?.name
+                    ? `${profile.experiences?.length || 0} work roles · ${profile.metadata?.sourceFiles?.length || 0} source CVs saved · Review your details before tailoring.`
+                    : 'Upload your CV or add your experience once. Jobhunter will use it as the source for every tailored resume.'}</p>
+                </div>
+              </div>
+              <button className="btn-secondary" onClick={() => setActiveTab('profile')}>
+                {profile?.contact?.name ? 'Review profile' : 'Set up profile'} <ChevronRight size={15} />
+              </button>
+            </div>
             {/* Metric Banner */}
             <div className="metrics-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
               <div className="glass-panel" style={{ padding: '18px 20px' }}>
@@ -797,6 +811,15 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
         {/* TAB 2: TAILORED CV STUDIO */}
         {activeTab === 'studio' && (
+          <>
+          <div className="page-heading studio-page-heading">
+            <div>
+              <p className="eyebrow">YOUR RESUME WORKSPACE</p>
+              <h1>Resume studio</h1>
+              <p className="page-lede">{selectedJob ? `Review the resume tailored for ${selectedJob.title} at ${selectedJob.company}.` : 'Choose a saved job to create and review a role-specific resume.'}</p>
+            </div>
+            {selectedJob && <span className="badge">{selectedJob.company}</span>}
+          </div>
           <div className="studio-grid" style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '24px' }}>
             {/* Left Controls & Analysis Panel */}
             <div className="no-print studio-controls" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -831,11 +854,11 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   <div>
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Calculated Match Score</div>
                     <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-success)' }}>
-                      {tailoredCv ? `${tailoredCv.matchScore}%` : '88%'}
+                      {tailoredCv ? `${tailoredCv.matchScore}%` : '—'}
                     </div>
                   </div>
                   <div style={{ fontSize: '12px', color: 'var(--color-success)', maxWidth: '160px', textAlign: 'right' }}>
-                    Verified ATS single-column parseable
+                    ATS-friendly single-column layout
                   </div>
                 </div>
 
@@ -1063,11 +1086,19 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               )}
             </div>
           </div>
+          </>
         )}
 
         {/* TAB 3: MASTER PROFILE HUB */}
         {activeTab === 'profile' && profile && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div className="profile-workspace">
+            <div className="page-heading profile-page-heading">
+              <div>
+                <p className="eyebrow">YOUR CAREER FOUNDATION</p>
+                <h1>Career profile</h1>
+                <p className="page-lede">Keep your experience accurate and up to date. Every tailored resume starts here.</p>
+              </div>
+            </div>
             {isEditingProfile && (
               <section className="glass-panel profile-editor-panel" style={{ padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '20px' }}>
@@ -1270,6 +1301,14 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
         {/* TAB 4: CHROME EXTENSION SETUP GUIDE */}
         {activeTab === 'extension' && (
+          <>
+          <div className="page-heading extension-page-heading">
+            <div>
+              <p className="eyebrow">LINKEDIN COPILOT</p>
+              <h1>Bring Jobhunter to LinkedIn</h1>
+              <p className="page-lede">Capture a role while you browse and tailor your resume without copying job links.</p>
+            </div>
+          </div>
           <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div className="glass-panel" style={{ padding: '28px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
@@ -1321,6 +1360,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               </section>
             </div>
           </div>
+          </>
         )}
       </main>
 
