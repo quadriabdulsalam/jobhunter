@@ -19,23 +19,23 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary / action | `#C04E1B` | `--color-primary` |
+| Primary / action | `#0A66C2` | `--color-primary` |
 | On Primary | `#FFFFFF` | `--color-on-primary` |
-| Primary hover | `#B84A16` | `--color-primary-hover` |
-| Accent text / links / focus | `#963B16` | `--color-primary-strong`, `--color-link`, `--color-focus` |
-| Accent/CTA | `#C04E1B` | `--color-primary` |
-| Background | `#F7F6F3` | `--color-page` |
-| Foreground | `#1A1917` | `--color-text` |
+| Primary hover | `#004F9E` | `--color-primary-hover` |
+| Accent text / links / focus | `#07549E` | `--color-primary-strong`, `--color-link`, `--color-focus` |
+| Accent/CTA | `#0A66C2` | `--color-primary` |
+| Background | `#F2F6FA` | `--color-page` |
+| Foreground | `#172B3A` | `--color-text` |
 | Card | `#FFFFFF` | `--color-card` |
 | Card Foreground | `#111111` | `--color-text` |
-| Muted | `#F2F1EE` | `--color-surface-muted` |
-| Muted Foreground | `#66625E` | `--color-text-muted` |
-| Border | `#E6E3DE` | `--color-border` |
+| Muted | `#EAF1F6` | `--color-surface-muted` |
+| Muted Foreground | `#526878` | `--color-text-muted` |
+| Border | `#D6E0E8` | `--color-border` |
 | Destructive | `#A12B2B` | `--color-danger` |
 | On Destructive | `#FFFFFF` | `--color-on-danger` |
 | Ring | `#C2410C` | `--color-focus` |
 
-**Color Notes:** Use warm neutral surfaces and near-black text. Reserve terracotta orange for primary actions, the brand mark, selected navigation, and focus. Use the deeper orange for text links and focus; white text on the primary orange maintains WCAG AA contrast. Avoid gradients and decorative accent fills.
+**Color Notes:** Use cool mist-gray surfaces and deep blue-gray text. Use professional blue for primary actions, selected navigation, and links; deep navy anchors the brand and secondary actions. Use muted teal to mark profile progress or successful resume work. White text on the primary blue keeps actions legible. Avoid gradients and decorative accent fills.
 
 ### Typography
 
@@ -202,7 +202,7 @@ Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use 
 
 **Style:** Minimalism & Swiss Style
 
-**Keywords:** Clean, simple, spacious, functional, white space, high contrast, geometric, sans-serif, grid-based, essential
+**Keywords:** Clear, capable, spacious, functional, white space, high contrast, geometric, sans-serif, grid-based, career-focused
 
 **Best For:** Enterprise apps, dashboards, documentation sites, SaaS platforms, professional tools
 

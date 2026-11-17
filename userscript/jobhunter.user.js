@@ -70,29 +70,29 @@
     <style>
       :host { all: initial; }
       * { box-sizing: border-box; }
-      .panel { position: fixed; z-index: 2147483646; right: 20px; bottom: 20px; width: 330px; max-height: min(620px, calc(100vh - 40px)); overflow: auto; padding: 16px; border: 1px solid #e6e6e6; border-radius: 14px; background: #fff; color: #111; box-shadow: 0 8px 32px #0002; font: 13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; }
+      .panel { position: fixed; z-index: 2147483646; right: 20px; bottom: 20px; width: 330px; max-height: min(620px, calc(100vh - 40px)); overflow: auto; padding: 16px; border: 1px solid #d6e0e8; border-radius: 14px; background: #fff; color: #172b3a; box-shadow: 0 8px 32px #102b4326; font: 13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; }
       .header, .brand, .actions, .row { display: flex; align-items: center; }
       .header, .row { justify-content: space-between; gap: 10px; }
       .brand { gap: 10px; }
-      .logo { display:grid; place-items:center; width:32px; height:32px; border-radius:9px; background:#111; color:#fff; font-weight:700; }
+      .logo { display:grid; place-items:center; width:32px; height:32px; border-radius:9px; background:#102b43; color:#fff; font-weight:700; }
       .name { font-size:14px; font-weight:650; }
-      .muted { color:#777; font-size:12px; }
-      .status { margin: 14px 0; color:#666; font-size:12px; }
+      .muted { color:#526878; font-size:12px; }
+      .status { margin: 14px 0; color:#526878; font-size:12px; }
       .status:before { content:''; display:inline-block; width:7px; height:7px; margin-right:7px; border-radius:50%; background:#aaa; }
       .status.online:before { background:#16834a; }
       .status.error:before { background:#c23a32; }
       .job { margin: 12px 0; padding: 12px 0; border-top:1px solid #eee; border-bottom:1px solid #eee; }
       .job-title { margin-bottom:4px; font-size:14px; font-weight:650; }
       .actions { flex-direction:column; gap:8px; }
-      button, a.button { display:block; width:100%; min-height:38px; padding:9px 12px; border:1px solid #e3e3e3; border-radius:8px; background:#fff; color:#111; font:600 12px/1.2 inherit; text-align:center; text-decoration:none; cursor:pointer; }
-      button.primary { border-color:#111; background:#111; color:#fff; }
+      button, a.button { display:block; width:100%; min-height:38px; padding:9px 12px; border:1px solid #cbd9e3; border-radius:8px; background:#fff; color:#29475c; font:600 12px/1.2 inherit; text-align:center; text-decoration:none; cursor:pointer; }
+      button.primary { border-color:#0a66c2; background:#0a66c2; color:#fff; }
       button:disabled { opacity:.55; cursor:wait; }
       .icon { width:auto; min-height:28px; padding:5px 8px; }
       .settings { display:none; margin-top:12px; padding-top:12px; border-top:1px solid #eee; }
       .settings.open { display:block; }
       label { display:block; margin-bottom:6px; color:#666; font-size:11px; }
-      input { width:100%; min-height:36px; margin-bottom:8px; padding:8px; border:1px solid #ddd; border-radius:7px; font:inherit; }
-      .result { margin-top:10px; padding:10px; border-radius:8px; background:#f6f6f5; }
+      input { width:100%; min-height:36px; margin-bottom:8px; padding:8px; border:1px solid #cbd9e3; border-radius:7px; font:inherit; }
+      .result { margin-top:10px; padding:10px; border-radius:8px; background:#f2f6fa; }
       .result strong { display:block; margin-bottom:4px; }
       .small { margin-top:10px; color:#888; font-size:11px; }
     </style>
@@ -107,7 +107,7 @@
       <div class="status" id="status">Checking Jobhunter connection…</div>
       <div class="job" id="job"><div class="muted">Reading job details…</div></div>
       <div class="actions" id="actions">
-        <button class="primary" id="tailor">Tailor my CV for this job</button>
+        <button class="primary" id="tailor">Tailor my resume for this job</button>
         <button id="autofill">Assist with application form</button>
         <button id="connect">Connect Jobhunter account</button>
         <button id="settings-toggle">Settings</button>
@@ -272,13 +272,13 @@
       const link = document.createElement('a'); link.className = 'button'; link.style.marginTop = '9px'; link.textContent = 'Open tailored CV'; link.href = `${currentAppUrl()}/?cvId=${encodeURIComponent(data.tailoredCv.id)}`; link.target = '_blank'; link.rel = 'noopener noreferrer';
       result.append(heading, rationale, link);
       $('#job').appendChild(result);
-      setStatus('CV tailoring complete.', 'online');
+      setStatus('Resume tailoring complete.', 'online');
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Could not tailor this CV.', 'error');
     } finally {
       busy = false;
       $('#tailor').disabled = false;
-      $('#tailor').textContent = 'Tailor my CV for this job';
+      $('#tailor').textContent = 'Tailor my resume for this job';
     }
   }
 
