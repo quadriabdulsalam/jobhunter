@@ -1,284 +1,65 @@
-# Design System Master File
+# Jobhunter product design system
 
-> **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
-> If that file exists, its rules **override** this Master file.
-> If not, strictly follow the rules below.
+**Product:** Career search and resume workspace
+**Interface direction:** Precise, calm, editorial, and work focused
+**Updated:** 2026-11-17
 
----
-
-**Project:** Jobhunter
-**Generated:** 2026-10-29 16:47:10
-**Category:** Career productivity / job application workspace
-**Design Dials:** Variance 3/10 (Centered / Minimal) | Motion 2/10 (Subtle) | Density 4/10 (Standard)
-
----
-
-## Global Rules
-
-### Color Palette
-
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary / action | `#0A66C2` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Primary hover | `#004F9E` | `--color-primary-hover` |
-| Accent text / links / focus | `#07549E` | `--color-primary-strong`, `--color-link`, `--color-focus` |
-| Accent/CTA | `#0A66C2` | `--color-primary` |
-| Background | `#F2F6FA` | `--color-page` |
-| Foreground | `#172B3A` | `--color-text` |
-| Card | `#FFFFFF` | `--color-card` |
-| Card Foreground | `#111111` | `--color-text` |
-| Muted | `#EAF1F6` | `--color-surface-muted` |
-| Muted Foreground | `#526878` | `--color-text-muted` |
-| Border | `#D6E0E8` | `--color-border` |
-| Destructive | `#A12B2B` | `--color-danger` |
-| On Destructive | `#FFFFFF` | `--color-on-danger` |
-| Ring | `#C2410C` | `--color-focus` |
-
-**Color Notes:** Use cool mist-gray surfaces and deep blue-gray text. Use professional blue for primary actions, selected navigation, and links; deep navy anchors the brand and secondary actions. Use muted teal to mark profile progress or successful resume work. White text on the primary blue keeps actions legible. Avoid gradients and decorative accent fills.
-
-### Typography
-
-- **Heading Font:** Inter with system sans-serif fallbacks
-- **Body Font:** Inter with system sans-serif fallbacks
-- **Mood:** calm, clear, professional, focused
-- **Loading:** Keep system fallbacks to avoid a remote font dependency and preserve a fast first paint.
-
-| Token | Size | Use |
-|-------|------|-----|
-| `--font-size-xs` | `.75rem` | Badges and compact metadata |
-| `--font-size-sm` | `.875rem` | Buttons, labels, and secondary copy |
-| `--font-size-base` | `1rem` | Default text and mobile body copy |
-| `--font-size-lg` | `1.125rem` | Section headings and lead text |
-| `--font-size-xl` | `1.5rem` | Subsection headings |
-| `--font-size-2xl` | `2rem` | Page headings |
-| `--font-size-3xl` | `2.5rem` | Large display headings |
-
-Use a 1.5–1.6 body line-height. Keep supporting text at or above 12px and use the muted text token (`#666` on white) so contrast remains readable. Keep page headings fluid with `clamp()` and use system font fallbacks for a fast first paint.
-
-### Spacing Variables
-
-*Density: 4/10 — Standard*
+## Color system
 
 | Token | Value | Usage |
-|-------|-------|-------|
-| `--space-1` | `4px` | Tight gaps |
-| `--space-2` | `8px` | Icon gaps, inline spacing |
-| `--space-3` | `12px` | Compact component gaps |
-| `--space-4` | `16px` | Standard padding |
-| `--space-6` | `24px` | Section padding |
-| `--space-8` | `32px` | Large gaps |
-| `--space-10` | `40px` | Desktop section separation |
-| `--space-12` | `48px` | Wide page breathing room |
+|---|---|---|
+| `--color-page` | `#F4F7FA` | App canvas |
+| `--color-surface` | `#FFFFFF` | Cards, forms, menus |
+| `--color-surface-muted` | `#EDF3F7` | Quiet controls and selected navigation |
+| `--color-text` | `#142B3D` | Main text on light surfaces |
+| `--color-text-muted` | `#536B7D` | Supporting text on light surfaces |
+| `--color-border` | `#D7E1E8` | Dividers and control edges |
+| `--color-primary` | `#0969B5` | Primary action; white text only |
+| `--color-primary-hover` | `#07528D` | Primary hover; white text only |
+| `--color-link` | `#075D9F` | Text links on light surfaces |
+| `--color-success` | `#176B55` | Success indicators on light surfaces |
+| `--color-warning` | `#805B13` | Caution indicators on light surfaces |
+| `--color-danger` | `#A22E36` | Destructive actions on light surfaces |
+| `--color-focus` | `#0969B5` | Visible keyboard focus |
 
-### Shadow Depths
+Never pair dark text with dark surfaces or light text with light surfaces. The only dark surface is the sign-in story panel; its text and icons use high contrast light colors. Keep the resume preview white with dark text for print fidelity. Do not use opacity to create text colors.
 
-| Level | Value | Usage |
-|-------|-------|-------|
-| Default | `none` | Flat surfaces and application rows |
-| Overlay | soft neutral scrim | Dialogs only |
+## Type
 
----
+Use the native system sans stack with Inter when available. Keep the hierarchy clear and consistent:
 
-## Component Specs
+- Page title: `clamp(2rem, 3vw, 2.65rem)`, 690 weight, tight tracking, 1.08 line height.
+- Section title: 16–20px, 680–720 weight.
+- Body: 14–16px, 1.55–1.65 line height.
+- Labels and metadata: 12–13px, medium weight, readable contrast.
+- Do not reduce helper text below 11px; reserve that size for secondary metadata.
 
-### Buttons
+## Layout and components
 
-```css
-/* Primary Button */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 44px;
-  background: var(--color-primary);
-  color: var(--color-on-primary); /* white maintains AA contrast on terracotta */
-  padding: 10px 16px;
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius-control);
-  font-size: var(--font-size-sm);
-  font-weight: 550;
-  transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease;
-  cursor: pointer;
-}
+- Use a cool, pale blue-gray page canvas with flat white work surfaces and fine cool-gray borders.
+- Keep panels at 10–12px radius. Avoid glass effects, gradients, ambient glow, and ornamental shadows.
+- Primary buttons use saturated blue with white text. Secondary buttons use white with dark blue-gray text and a visible border. Destructive actions use dark red text on white.
+- Buttons and controls are at least 44px high. Keep 8px between adjacent touch targets.
+- Inputs have visible labels, 46px minimum height, 7px radius, a strong blue focus ring, and dark text on white.
+- Native checkboxes and radios use the primary blue accent and remain at least 18px.
+- Job cards use concise metadata, aligned actions, and thin separators. Empty states offer one clear next step.
+- Resume preview remains a white, printable document with dark ink and no dark-mode treatments.
 
-.btn-primary:hover {
-  background: var(--color-primary-hover);
-}
+## Responsive behavior
 
-.btn-primary:active { opacity: .82; }
-.btn-primary:disabled { opacity: .52; cursor: not-allowed; }
+- **Phones (320–767px):** Keep the brand and account actions in the top header. Pin the four destination controls in a centered bottom dock above the safe area. Use 16px page gutters, one-column cards and forms, full-width primary actions, and bottom content padding that clears the dock.
+- **Tablet (768–1023px):** Restore horizontal navigation and keep the resume editor in a compact two-column layout only when each column remains usable.
+- **Desktop (1024px+):** Use the full horizontal header, readable page measure, and a dedicated resume controls column.
+- Respect safe-area insets, reduced motion, keyboard focus, zoom, and long user-provided text. Prevent horizontal page scrolling.
 
-/* Ghost actions stay quiet until hover/focus; all button variants remain 44px tall. */
-.btn-ghost { min-height: 44px; background: transparent; color: var(--color-text-muted); }
+## Accessibility and interaction
 
-/* Secondary Button */
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 44px;
-  background: #FFFFFF;
-  color: var(--color-text);
-  border: 1px solid #dededd;
-  padding: 10px 16px;
-  border-radius: var(--radius-control);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease;
-  cursor: pointer;
-}
+- Maintain at least 4.5:1 contrast for regular text and 3:1 for large text and meaningful UI boundaries.
+- Provide visible focus on every interactive control. Never remove the outline without an equivalent.
+- Use real labels and semantic buttons. Provide accessible names for icon-only actions and state for selected controls.
+- Hover, active, disabled, loading, error, and success states must be visually distinct without relying on color alone.
+- Keep transitions to brief color, border, and position feedback. Honor `prefers-reduced-motion`.
 
-/* Destructive actions are visually distinct and retain readable contrast. */
-.btn-danger {
-  min-height: 44px;
-  color: var(--color-danger);
-  background: #fff;
-  border: 1px solid #e4b7b7;
-  border-radius: var(--radius-control);
-  padding: 10px 16px;
-}
-```
+## Auth flow
 
-### Cards
-
-```css
-.card {
-  background: #FFFFFF;
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid var(--color-border);
-  box-shadow: none;
-  transition: border-color 150ms ease;
-}
-
-.card:hover {
-  border-color: #c9c9c6;
-}
-```
-
-### Inputs
-
-```css
-.input {
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  font-size: var(--font-size-sm);
-  transition: border-color 200ms ease;
-}
-
-.input:focus {
-  border-color: var(--color-focus);
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-```
-
-### Modals
-
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: none;
-  max-width: 500px;
-  width: 90%;
-}
-```
-
----
-
-## Style Guidelines
-
-**Style:** Minimalism & Swiss Style
-
-**Keywords:** Clear, capable, spacious, functional, white space, high contrast, geometric, sans-serif, grid-based, career-focused
-
-**Best For:** Enterprise apps, dashboards, documentation sites, SaaS platforms, professional tools
-
-**Key Effects:** Subtle hover (200-250ms), smooth transitions, sharp shadows if any, clear type hierarchy, fast loading
-
-### Page Pattern
-
-**Pattern Name:** Calm career workspace
-
-- **Primary Surface:** Application list with a single, clear way to add a job.
-- **Navigation:** Compact horizontal navigation on tablet and desktop; a persistent four-item bottom bar on phones for Jobs, Resume, Profile, and Helper.
-- **Progression:** Keep job capture, tailoring, and profile editing distinct; explain the next action when a screen has no content.
-- **CTA Placement:** One primary action per view; supporting actions use quiet secondary buttons.
-- **Section Order:** Page title and context > job capture > search and application list.
-
-### Responsive Dashboard
-
-- **Mobile first (`320–480px`):** Default to a single column with 16px body text, 16px side gutters, an always-reachable bottom navigation dock with safe-area spacing, full-width primary actions, and no horizontal overflow.
-- **Tablet (`768–1024px`):** Restore horizontal form and job-card actions when there is room; allow two-column profile and control groups while keeping nav labels legible.
-- **Desktop (`900px+`):** Use the full top navigation and a two-column resume workspace.
-- **Wide screens (`1200px+`):** Expand only the resume workspace; keep application text at a readable measure.
-- **Touch:** Interactive controls are at least `44 × 44px`; keep `8px` or more between adjacent targets.
-- **Overflow:** Wrap long content and action groups; never rely on horizontal page scrolling.
-
-### Contrast and Accessibility
-
-- Body text: `#111111` on `#FCFCFC`; muted text: `#666666` on white; links/focus: `#0369A1`; destructive text: `#A12B2B` on white. These pairs meet the normal-text `4.5:1` contrast target.
-- Preserve a visible keyboard focus ring. Give each form field a visible label and each icon-only action an accessible name.
-- Use `aria-pressed` for mutually exclusive view controls, provide clear disabled and destructive states, and respect reduced-motion preferences.
-
----
-
-## Motion
-
-**Interaction feedback** (Subtle) — Use short state feedback for buttons and focus; avoid scroll choreography in the work dashboard.
-
-```css
-button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
-```
-
-**Framework notes:** Respect `prefers-reduced-motion`; motion should never delay or hide work content.
-
-- ✅ Keep feedback fast and visually subtle
-- ✅ Respect `prefers-reduced-motion`
-- ❌ Do not use decorative scroll-reveal animation in core work screens
-
----
-
-## Anti-Patterns (Do NOT Use)
-
-- ❌ Outdated forms
-- ❌ Hidden filters
-
-### Additional Forbidden Patterns
-
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
-- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
-- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
-- ❌ **Invisible focus states** — Focus states must be visible for a11y
-
----
-
-## Pre-Delivery Checklist
-
-Before delivering any UI code, verify:
-
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
-- [ ] `cursor-pointer` on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard navigation
-- [ ] `prefers-reduced-motion` respected
-- [ ] Responsive: 375px, 768px, 1024px, 1440px
-- [ ] No content hidden behind fixed navbars
-- [ ] No horizontal scroll on mobile
-
+The sign-in and account creation screen has a dark navy product story panel with light text and a light form surface with dark text. LinkedIn is the primary provider action; email and password use the same control language as the rest of the app. Never place dark labels or body text on the navy panel.
