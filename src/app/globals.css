@@ -151,6 +151,7 @@ a:hover { color: var(--color-primary-hover); }
 .nav-button svg { width: 16px; height: 16px; color: currentColor !important; }
 .nav-label-mobile { display: none; }
 .header-actions { display: flex !important; align-items: center; gap: 12px !important; margin-left: 12px; }
+.header-actions .signout-button { flex: 0 0 auto; min-width: 88px; white-space: nowrap; }
 .ai-status {
   min-height: 34px;
   align-items: center;
@@ -510,8 +511,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .topbar > div:first-child > div:first-child { gap: 8px !important; }
   .brand-mark { width: 36px !important; height: 36px !important; }
   .header-actions { flex: 0 0 auto; gap: 8px !important; margin-left: 8px; }
-  .ai-status { min-height: 32px; padding: 0 8px !important; font-size: 12px !important; }
-  .header-actions .btn-secondary { min-height: 44px !important; padding: 0 8px !important; font-size: 12px !important; }
+  .ai-status { display: none !important; }
+  .header-actions .signout-button { min-height: 44px !important; padding: 0 10px !important; font-size: 13px !important; }
   .top-nav {
     position: fixed !important;
     top: auto !important;

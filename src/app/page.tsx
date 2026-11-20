@@ -478,7 +478,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             <span className={`ai-status-dot ${aiConfigured ? 'is-ready' : 'is-local'}`} aria-hidden="true" />
             {aiConfigured ? `${aiProvider} ready` : 'Local mode'}
           </div>
-          <button className="btn-secondary" onClick={signOut}>Sign out</button>
+          <button className="btn-secondary signout-button" onClick={signOut}>Sign out</button>
         </div>
       </header>
 
