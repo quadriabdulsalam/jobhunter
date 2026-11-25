@@ -2,7 +2,8 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, FileText, Linkedin } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Briefcase, FileText, Linkedin, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -52,10 +53,28 @@ export default function LoginPage() {
 
   return (
     <main className="auth-page">
-      <section className="auth-story" aria-label="Job application illustration">
+      <section className="auth-story" aria-label="About Jobhunter">
         <a className="auth-story-brand" href="/" aria-label="Jobhunter home">
           <span className="auth-story-mark">JH</span><span>Jobhunter</span>
         </a>
+        <div className="auth-story-content">
+          <h1>Your next role starts with a stronger story.</h1>
+          <p className="auth-story-lede">Keep your search organized, your experience ready, and every resume focused on the opportunity in front of you.</p>
+          <ul className="auth-benefits">
+            <li><span><Briefcase size={17} aria-hidden="true" /></span><div><strong>Keep roles in one place</strong><p>Save opportunities as you find them.</p></div></li>
+            <li><span><FileText size={17} aria-hidden="true" /></span><div><strong>Tailor with your experience</strong><p>Build a focused resume for each role.</p></div></li>
+            <li><span><ShieldCheck size={17} aria-hidden="true" /></span><div><strong>Stay in control</strong><p>Review, edit, and export before you apply.</p></div></li>
+          </ul>
+        </div>
+        <Image
+          className="auth-story-illustration"
+          src="/login-application.jpg"
+          alt="A job seeker reviewing an application and preparing a resume"
+          width={1659}
+          height={948}
+          sizes="(max-width: 767px) 100vw, (max-width: 900px) 50vw, 55vw"
+          priority
+        />
       </section>
 
       <section className="auth-panel-wrap" aria-label={mode === 'login' ? 'Sign in to Jobhunter' : 'Create a Jobhunter account'}>
