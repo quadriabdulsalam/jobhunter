@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Briefcase, FileText, Linkedin, ShieldCheck } from 'lucide-react';
+import { ArrowRight, FileText, Linkedin } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -52,20 +52,10 @@ export default function LoginPage() {
 
   return (
     <main className="auth-page">
-      <section className="auth-story" aria-label="About Jobhunter">
+      <section className="auth-story" aria-label="Job application illustration">
         <a className="auth-story-brand" href="/" aria-label="Jobhunter home">
           <span className="auth-story-mark">JH</span><span>Jobhunter</span>
         </a>
-        <div className="auth-story-content">
-          <h1>Your next role starts with a stronger story.</h1>
-          <p className="auth-story-lede">Keep your search organized, your experience ready, and every resume focused on the opportunity in front of you.</p>
-          <ul className="auth-benefits">
-            <li><span><Briefcase size={17} aria-hidden="true" /></span><div><strong>Keep roles in one place</strong><small>Save opportunities as you find them.</small></div></li>
-            <li><span><FileText size={17} aria-hidden="true" /></span><div><strong>Tailor with your experience</strong><small>Build a focused resume for each role.</small></div></li>
-            <li><span><ShieldCheck size={17} aria-hidden="true" /></span><div><strong>Stay in control</strong><small>Review, edit, and export before you apply.</small></div></li>
-          </ul>
-        </div>
-        <p className="auth-story-footnote">One private workspace for your next career move.</p>
       </section>
 
       <section className="auth-panel-wrap" aria-label={mode === 'login' ? 'Sign in to Jobhunter' : 'Create a Jobhunter account'}>
