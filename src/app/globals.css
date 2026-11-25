@@ -15,15 +15,15 @@ main p, main h1, main h2, main h3, main label, .job-card { overflow-wrap: anywhe
 /* 2026 product system: one surface model, precise contrast, and intentional rhythm. */
 :root {
   color-scheme: light;
-  --color-page: #f6faff;
+  --color-page: #f3f8fd;
   --color-surface: #ffffff;
   --color-surface-raised: #ffffff;
-  --color-surface-muted: #f0f6fb;
-  --color-text: #142b3d;
-  --color-text-muted: #536b7d;
-  --color-text-subtle: #536b7d;
-  --color-border: #d7e1e8;
-  --color-border-strong: #748c9d;
+  --color-surface-muted: #eaf4fc;
+  --color-text: #1d2329;
+  --color-text-muted: #0a66c2;
+  --color-text-subtle: #0a66c2;
+  --color-border: #cfe2f3;
+  --color-border-strong: #0a66c2;
   --color-primary: #0a66c2;
   --color-primary-hover: #004182;
   --color-primary-strong: #004182;
@@ -42,14 +42,14 @@ main p, main h1, main h2, main h3, main label, .job-card { overflow-wrap: anywhe
   --color-danger-soft: #fff5f5;
   --color-danger-border: #e5c5c8;
   --color-focus: #0a66c2;
-  --color-focus-ring: #d6eafa;
+  --color-focus-ring: #0a66c2;
   --color-on-primary: #ffffff;
   --color-white: #ffffff;
   --color-on-danger: #ffffff;
   --color-overlay: rgb(12 31 46 / 54%);
   --color-document: #ffffff;
-  --color-document-text: #142b3d;
-  --color-document-muted: #536b7d;
+  --color-document-text: #1d2329;
+  --color-document-muted: #0a66c2;
   --color-dark-surface: #0a66c2;
   --color-on-dark: #ffffff;
   --color-on-dark-muted: #d4e1ea;
@@ -172,7 +172,7 @@ a:hover { color: var(--color-primary-hover); }
   color: var(--color-primary-strong) !important;
   font-weight: 690 !important;
 }
-.nav-button svg { width: 16px; height: 16px; color: currentColor !important; }
+.nav-button svg { width: 16px; height: 16px; color: var(--color-primary) !important; }
 .nav-label-mobile { display: none; }
 .header-actions { display: flex !important; align-items: center; gap: 12px !important; margin-left: 12px; }
 .header-actions .signout-button { flex: 0 0 auto; min-width: 88px; white-space: nowrap; }
@@ -309,7 +309,7 @@ main input:not([type="file"]), main textarea, main select {
 main textarea { min-height: 112px; resize: vertical; }
 main input::placeholder, main textarea::placeholder { color: var(--color-text-muted) !important; opacity: 1; }
 .job-modal input::placeholder, .job-modal textarea::placeholder { color: var(--color-text-muted) !important; opacity: 1; }
-main input:hover:not(:focus), main textarea:hover:not(:focus), main select:hover:not(:focus) { border-color: var(--color-text) !important; }
+main input:hover:not(:focus), main textarea:hover:not(:focus), main select:hover:not(:focus) { border-color: var(--color-primary) !important; }
 main input:focus, main textarea:focus, main select:focus, .auth-field input:focus {
   border-color: var(--color-primary) !important;
   outline: 3px solid var(--color-focus-ring) !important;
@@ -428,12 +428,14 @@ main .search-field input { padding-left: var(--space-12) !important; }
 .profile-field-label { display: block; margin-bottom: var(--space-2); color: var(--color-text-muted); font-size: var(--font-body); font-weight: 500; }
 .profile-field-input { width: 100%; min-height: 48px; border-color: var(--color-border-strong) !important; border-radius: var(--radius-control) !important; background: var(--color-surface) !important; color: var(--color-text) !important; }
 .profile-file-picker { position: relative; display: inline-flex; min-height: 48px; align-items: center; gap: var(--space-2); margin-top: var(--space-2); padding: 0 var(--space-4); border: 1px solid var(--color-primary); border-radius: var(--radius-control); background: var(--color-primary); color: var(--color-on-primary); cursor: pointer; font-size: 14px; font-weight: 650; transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease; }
-.profile-file-picker:hover { border-color: var(--color-primary-hover); background: var(--color-primary-hover); }
+.profile-file-picker:hover { border-color: var(--color-primary-hover); background: var(--color-primary-hover); color: var(--color-on-primary); }
 .profile-file-picker:focus-within { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .profile-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 main input.profile-file-input { width: 1px !important; height: 1px !important; min-height: 0 !important; padding: 0 !important; border: 0 !important; }
 .profile-file-status { display: flex; align-items: flex-start; gap: var(--space-2); margin: var(--space-2) 0 0; color: var(--color-text-muted); font-size: 12px; line-height: 16px; overflow-wrap: anywhere; }
 .profile-file-status.is-selected { color: var(--color-success); }
+.profile-inline-015, .profile-inline-028 .btn-primary { border-color: var(--color-primary) !important; background: var(--color-primary) !important; color: var(--color-on-primary) !important; }
+.profile-inline-015:hover:not(:disabled), .profile-inline-028 .btn-primary:hover:not(:disabled) { border-color: var(--color-primary-hover) !important; background: var(--color-primary-hover) !important; color: var(--color-on-primary) !important; }
 .profile-field-spaced { margin-top: var(--space-2); }
 .profile-summary-input { min-height: 112px; resize: vertical; }
 .profile-feedback { color: var(--color-text-muted); font-size: var(--font-caption); }
