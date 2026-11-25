@@ -1,21 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Briefcase, 
-  FileText, 
-  UserCheck, 
-  Chrome, 
-  ExternalLink, 
-  Sparkles, 
-  Download, 
-  Printer, 
-  CheckCircle2, 
-  AlertCircle, 
-  Plus, 
-  Search, 
-  Layers, 
-  ShieldCheck, 
+import {
+  Briefcase,
+  FileText,
+  UserCheck,
+  Chrome,
+  ExternalLink,
+  Sparkles,
+  Download,
+  Printer,
+  CheckCircle2,
+  AlertCircle,
+  Plus,
+  Search,
+  Layers,
+  ShieldCheck,
   ChevronRight,
   RefreshCw,
   Copy,
@@ -34,13 +34,6 @@ function createEmptyProfile(): MasterProfile {
     metadata: { lastUpdated: new Date().toISOString(), sourceFiles: [] }
   };
 }
-
-const profileInputStyle: React.CSSProperties = {};
-
-const profileLabelStyle: React.CSSProperties = {
-  display: 'block', marginBottom: '6px', color: 'var(--text-muted)',
-  fontSize: '14px', fontWeight: 500
-};
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'jobs' | 'studio' | 'profile' | 'extension'>('jobs');
@@ -412,7 +405,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
     setTimeout(() => setIsCopied(false), 2000);
   }
 
-  const filteredJobs = jobs.filter(j => 
+  const filteredJobs = jobs.filter(j =>
     j.title.toLowerCase().includes(filterQuery.toLowerCase()) ||
     j.company.toLowerCase().includes(filterQuery.toLowerCase())
   );
@@ -434,7 +427,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
           {/* Navigation Tabs */}
           <nav className="top-nav" aria-label="Main navigation">
-            <button 
+            <button
               onClick={() => setActiveTab('jobs')}
               aria-pressed={activeTab === 'jobs'}
               aria-controls="main-content"
@@ -443,7 +436,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               <Briefcase size={18} aria-hidden="true" /><span className="nav-label-desktop">Jobs <span className="nav-count">({jobs.length})</span></span><span className="nav-label-mobile">Jobs</span>
             </button>
 
-            <button 
+            <button
               onClick={() => setActiveTab('studio')}
               aria-pressed={activeTab === 'studio'}
               aria-controls="main-content"
@@ -452,7 +445,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               <FileText size={18} aria-hidden="true" /><span>Resume</span>
             </button>
 
-            <button 
+            <button
               onClick={() => setActiveTab('profile')}
               aria-pressed={activeTab === 'profile'}
               aria-controls="main-content"
@@ -461,7 +454,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
               <UserCheck size={18} aria-hidden="true" /><span>Profile</span>
             </button>
 
-            <button 
+            <button
               onClick={() => setActiveTab('extension')}
               aria-pressed={activeTab === 'extension'}
               aria-controls="main-content"
@@ -489,7 +482,6 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <div className="jobs-workspace">
             <div className="page-heading heading-row">
               <div>
-                <p className="eyebrow">YOUR CAREER WORKSPACE</p>
                 <h1>Your job pipeline</h1>
                 <p className="page-lede">Save interesting roles, prepare a focused resume, and keep your next steps clear.</p>
               </div>
@@ -511,13 +503,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             </div>
             {/* Metric Banner */}
             <div className="metrics-strip" aria-label="Job search overview">
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">Roles saved</div>
                 <div className="metric-value">{jobs.length}</div>
                 <div className="metric-note">Across your search</div>
               </div>
 
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">Resumes tailored</div>
                 <div className="metric-value">
                   {jobs.filter(j => j.tailoredCvId || j.status === 'tailored').length}
@@ -525,7 +517,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <div className="metric-note">Ready to review</div>
               </div>
 
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">LinkedIn Easy Apply</div>
                 <div className="metric-value">
                   {jobs.filter(j => j.applyType === 'easy_apply').length}
@@ -533,7 +525,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <div className="metric-note">Roles in your pipeline</div>
               </div>
 
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">Source resumes</div>
                 <div className="metric-value">{profile?.metadata?.sourceFiles?.length || 0}</div>
                 <div className="metric-note">In your career profile</div>
@@ -544,9 +536,9 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             <section className="glass-panel import-panel" aria-labelledby="job-import-heading">
               <div className="import-panel-heading">
                 <div>
-                    <h3 id="job-import-heading">
+                    <h2 id="job-import-heading">
                       Start with a job you’re interested in
-                    </h3>
+                    </h2>
                     <p>
                       Paste a LinkedIn job link. Jobhunter will save the role and prepare a resume for you to review.
                     </p>
@@ -565,8 +557,8 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     onChange={e => setLinkedinUrlInput(e.target.value)}
                   />
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={isImportingUrl}
                   className="btn-primary"
                 >
@@ -582,7 +574,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <Search className="search-icon" size={18} aria-hidden="true" />
                 <input
                   id="application-search"
-                  type="text" 
+                  type="text"
                   placeholder="Search by title or company"
                   value={filterQuery}
                   onChange={e => setFilterQuery(e.target.value)}
@@ -633,10 +625,10 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
                     <div className="job-card-actions">
                       {job.url && job.url !== '#' && (
-                        <a 
-                          href={job.url} 
-                          target="_blank" 
-                          rel="noreferrer" 
+                        <a
+                          href={job.url}
+                          target="_blank"
+                          rel="noreferrer"
                           className="btn-icon"
                           title="Open on LinkedIn"
                           aria-label={`Open ${job.title} at ${job.company} on LinkedIn`}
@@ -644,15 +636,15 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                           <ExternalLink size={14} />
                         </a>
                       )}
-                      
-                      <button 
+
+                      <button
                         onClick={() => handleTailor(job)}
                         className="btn-secondary"
                       >
                         <Sparkles size={14} /> {job.tailoredCvId ? 'View resume' : 'Tailor resume'}
                       </button>
 
-                      <button 
+                      <button
                         onClick={(e) => handleDeleteJob(job.id, e)}
                         className="btn-danger"
                         title="Remove job from pipeline"
@@ -665,12 +657,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </article>
               ))}
               {filteredJobs.length === 0 && (
-                <div className="glass-panel" style={{ gridColumn: '1 / -1', padding: '36px 24px', textAlign: 'center' }}>
-                  <Briefcase size={22} style={{ color: 'var(--text-muted)', marginBottom: '12px' }} />
-                  <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '6px' }}>
+                <div className="glass-panel job-empty-state">
+                  <Briefcase className="job-empty-icon" size={22} aria-hidden="true" />
+                  <h2 className="job-empty-title">
                     {filterQuery ? 'No roles match that search' : 'Your pipeline is ready for its first role'}
                   </h2>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '16px' }}>
+                  <p className="job-empty-copy">
                     {filterQuery ? 'Try a different title or company name.' : 'Paste a LinkedIn job URL above or add a role manually to get started.'}
                   </p>
                   {!filterQuery && <div className="empty-state-actions"><a className="btn-secondary" href="https://www.linkedin.com/jobs/" target="_blank" rel="noreferrer"><ExternalLink size={15} /> Browse LinkedIn jobs</a><button className="btn-ghost" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add manually</button></div>}
@@ -685,96 +677,86 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <>
           <div className="page-heading studio-page-heading">
             <div>
-              <p className="eyebrow">YOUR RESUME WORKSPACE</p>
               <h1>Resume studio</h1>
               <p className="page-lede">{selectedJob ? `Review the resume tailored for ${selectedJob.title} at ${selectedJob.company}.` : 'Choose a saved job to create and review a role-specific resume.'}</p>
             </div>
             {selectedJob && <span className="badge">{selectedJob.company}</span>}
           </div>
-          <div className="studio-grid" style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '24px' }}>
+          <div className="studio-grid resume-inline-001" >
             {/* Left Controls & Analysis Panel */}
-            <div className="no-print studio-controls" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div className="glass-panel" style={{ padding: '20px' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <ShieldCheck size={18} color="#3b82f6" /> ATS Alignment & Optimization
+            <div className="no-print studio-controls resume-inline-002" >
+              <div className="glass-panel resume-inline-003" >
+                <h3 className="resume-inline-004">
+                  <ShieldCheck size={18} className="resume-heading-icon" /> ATS Alignment & Optimization
                 </h3>
 
                 {selectedJob ? (
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Tailoring for</div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text)' }}>{selectedJob.title}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--accent-blue)' }}>{selectedJob.company}</div>
+                  <div className="resume-inline-005">
+                    <div className="resume-inline-006">Tailoring for</div>
+                    <div className="resume-inline-007">{selectedJob.title}</div>
+                    <div className="resume-inline-008">{selectedJob.company}</div>
                   </div>
                 ) : (
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                  <div className="resume-inline-009">
                     Select a job from your pipeline to generate and review your tailored CV.
                   </div>
                 )}
 
                 {/* Match Score Display */}
-                <div style={{
-                  padding: '16px',
-                  backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                  border: '1px solid rgba(16, 185, 129, 0.25)',
-                  borderRadius: '12px',
-                  marginBottom: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}>
+                <div className="resume-inline-010">
                   <div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Resume match</div>
-                    <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-success)' }}>
+                    <div className="resume-inline-011">Resume match</div>
+                    <div className="resume-inline-012">
                       {tailoredCv ? `${tailoredCv.matchScore}%` : '—'}
                     </div>
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--color-success)', maxWidth: '160px', textAlign: 'right' }}>
+                  <div className="resume-inline-013">
                     ATS-friendly single-column layout
                   </div>
                 </div>
 
                 {tailoredCv?.rationale && (
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '18px' }}>
-                    <strong style={{ color: 'var(--color-text)' }}>Tailoring notes:</strong> {tailoredCv.rationale}
+                  <div className="resume-inline-014">
+                    <strong className="resume-inline-015">Tailoring notes:</strong> {tailoredCv.rationale}
                   </div>
                 )}
 
                 {/* Actions */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <button 
-                    onClick={handlePrintResume} 
-                    className="btn-primary" 
-                    style={{ width: '100%', padding: '12px' }}
+                <div className="resume-inline-016">
+                  <button
+                    onClick={handlePrintResume}
+                    className="btn-primary resume-inline-017"
+
                   >
                     <Printer size={16} /> Print / Save as PDF
                   </button>
 
-                  <button 
-                    onClick={handleCopyText} 
-                    className="btn-secondary" 
-                    style={{ width: '100%', padding: '10px' }}
+                  <button
+                    onClick={handleCopyText}
+                    className="btn-secondary resume-inline-018"
+
                   >
                     {isCopied ? <Check size={16} color="var(--color-success)" /> : <Copy size={16} />}
                     {isCopied ? 'Resume copied' : 'Copy resume text'}
                   </button>
 
                   {selectedJob && (
-                    <button 
-                      onClick={() => handleTailor(selectedJob)} 
+                    <button
+                      onClick={() => handleTailor(selectedJob)}
                       disabled={isLoadingTailor}
-                      className="btn-secondary" 
-                      style={{ width: '100%', padding: '10px' }}
+                      className="btn-secondary resume-inline-019"
+
                     >
-                      <RefreshCw size={16} className={isLoadingTailor ? 'animate-spin' : ''} /> 
+                      <RefreshCw size={16} className={isLoadingTailor ? 'animate-spin' : ''} />
                       {isLoadingTailor ? 'Updating resume…' : 'Tailor again'}
                     </button>
                   )}
 
                   {tailoredCv && (
-                    <button 
-                      onClick={() => handleDeleteTailoredCv(tailoredCv.id)} 
-                      className="btn-danger"
-                      style={{ width: '100%', marginTop: '4px' }}
+                    <button
+                      onClick={() => handleDeleteTailoredCv(tailoredCv.id)}
+                      className="btn-danger resume-inline-020"
+
                     >
                       <Trash2 size={15} /> Remove tailored resume
                     </button>
@@ -784,13 +766,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
               {/* Keyword Breakdown Card */}
               {tailoredCv && (
-                <div className="glass-panel" style={{ padding: '20px' }}>
-                  <h4 style={{ fontSize: '13px', fontWeight: 700, marginBottom: '12px' }}>
+                <div className="glass-panel resume-inline-021" >
+                  <h4 className="resume-inline-022">
                     Highlighted Keywords
                   </h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <div className="resume-inline-023">
                     {tailoredCv.highlightedSkills.flatMap(c => c.skills).map((skill, idx) => (
-                      <span key={idx} className="badge badge-emerald" style={{ fontSize: '10.5px' }}>
+                      <span key={idx} className="badge badge-emerald resume-inline-024" >
                         ✓ {skill}
                       </span>
                     ))}
@@ -800,37 +782,28 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             </div>
 
             {/* Right: The Clean ATS Resume Document Sheet */}
-            <div className="resume-paper print-resume-sheet" style={{
-              backgroundColor: '#ffffff',
-              color: '#111827',
-              borderRadius: '12px',
-              padding: '48px 56px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-              minHeight: '1000px',
-              fontFamily: '"Times New Roman", Times, Georgia, serif',
-              lineHeight: '1.4'
-            }}>
+            <div className="resume-paper print-resume-sheet resume-inline-025" >
               {isLoadingTailor ? (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', gap: '14px', color: '#6b7280' }}>
-                  <div className="jh-spinner" style={{ width: '28px', height: '28px', borderColor: 'rgba(0,0,0,0.2)', borderTopColor: '#2563eb' }}></div>
-                  <div style={{ fontSize: '14px', fontWeight: 600 }}>Preparing your profile and tailoring the resume…</div>
+                <div className="resume-inline-026">
+                  <div className="jh-spinner resume-inline-027" ></div>
+                  <div className="resume-inline-028">Preparing your profile and tailoring the resume…</div>
                 </div>
               ) : tailoredCv ? (
                 <div>
                   {/* Header / Contact */}
-                  <div style={{ textAlign: 'center', borderBottom: '1.5px solid #111827', paddingBottom: '12px', marginBottom: '18px' }}>
-                    <h1 style={{ fontSize: '26px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 4px 0' }}>
+                  <div className="resume-inline-029">
+                    <h1 className="resume-inline-030">
                       {tailoredCv.contact.name}
                     </h1>
-                    <div 
+                    <div
                       contentEditable
                       suppressContentEditableWarning
                       title="Click to edit headline"
-                      style={{ fontSize: '14px', fontWeight: 700, color: '#374151', marginBottom: '6px', outline: 'none', cursor: 'text' }}
+                      className="resume-inline-031"
                     >
                       {cleanProfessionalTitle(tailoredCv.targetRole, tailoredCv.company)}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#4b5563', display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    <div className="resume-inline-032">
                       <span>{tailoredCv.contact.location}</span>
                       <span>•</span>
                       <span>{tailoredCv.contact.phone}</span>
@@ -842,32 +815,32 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   </div>
 
                   {/* Professional Summary */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <h2 style={{ fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', borderBottom: '1px solid #9ca3af', paddingBottom: '2px', marginBottom: '8px', letterSpacing: '0.05em' }}>
+                  <div className="resume-inline-033">
+                    <h2 className="resume-inline-034">
                       Professional Summary
                     </h2>
-                    <p 
+                    <p
                       contentEditable
                       suppressContentEditableWarning
-                      style={{ fontSize: '12px', color: '#1f2937', textAlign: 'justify', margin: 0, lineHeight: '1.5', outline: 'none' }}
+                      className="resume-inline-035"
                     >
                       {tailoredCv.professionalSummary}
                     </p>
                   </div>
 
                   {/* Core Technical Competencies */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <h2 style={{ fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', borderBottom: '1px solid #9ca3af', paddingBottom: '2px', marginBottom: '8px', letterSpacing: '0.05em' }}>
+                  <div className="resume-inline-036">
+                    <h2 className="resume-inline-037">
                       Technical Skills & Competencies
                     </h2>
-                    <div style={{ fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div className="resume-inline-038">
                       {tailoredCv.highlightedSkills.map((cat, idx) => (
                         <div key={idx}>
-                          <strong style={{ color: '#111827' }}>{cat.category}: </strong>
-                          <span 
+                          <strong className="resume-inline-039">{cat.category}: </strong>
+                          <span
                             contentEditable
                             suppressContentEditableWarning
-                            style={{ color: '#374151', outline: 'none' }}
+                            className="resume-inline-040"
                           >
                             {cat.skills.join(', ')}
                           </span>
@@ -877,27 +850,27 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   </div>
 
                   {/* Professional Experience */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <h2 style={{ fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', borderBottom: '1px solid #9ca3af', paddingBottom: '2px', marginBottom: '10px', letterSpacing: '0.05em' }}>
+                  <div className="resume-inline-041">
+                    <h2 className="resume-inline-042">
                       Professional Experience
                     </h2>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <div className="resume-inline-043">
                       {tailoredCv.tailoredExperiences.map((exp, idx) => (
                         <div key={idx}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2px' }}>
-                            <span style={{ fontSize: '13px', fontWeight: 700, color: '#111827' }}>
+                          <div className="resume-inline-044">
+                            <span className="resume-inline-045">
                               {exp.company}
                             </span>
-                            <span style={{ fontSize: '11px', color: '#4b5563', fontStyle: 'italic' }}>
+                            <span className="resume-inline-046">
                               {exp.period} | {exp.location}
                             </span>
                           </div>
-                          <div style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>
+                          <div className="resume-inline-047">
                             {exp.role}
                           </div>
-                          <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '11.5px', color: '#1f2937' }}>
+                          <ul className="resume-inline-048">
                             {exp.bullets.map((bullet, bIdx) => (
-                              <li key={bIdx} style={{ marginBottom: '4px', lineHeight: '1.45' }}>
+                              <li key={bIdx} className="resume-inline-049">
                                 {bullet}
                               </li>
                             ))}
@@ -908,21 +881,21 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   </div>
 
                   {/* Education */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <h2 style={{ fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', borderBottom: '1px solid #9ca3af', paddingBottom: '2px', marginBottom: '8px', letterSpacing: '0.05em' }}>
+                  <div className="resume-inline-050">
+                    <h2 className="resume-inline-051">
                       Education
                     </h2>
                     {tailoredCv.education.map((edu, idx) => (
-                      <div 
-                        key={idx} 
+                      <div
+                        key={idx}
                         contentEditable
                         suppressContentEditableWarning
-                        style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '12px', outline: 'none' }}
+                        className="resume-inline-052"
                       >
                         <div>
                           <strong>{edu.degree}</strong> — {edu.institution}
                         </div>
-                        <div style={{ fontStyle: 'italic', color: '#4b5563' }}>
+                        <div className="resume-inline-053">
                           {edu.graduationYear} | {edu.location}
                         </div>
                       </div>
@@ -932,20 +905,20 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   {/* Certifications */}
                   {tailoredCv.certifications && tailoredCv.certifications.length > 0 && (
                     <div>
-                      <h2 style={{ fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', borderBottom: '1px solid #9ca3af', paddingBottom: '2px', marginBottom: '8px', letterSpacing: '0.05em' }}>
+                      <h2 className="resume-inline-054">
                         Certifications & Professional Development
                       </h2>
-                      <div style={{ fontSize: '12px', color: '#1f2937' }}>
+                      <div className="resume-inline-055">
                         {tailoredCv.certifications.map(c => `${c.name} (${c.issuer})`).join(' • ')}
                       </div>
                     </div>
                   )}
                 </div>
               ) : (
-                <div style={{ textAlign: 'center', padding: '80px 0', color: '#6b7280' }}>
-                  <FileText size={48} style={{ margin: '0 auto 16px auto', color: 'var(--color-text-muted)' }} />
-                  <h3 style={{ fontSize: '18px', color: '#111827', marginBottom: '8px' }}>No tailored resume yet</h3>
-                  <p style={{ fontSize: '13px', maxWidth: '360px', margin: '0 auto 20px auto' }}>
+                <div className="resume-inline-056">
+                  <FileText size={48} className="resume-inline-057" />
+                  <h3 className="resume-inline-058">No tailored resume yet</h3>
+                  <p className="resume-inline-059">
                     Save a role first, then Jobhunter can shape your experience into a resume focused on that opportunity.
                   </p>
                   {selectedJob ? (
@@ -967,17 +940,16 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <div className="profile-workspace">
             <div className="page-heading profile-page-heading">
               <div>
-                <p className="eyebrow">YOUR CAREER FOUNDATION</p>
                 <h1>Career profile</h1>
                 <p className="page-lede">Keep your experience accurate and up to date. Every tailored resume starts here.</p>
               </div>
             </div>
             {isEditingProfile && (
-              <section className="glass-panel profile-editor-panel" style={{ padding: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '20px' }}>
+              <section className="glass-panel profile-editor-panel profile-inline-001" >
+                <div className="profile-inline-002">
                   <div>
-                    <h2 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>Your career details</h2>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '640px' }}>
+                    <h2 className="profile-inline-003">Your career details</h2>
+                    <p className="profile-inline-004">
                       Add accurate details about your experience and skills. The tailoring tool will use this information to prepare a role-specific resume.
                     </p>
                   </div>
@@ -988,89 +960,89 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   )}
                 </div>
 
-                <div role="group" aria-label="Choose how to add your profile" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '20px' }}>
-                  <button type="button" aria-pressed={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'import' ? 'var(--accent-blue)' : 'var(--color-border)', background: profileEntryMode === 'import' ? 'var(--color-surface-muted)' : '#ffffff' }}>
-                    <strong style={{ display: 'block', marginBottom: '4px' }}>Import an existing CV</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Upload PDF, DOCX, or TXT</span>
+                <div role="group" aria-label="Choose how to add your profile" className="profile-inline-005">
+                  <button type="button" aria-pressed={profileEntryMode === 'import'} onClick={() => { setProfileEntryMode('import'); setProfileImportMessage(''); }} className="profile-mode-option">
+                    <strong className="profile-inline-006">Import an existing CV</strong><span className="profile-inline-007">Upload PDF, DOCX, or TXT</span>
                   </button>
-                  <button type="button" aria-pressed={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} style={{ ...profileInputStyle, cursor: 'pointer', textAlign: 'left', borderColor: profileEntryMode === 'manual' ? 'var(--accent-blue)' : 'var(--color-border)', background: profileEntryMode === 'manual' ? 'var(--color-surface-muted)' : '#ffffff' }}>
-                    <strong style={{ display: 'block', marginBottom: '4px' }}>Enter details manually</strong><span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Add your information one section at a time</span>
+                  <button type="button" aria-pressed={profileEntryMode === 'manual'} onClick={() => { setProfileEntryMode('manual'); setProfileImportMessage(''); }} className="profile-mode-option">
+                    <strong className="profile-inline-008">Enter details manually</strong><span className="profile-inline-009">Add your information one section at a time</span>
                   </button>
                 </div>
 
                 {profileEntryMode === 'import' ? (
-                  <div style={{ border: '1px solid var(--color-border)', borderRadius: '10px', padding: '18px' }}>
-                    <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>Import your resume</h3>
-                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>Choose one or more files. You’ll be able to review and correct the extracted information before saving it to your profile.</p>
-                    <label style={profileLabelStyle}>CV files (PDF, DOCX, TXT)
-                      <input style={{ ...profileInputStyle, marginTop: '6px' }} type="file" accept=".pdf,.docx,.txt,application/pdf,text/plain" multiple onChange={e => setProfileFiles(Array.from(e.target.files || []))} />
+                  <div className="profile-inline-010">
+                    <h3 className="profile-inline-011">Import your resume</h3>
+                    <p className="profile-inline-012">Choose one or more files. You’ll be able to review and correct the extracted information before saving it to your profile.</p>
+                    <label className="profile-field-label">CV files (PDF, DOCX, TXT)
+                      <input className="profile-field-input profile-field-spaced" type="file" accept=".pdf,.docx,.txt,application/pdf,text/plain" multiple onChange={e => setProfileFiles(Array.from(e.target.files || []))} />
                     </label>
-                    {profileFiles.length > 0 && <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>Selected: {profileFiles.map(file => file.name).join(', ')}</p>}
-                    <p style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '12px' }}>When an OpenAI API key is configured, the CV text is sent to OpenAI for extraction. Without a key, basic details are extracted locally and you can complete the profile manually.</p>
-                    <button className="btn-primary" style={{ marginTop: '14px' }} onClick={importProfileCVs} disabled={isImportingProfile || profileFiles.length === 0}>
+                    {profileFiles.length > 0 && <p className="profile-inline-013">Selected: {profileFiles.map(file => file.name).join(', ')}</p>}
+                    <p className="profile-inline-014">When an OpenAI API key is configured, the CV text is sent to OpenAI for extraction. Without a key, basic details are extracted locally and you can complete the profile manually.</p>
+                    <button className="btn-primary profile-inline-015"  onClick={importProfileCVs} disabled={isImportingProfile || profileFiles.length === 0}>
                       {isImportingProfile ? <><RefreshCw size={15} className="spin" /> Importing...</> : <><FileText size={15} /> Import and review</>}
                     </button>
-                    {profileImportMessage && <p role="status" style={{ color: profileImportMessage.toLowerCase().includes('could not') || profileImportMessage.toLowerCase().includes('choose') ? 'var(--color-danger)' : 'var(--color-success)', fontSize: '12px', marginTop: '12px' }}>{profileImportMessage}</p>}
+                    {profileImportMessage && <p role="status" className="profile-feedback profile-feedback-spaced">{profileImportMessage}</p>}
                   </div>
                 ) : (
                   <>
-                {profileImportMessage && <p role="status" style={{ color: 'var(--color-success)', fontSize: '12px', marginBottom: '14px' }}>{profileImportMessage}</p>}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
-                  <label style={profileLabelStyle}>Full name<input style={profileInputStyle} value={profileDraft.contact.name} onChange={e => updateProfileContact('name', e.target.value)} placeholder="Your name" /></label>
-                  <label style={profileLabelStyle}>Professional titles<input style={profileInputStyle} value={profileDraft.contact.titles.join(', ')} onChange={e => updateProfileContact('titles', e.target.value)} placeholder="e.g. Product Designer, UX Researcher" /></label>
-                  <label style={profileLabelStyle}>Email<input style={profileInputStyle} type="email" value={profileDraft.contact.email} onChange={e => updateProfileContact('email', e.target.value)} placeholder="you@example.com" /></label>
-                  <label style={profileLabelStyle}>Phone<input style={profileInputStyle} value={profileDraft.contact.phone} onChange={e => updateProfileContact('phone', e.target.value)} placeholder="Phone number" /></label>
-                  <label style={profileLabelStyle}>Location<input style={profileInputStyle} value={profileDraft.contact.location} onChange={e => updateProfileContact('location', e.target.value)} placeholder="City, Country" /></label>
-                  <label style={profileLabelStyle}>LinkedIn<input style={profileInputStyle} value={profileDraft.contact.linkedin || ''} onChange={e => updateProfileContact('linkedin', e.target.value)} placeholder="LinkedIn URL" /></label>
-                  <label style={profileLabelStyle}>Portfolio or website<input style={profileInputStyle} value={profileDraft.contact.portfolio || ''} onChange={e => updateProfileContact('portfolio', e.target.value)} placeholder="Website URL" /></label>
-                  <label style={profileLabelStyle}>GitHub<input style={profileInputStyle} value={profileDraft.contact.github || ''} onChange={e => updateProfileContact('github', e.target.value)} placeholder="GitHub URL" /></label>
+                {profileImportMessage && <p role="status" className="profile-inline-016">{profileImportMessage}</p>}
+                <div className="profile-inline-017">
+                  <label className="profile-field-label">Full name<input className="profile-field-input" value={profileDraft.contact.name} onChange={e => updateProfileContact('name', e.target.value)} placeholder="Your name" /></label>
+                  <label className="profile-field-label">Professional titles<input className="profile-field-input" value={profileDraft.contact.titles.join(', ')} onChange={e => updateProfileContact('titles', e.target.value)} placeholder="e.g. Product Designer, UX Researcher" /></label>
+                  <label className="profile-field-label">Email<input className="profile-field-input" type="email" value={profileDraft.contact.email} onChange={e => updateProfileContact('email', e.target.value)} placeholder="you@example.com" /></label>
+                  <label className="profile-field-label">Phone<input className="profile-field-input" value={profileDraft.contact.phone} onChange={e => updateProfileContact('phone', e.target.value)} placeholder="Phone number" /></label>
+                  <label className="profile-field-label">Location<input className="profile-field-input" value={profileDraft.contact.location} onChange={e => updateProfileContact('location', e.target.value)} placeholder="City, Country" /></label>
+                  <label className="profile-field-label">LinkedIn<input className="profile-field-input" value={profileDraft.contact.linkedin || ''} onChange={e => updateProfileContact('linkedin', e.target.value)} placeholder="LinkedIn URL" /></label>
+                  <label className="profile-field-label">Portfolio or website<input className="profile-field-input" value={profileDraft.contact.portfolio || ''} onChange={e => updateProfileContact('portfolio', e.target.value)} placeholder="Website URL" /></label>
+                  <label className="profile-field-label">GitHub<input className="profile-field-input" value={profileDraft.contact.github || ''} onChange={e => updateProfileContact('github', e.target.value)} placeholder="GitHub URL" /></label>
                 </div>
 
-                <label style={{ ...profileLabelStyle, marginTop: '18px' }}>Professional summary
-                  <textarea style={{ ...profileInputStyle, minHeight: '110px', resize: 'vertical', marginTop: '6px' }} value={profileDraft.summaries.general || ''} onChange={e => setProfileDraft(current => ({ ...current, summaries: { ...current.summaries, general: e.target.value } }))} placeholder="Summarize your experience, strengths, and the work you do." />
+                <label className="profile-field-label profile-field-spaced">Professional summary
+                  <textarea className="profile-field-input profile-field-spaced profile-summary-input" value={profileDraft.summaries.general || ''} onChange={e => setProfileDraft(current => ({ ...current, summaries: { ...current.summaries, general: e.target.value } }))} placeholder="Summarize your experience, strengths, and the work you do." />
                 </label>
 
-                <h3 style={{ fontSize: '15px', fontWeight: 700, margin: '22px 0 12px' }}>Skills</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '12px' }}>Separate skills with commas. Include only skills you can support with real experience.</p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                <h3 className="profile-inline-018">Skills</h3>
+                <p className="profile-inline-019">Separate skills with commas. Include only skills you can support with real experience.</p>
+                <div className="profile-inline-020">
                   {([
                     ['languages', 'Languages / core skills'], ['frameworks', 'Tools / frameworks'], ['data_and_ai', 'Data / AI'],
                     ['cloud_and_devops', 'Cloud / operations'], ['databases', 'Databases'], ['practices', 'Methods / practices']
                   ] as [keyof MasterProfile['skills'], string][]).map(([key, label]) => (
-                    <label key={key} style={profileLabelStyle}>{label}<input style={profileInputStyle} value={profileDraft.skills[key].join(', ')} onChange={e => updateProfileSkill(key, e.target.value)} placeholder="Add comma-separated skills" /></label>
+                    <label key={key} className="profile-field-label">{label}<input className="profile-field-input" value={profileDraft.skills[key].join(', ')} onChange={e => updateProfileSkill(key, e.target.value)} placeholder="Add comma-separated skills" /></label>
                   ))}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap', margin: '24px 0 12px' }}>
+                <div className="profile-inline-021">
                   <div>
-                    <h3 style={{ fontSize: '15px', fontWeight: 700 }}>Work experience</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px' }}>Add the roles and achievements you want considered for tailored resumes.</p>
+                    <h3 className="profile-inline-022">Work experience</h3>
+                    <p className="profile-inline-023">Add the roles and achievements you want considered for tailored resumes.</p>
                   </div>
                   <button className="btn-secondary" onClick={addProfileExperience}><Plus size={15} /> Add role</button>
                 </div>
                 {profileDraft.experiences.map((experience, index) => (
-                  <div key={experience.id} style={{ border: '1px solid var(--color-border)', borderRadius: '10px', padding: '14px', marginBottom: '12px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+                  <div key={experience.id} className="profile-inline-024">
+                    <div className="profile-inline-025">
                       {([['role', 'Job title'], ['company', 'Company'], ['location', 'Location'], ['startDate', 'Start date'], ['endDate', 'End date']] as [keyof ExperienceItem, string][]).map(([key, label]) => (
-                        <label key={key} style={profileLabelStyle}>{label}<input style={profileInputStyle} value={experience[key] as string} onChange={e => updateProfileExperience(index, key, e.target.value)} placeholder={label} /></label>
+                        <label key={key} className="profile-field-label">{label}<input className="profile-field-input" value={experience[key] as string} onChange={e => updateProfileExperience(index, key, e.target.value)} placeholder={label} /></label>
                       ))}
                     </div>
-                    <label style={{ ...profileLabelStyle, marginTop: '10px' }}>Achievements (one per line)
-                      <textarea style={{ ...profileInputStyle, minHeight: '88px', resize: 'vertical', marginTop: '6px' }} value={experience.highlights.join('\n')} onChange={e => updateProfileExperience(index, 'highlights', e.target.value)} placeholder="Describe what you did and the results you achieved." />
+                    <label className="profile-field-label profile-field-spaced">Achievements (one per line)
+                      <textarea className="profile-field-input profile-field-spaced profile-summary-input" value={experience.highlights.join('\n')} onChange={e => updateProfileExperience(index, 'highlights', e.target.value)} placeholder="Describe what you did and the results you achieved." />
                     </label>
-                    <label style={{ ...profileLabelStyle, marginTop: '10px' }}>Relevant skills (comma-separated)
-                      <input style={profileInputStyle} value={experience.keywords.join(', ')} onChange={e => updateProfileExperience(index, 'keywords', e.target.value)} placeholder="Skills and tools used in this role" />
+                    <label className="profile-field-label profile-field-spaced">Relevant skills (comma-separated)
+                      <input className="profile-field-input" value={experience.keywords.join(', ')} onChange={e => updateProfileExperience(index, 'keywords', e.target.value)} placeholder="Skills and tools used in this role" />
                     </label>
-                    <button className="btn-danger" style={{ marginTop: '10px' }} onClick={() => setProfileDraft(current => ({ ...current, experiences: current.experiences.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 size={14} /> Remove role</button>
+                    <button className="btn-danger profile-inline-026"  onClick={() => setProfileDraft(current => ({ ...current, experiences: current.experiences.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 size={14} /> Remove role</button>
                   </div>
                 ))}
-                {profileDraft.experiences.length === 0 && <p style={{ color: 'var(--text-dim)', fontSize: '13px', padding: '12px 0' }}>No roles added yet. Add at least one role for better tailoring.</p>}
+                {profileDraft.experiences.length === 0 && <p className="profile-inline-027">No roles added yet. Add at least one role for better tailoring.</p>}
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '18px' }}>
+                <div className="profile-inline-028">
                   <button className="btn-primary" onClick={saveProfileDetails} disabled={isSavingProfile || !profileDraft.contact.name.trim()}>
                     {isSavingProfile ? <><RefreshCw size={15} className="spin" /> Saving...</> : <><CheckCircle2 size={15} /> Save career details</>}
                   </button>
-                  {!profileDraft.contact.name.trim() && <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>Enter your name to save.</span>}
-                  {profileSaveMessage && <span role="status" style={{ color: profileSaveMessage.includes('saved') ? 'var(--color-success)' : 'var(--color-danger)', fontSize: '12px' }}>{profileSaveMessage}</span>}
+                  {!profileDraft.contact.name.trim() && <span className="profile-inline-029">Enter your name to save.</span>}
+                  {profileSaveMessage && <span role="status" className="profile-feedback">{profileSaveMessage}</span>}
                 </div>
                   </>
                 )}
@@ -1079,20 +1051,20 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
             {!isEditingProfile && profile.contact.name && (
               <>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div className="profile-inline-030">
                   <button className="btn-primary" onClick={() => { setProfileDraft(profile); setIsEditingProfile(true); setProfileSaveMessage(''); }}><UserCheck size={15} /> Edit career details</button>
                 </div>
-                {profileSaveMessage && <p role="status" style={{ color: '#555', fontSize: '13px' }}>{profileSaveMessage}</p>}
+                {profileSaveMessage && <p role="status" className="profile-inline-031">{profileSaveMessage}</p>}
             {/* Header info */}
-            <div className="glass-panel profile-overview" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div className="glass-panel profile-overview profile-inline-032" >
               <div>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+                <h2 className="profile-inline-033">
                   {profile.contact.name}
                 </h2>
-                <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px' }}>
+                <div className="profile-inline-034">
                   {profile.contact.titles.join(' • ')}
                 </div>
-                <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--accent-blue)', flexWrap: 'wrap' }}>
+                <div className="profile-inline-035">
                   {profile.contact.location && <span>{profile.contact.location}</span>}
                   {profile.contact.phone && <a href={`tel:${profile.contact.phone}`}>{profile.contact.phone}</a>}
                   {profile.contact.email && <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>}
@@ -1100,46 +1072,46 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </div>
               </div>
 
-              <div style={{ textAlign: 'right' }}>
-                <span className="badge badge-emerald" style={{ marginBottom: '6px' }}>
+              <div className="profile-inline-036">
+                <span className="badge badge-emerald profile-inline-037" >
                   {profile.metadata.sourceFiles.length} CV{profile.metadata.sourceFiles.length === 1 ? '' : 's'} saved
                 </span>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
+                <div className="profile-inline-038">
                   Used when tailoring your resume
                 </div>
               </div>
             </div>
 
             {/* Categorized Skills */}
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="glass-panel profile-inline-039" >
+              <h3 className="profile-inline-040">
                 <Layers size={18} /> Skills
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '18px' }}>
+              <div className="profile-inline-041">
                 <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Languages</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <h4 className="profile-inline-042">Languages</h4>
+                  <div className="profile-inline-043">
                     {profile.skills.languages.map((s, i) => <span key={i} className="badge badge-blue">{s}</span>)}
                   </div>
                 </div>
 
                 <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Frameworks & Libraries</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <h4 className="profile-inline-044">Frameworks & Libraries</h4>
+                  <div className="profile-inline-045">
                     {profile.skills.frameworks.map((s, i) => <span key={i} className="badge badge-purple">{s}</span>)}
                   </div>
                 </div>
 
                 <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Data & AI Infrastructure</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <h4 className="profile-inline-046">Data & AI Infrastructure</h4>
+                  <div className="profile-inline-047">
                     {profile.skills.data_and_ai.map((s, i) => <span key={i} className="badge badge-emerald">{s}</span>)}
                   </div>
                 </div>
 
                 <div>
-                  <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>Cloud & DevOps</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <h4 className="profile-inline-048">Cloud & DevOps</h4>
+                  <div className="profile-inline-049">
                     {profile.skills.cloud_and_devops.map((s, i) => <span key={i} className="badge badge-amber">{s}</span>)}
                   </div>
                 </div>
@@ -1147,18 +1119,18 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             </div>
 
             {/* Work History Timeline */}
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="glass-panel profile-inline-050" >
+              <h3 className="profile-inline-051">
                 <Briefcase size={18} /> Work experience ({profile.experiences.length})
               </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="profile-inline-052">
                 {profile.experiences.map(exp => (
-                  <div key={exp.id} style={{ borderLeft: '2px solid var(--accent-blue)', paddingLeft: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                      <strong style={{ fontSize: '14.5px', color: 'var(--color-text)' }}>{exp.role} — {exp.company}</strong>
-                      <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{exp.startDate} – {exp.endDate} | {exp.location}</span>
+                  <div key={exp.id} className="profile-inline-053">
+                    <div className="profile-inline-054">
+                      <strong className="profile-inline-055">{exp.role} — {exp.company}</strong>
+                      <span className="profile-inline-056">{exp.startDate} – {exp.endDate} | {exp.location}</span>
                     </div>
-                    <ul style={{ margin: '8px 0', paddingLeft: '18px', fontSize: '12.5px', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <ul className="profile-inline-057">
                       {exp.highlights.map((h, i) => (
                         <li key={i}>{h}</li>
                       ))}
@@ -1177,44 +1149,43 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <>
           <div className="page-heading extension-page-heading">
             <div>
-              <p className="eyebrow">LINKEDIN COPILOT</p>
               <h1>Bring Jobhunter to LinkedIn</h1>
               <p className="page-lede">Capture a role while you browse and tailor your resume without copying job links.</p>
             </div>
           </div>
-          <div className="extension-workspace" style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div className="glass-panel" style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
+          <div className="extension-workspace extension-inline-001" >
+            <div className="glass-panel extension-inline-002" >
+              <div className="extension-inline-003">
                 <Chrome size={24} />
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: 750 }}>Add Jobhunter to Chrome</h2>
-                  <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Download it once, then load it into Chrome.</p>
+                  <h2 className="extension-inline-004">Add Jobhunter to Chrome</h2>
+                  <p className="extension-inline-005">Download it once, then load it into Chrome.</p>
                 </div>
               </div>
 
-              <section style={{ padding: '20px 0', borderBottom: '1px solid var(--border-subtle, var(--color-border))' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 1 · Download the extension</h3>
-                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px' }}>Save the ZIP, then extract it to a folder you can find easily, such as Downloads.</p>
+              <section className="extension-inline-006">
+                <h3 className="extension-inline-007">Step 1 · Download the extension</h3>
+                <p className="extension-inline-008">Save the ZIP, then extract it to a folder you can find easily, such as Downloads.</p>
                 <a
                   href="/downloads/jobhunter-chrome-extension.zip"
                   download="jobhunter-chrome-extension.zip"
-                  className="btn-primary"
-                  style={{ minHeight: '46px', justifyContent: 'center', textDecoration: 'none', padding: '0 18px' }}
+                  className="btn-primary extension-inline-009"
+
                 >
                   <Download size={16} /> Download Chrome extension (.zip)
                 </a>
               </section>
 
-              <section style={{ padding: '20px 0' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Step 2 · Add it to Chrome</h3>
-                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.65 }}>
+              <section className="extension-inline-010">
+                <h3 className="extension-inline-011">Step 2 · Add it to Chrome</h3>
+                <p className="extension-inline-012">
                   Chrome blocks websites from opening its internal pages. Copy the address below, paste it into Chrome’s address bar, then turn on <strong>Developer mode</strong>, choose <strong>Load unpacked</strong>, and select the extracted <strong>extension</strong> folder. Open the extension and sign in to Jobhunter.
                 </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-                  <code style={{ padding: '12px', borderRadius: '8px', background: 'var(--color-surface-muted)', color: 'var(--color-text)', fontSize: '13px' }}>chrome://extensions</code>
+                <div className="extension-inline-013">
+                  <code className="extension-inline-014">chrome://extensions</code>
                   <button
                     type="button"
-                    className="btn-primary"
+                    className="btn-primary extension-inline-015"
                     onClick={async () => {
                       try {
                         await navigator.clipboard.writeText('chrome://extensions');
@@ -1223,13 +1194,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                         setExtensionsLinkCopied(false);
                       }
                     }}
-                    style={{ minHeight: '46px', justifyContent: 'center', padding: '0 18px' }}
+
                   >
                     {extensionsLinkCopied ? <Check size={16} /> : <Copy size={16} />}
                     {extensionsLinkCopied ? 'Copied — paste in address bar' : 'Copy Chrome Extensions address'}
                   </button>
                 </div>
-                <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '10px' }}>If copying is blocked, select and copy the address above. After setup, visit <a href="https://www.linkedin.com/jobs" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-blue)' }}>LinkedIn Jobs</a> to use the helper.</p>
+                <p className="extension-inline-016">If copying is blocked, select and copy the address above. After setup, visit <a href="https://www.linkedin.com/jobs" target="_blank" rel="noreferrer" className="extension-inline-017">LinkedIn Jobs</a> to use the helper.</p>
               </section>
             </div>
           </div>
@@ -1239,103 +1210,60 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
 
       {/* Manual Job Modal */}
       {showAddJobModal && (
-        <div className="modal-backdrop" style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          padding: '20px'
-        }}>
-          <div className="glass-panel job-modal" style={{ width: '100%', maxWidth: '580px', padding: '28px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: 'var(--color-text)' }}>
+        <div className="modal-backdrop modal-inline-001" >
+          <div className="glass-panel job-modal modal-inline-002" >
+            <h3 className="modal-inline-003">
               Add Job Posting Manually
             </h3>
-            <form onSubmit={handleCreateJob} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <form onSubmit={handleCreateJob} className="modal-inline-004">
               <div>
-                <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Job Title</label>
-                <input 
-                  type="text" 
+                <label className="modal-inline-005">Job Title</label>
+                <input
+                  type="text"
                   required
                   placeholder="e.g. Senior Backend Engineer"
                   value={newJobTitle}
                   onChange={e => setNewJobTitle(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '8px',
-                    color: 'var(--color-text)',
-                    fontSize: '13px'
-                  }}
+                  className="modal-inline-006"
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="modal-inline-007">
                 <div>
-                  <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Company</label>
-                  <input 
-                    type="text" 
+                  <label className="modal-inline-008">Company</label>
+                  <input
+                    type="text"
                     placeholder="e.g. Stripe, Tesla"
                     value={newJobCompany}
                     onChange={e => setNewJobCompany(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      backgroundColor: '#ffffff',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: '8px',
-                      color: 'var(--color-text)',
-                      fontSize: '13px'
-                    }}
+                    className="modal-inline-009"
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Location</label>
-                  <input 
-                    type="text" 
+                  <label className="modal-inline-010">Location</label>
+                  <input
+                    type="text"
                     placeholder="e.g. Remote or Düsseldorf"
                     value={newJobLocation}
                     onChange={e => setNewJobLocation(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      backgroundColor: '#ffffff',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: '8px',
-                      color: 'var(--color-text)',
-                      fontSize: '13px'
-                    }}
+                    className="modal-inline-011"
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Job Description</label>
-                <textarea 
+                <label className="modal-inline-012">Job Description</label>
+                <textarea
                   required
                   rows={6}
                   placeholder="Paste the full job requirements and description here..."
                   value={newJobDesc}
                   onChange={e => setNewJobDesc(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '8px',
-                    color: 'var(--color-text)',
-                    fontSize: '13px',
-                    resize: 'vertical'
-                  }}
+                  className="modal-inline-013"
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+              <div className="modal-inline-014">
                 <button type="button" onClick={() => setShowAddJobModal(false)} className="btn-secondary">
                   Cancel
                 </button>
