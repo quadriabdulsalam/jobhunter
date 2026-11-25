@@ -485,7 +485,6 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <h1>Your job pipeline</h1>
                 <p className="page-lede">Save interesting roles, prepare a focused resume, and keep your next steps clear.</p>
               </div>
-              <button className="btn-secondary" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add job manually</button>
             </div>
             <div className="profile-readiness">
               <div className="readiness-copy">
@@ -497,9 +496,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     : 'Upload your CV or add your experience once. Jobhunter will use it as the source for every tailored resume.'}</p>
                 </div>
               </div>
-              <button className="btn-secondary" onClick={() => setActiveTab('profile')}>
-                {profile?.contact?.name ? 'Review profile' : 'Set up profile'} <ChevronRight size={15} />
-              </button>
+              <div className="readiness-actions">
+                <button className="btn-secondary" onClick={() => setActiveTab('profile')}>
+                  {profile?.contact?.name ? 'Review profile' : 'Set up profile'} <ChevronRight size={15} />
+                </button>
+                <button className="btn-ghost" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add job manually</button>
+              </div>
             </div>
             {/* Metric Banner */}
             <div className="metrics-strip" aria-label="Job search overview">
@@ -663,9 +665,9 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                     {filterQuery ? 'No roles match that search' : 'Your pipeline is ready for its first role'}
                   </h2>
                   <p className="job-empty-copy">
-                    {filterQuery ? 'Try a different title or company name.' : 'Paste a LinkedIn job URL above or add a role manually to get started.'}
+                    {filterQuery ? 'Try a different title or company name.' : 'Paste a LinkedIn job URL above, or use Add job manually in the career profile panel.'}
                   </p>
-                  {!filterQuery && <div className="empty-state-actions"><a className="btn-secondary" href="https://www.linkedin.com/jobs/" target="_blank" rel="noreferrer"><ExternalLink size={15} /> Browse LinkedIn jobs</a><button className="btn-ghost" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add manually</button></div>}
+                  {!filterQuery && <div className="empty-state-actions"><a className="btn-secondary" href="https://www.linkedin.com/jobs/" target="_blank" rel="noreferrer"><ExternalLink size={15} /> Browse LinkedIn jobs</a></div>}
                 </div>
               )}
             </div>
@@ -973,10 +975,16 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                   <div className="profile-inline-010">
                     <h3 className="profile-inline-011">Import your resume</h3>
                     <p className="profile-inline-012">Choose one or more files. You’ll be able to review and correct the extracted information before saving it to your profile.</p>
-                    <label className="profile-field-label">CV files (PDF, DOCX, TXT)
-                      <input className="profile-field-input profile-field-spaced" type="file" accept=".pdf,.docx,.txt,application/pdf,text/plain" multiple onChange={e => setProfileFiles(Array.from(e.target.files || []))} />
-                    </label>
-                    {profileFiles.length > 0 && <p className="profile-inline-013">Selected: {profileFiles.map(file => file.name).join(', ')}</p>}
+                    <div className="profile-field-label">CV files (PDF, DOCX, TXT)
+                      <label className="profile-file-picker">
+                        <FileText size={17} aria-hidden="true" />
+                        <span>Choose file{profileFiles.length === 1 ? '' : 's'}</span>
+                        <input className="profile-file-input" type="file" accept=".pdf,.docx,.txt,application/pdf,text/plain" multiple onChange={e => setProfileFiles(Array.from(e.target.files || []))} />
+                      </label>
+                    </div>
+                    <p className={`profile-file-status${profileFiles.length ? ' is-selected' : ''}`} aria-live="polite">
+                      {profileFiles.length > 0 ? <><CheckCircle2 size={16} aria-hidden="true" /> {profileFiles.length} file{profileFiles.length === 1 ? '' : 's'} selected: {profileFiles.map(file => file.name).join(', ')}</> : 'No files selected · PDF, DOCX, or TXT'}
+                    </p>
                     <p className="profile-inline-014">When an OpenAI API key is configured, the CV text is sent to OpenAI for extraction. Without a key, basic details are extracted locally and you can complete the profile manually.</p>
                     <button className="btn-primary profile-inline-015"  onClick={importProfileCVs} disabled={isImportingProfile || profileFiles.length === 0}>
                       {isImportingProfile ? <><RefreshCw size={15} className="spin" /> Importing...</> : <><FileText size={15} /> Import and review</>}

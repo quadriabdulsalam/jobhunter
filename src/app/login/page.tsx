@@ -54,7 +54,7 @@ export default function LoginPage() {
     <main className="auth-page">
       <section className="auth-story" aria-label="About Jobhunter">
         <a className="auth-story-brand" href="/" aria-label="Jobhunter home">
-          <span className="auth-story-mark">J</span><span>Jobhunter</span>
+          <span className="auth-story-mark">JH</span><span>Jobhunter</span>
         </a>
         <div className="auth-story-content">
           <h1>Your next role starts with a stronger story.</h1>
