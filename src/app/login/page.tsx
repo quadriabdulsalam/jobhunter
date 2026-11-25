@@ -57,7 +57,6 @@ export default function LoginPage() {
           <span className="auth-story-mark">J</span><span>Jobhunter</span>
         </a>
         <div className="auth-story-content">
-          <p className="auth-story-eyebrow">A clearer way to move forward</p>
           <h1>Your next role starts with a stronger story.</h1>
           <p className="auth-story-lede">Keep your search organized, your experience ready, and every resume focused on the opportunity in front of you.</p>
           <ul className="auth-benefits">
@@ -72,7 +71,6 @@ export default function LoginPage() {
       <section className="auth-panel-wrap" aria-label={mode === 'login' ? 'Sign in to Jobhunter' : 'Create a Jobhunter account'}>
         <div className="auth-card">
           <div className="auth-intro">
-            <p className="auth-kicker">YOUR CAREER WORKSPACE</p>
             <h2>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h2>
             <p className="auth-description">{mode === 'login' ? 'Sign in to pick up where your job search left off.' : 'Start with LinkedIn or create an account with your email.'}</p>
           </div>

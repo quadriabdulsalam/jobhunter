@@ -25,9 +25,7 @@ export default function ExtensionConnectPage() {
   return (
     <main className="extension-connect-page">
       <section className="extension-connect-card">
-        <div className="extension-connect-mark"><Chrome size={20} aria-hidden="true" /></div>
-        <p className="extension-connect-brand">JOBHUNTER · LINKEDIN HELPER</p>
-        <h1>Connect your browser helper</h1>
+        <h1><Chrome className="extension-connect-icon" size={20} aria-hidden="true" /><span>Connect your browser helper</span></h1>
         <p className={`extension-connect-status${failed ? ' is-error' : ''}`} role="status" aria-live="polite">
           {message}
         </p>
