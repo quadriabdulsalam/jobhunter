@@ -489,7 +489,6 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
           <div className="jobs-workspace">
             <div className="page-heading heading-row">
               <div>
-                <p className="eyebrow">YOUR CAREER WORKSPACE</p>
                 <h1>Your job pipeline</h1>
                 <p className="page-lede">Save interesting roles, prepare a focused resume, and keep your next steps clear.</p>
               </div>
@@ -511,13 +510,13 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
             </div>
             {/* Metric Banner */}
             <div className="metrics-strip" aria-label="Job search overview">
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">Roles saved</div>
                 <div className="metric-value">{jobs.length}</div>
                 <div className="metric-note">Across your search</div>
               </div>
 
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">Resumes tailored</div>
                 <div className="metric-value">
                   {jobs.filter(j => j.tailoredCvId || j.status === 'tailored').length}
@@ -525,7 +524,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <div className="metric-note">Ready to review</div>
               </div>
 
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">LinkedIn Easy Apply</div>
                 <div className="metric-value">
                   {jobs.filter(j => j.applyType === 'easy_apply').length}
@@ -533,7 +532,7 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 <div className="metric-note">Roles in your pipeline</div>
               </div>
 
-              <div className="glass-panel metric-card">
+              <div className="metric-card">
                 <div className="metric-label">Source resumes</div>
                 <div className="metric-value">{profile?.metadata?.sourceFiles?.length || 0}</div>
                 <div className="metric-note">In your career profile</div>
@@ -665,12 +664,12 @@ ${tailoredCv.education.map(edu => `${edu.degree} — ${edu.institution} (${edu.g
                 </article>
               ))}
               {filteredJobs.length === 0 && (
-                <div className="glass-panel" style={{ gridColumn: '1 / -1', padding: '36px 24px', textAlign: 'center' }}>
-                  <Briefcase size={22} style={{ color: 'var(--text-muted)', marginBottom: '12px' }} />
-                  <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '6px' }}>
+                <div className="glass-panel job-empty-state">
+                  <Briefcase className="job-empty-icon" size={22} aria-hidden="true" />
+                  <h2 className="job-empty-title">
                     {filterQuery ? 'No roles match that search' : 'Your pipeline is ready for its first role'}
                   </h2>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '16px' }}>
+                  <p className="job-empty-copy">
                     {filterQuery ? 'Try a different title or company name.' : 'Paste a LinkedIn job URL above or add a role manually to get started.'}
                   </p>
                   {!filterQuery && <div className="empty-state-actions"><a className="btn-secondary" href="https://www.linkedin.com/jobs/" target="_blank" rel="noreferrer"><ExternalLink size={15} /> Browse LinkedIn jobs</a><button className="btn-ghost" onClick={() => setShowAddJobModal(true)}><Plus size={15} /> Add manually</button></div>}

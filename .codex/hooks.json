@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd.exe /c \"%USERPROFILE%\\.agents\\skills\\impeccable\\scripts\\impeccable.cmd detect src/\"",
+            "statusMessage": "Checking UI changes with Impeccable"
+          }
+        ]
+      }
+    ]
+  }
+}
